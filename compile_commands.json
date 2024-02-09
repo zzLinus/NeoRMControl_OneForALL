@@ -1,0 +1,80 @@
+[
+ {
+  "directory": "/Users/zzlinus/dev/cpp/rm_rx78-2",
+  "arguments": [
+   "g++-13",
+   "-o",
+   "/Users/zzlinus/dev/cpp/rm_rx78-2/build/src/main.o",
+   "-c",
+   "src/main.cc",
+   "-std=c++14",
+   "-O3",
+   "-g",
+   "-Wall",
+   "-Werror",
+   "-Wextra",
+   "-Wpedantic",
+   "-Wstrict-aliasing",
+   "-Wno-pointer-arith",
+   "-Wno-newline-eof",
+   "-Wno-unused-parameter",
+   "-Wno-gnu-statement-expression",
+   "-Wno-gnu-compound-literal-initializer",
+   "-Wno-gnu-zero-variadic-macro-arguments",
+   "-I/Users/zzlinus/dev/cpp/rm_rx78-2/include"
+  ],
+  "file": "src/main.cc"
+ },
+ {
+  "directory": "/Users/zzlinus/dev/cpp/rm_rx78-2",
+  "arguments": [
+   "g++-13",
+   "-o",
+   "/Users/zzlinus/dev/cpp/rm_rx78-2/build/src/chassis/chassis.o",
+   "-c",
+   "src/chassis/chassis.cc",
+   "-std=c++14",
+   "-O3",
+   "-g",
+   "-Wall",
+   "-Werror",
+   "-Wextra",
+   "-Wpedantic",
+   "-Wstrict-aliasing",
+   "-Wno-pointer-arith",
+   "-Wno-newline-eof",
+   "-Wno-unused-parameter",
+   "-Wno-gnu-statement-expression",
+   "-Wno-gnu-compound-literal-initializer",
+   "-Wno-gnu-zero-variadic-macro-arguments",
+   "-I/Users/zzlinus/dev/cpp/rm_rx78-2/include"
+  ],
+  "file": "src/chassis/chassis.cc"
+ },
+ {
+  "directory": "/Users/zzlinus/dev/cpp/rm_rx78-2",
+  "arguments": [
+   "g++-13",
+   "-o",
+   "/Users/zzlinus/dev/cpp/rm_rx78-2/build/src/gimbal/gimbal.o",
+   "-c",
+   "src/gimbal/gimbal.cc",
+   "-std=c++14",
+   "-O3",
+   "-g",
+   "-Wall",
+   "-Werror",
+   "-Wextra",
+   "-Wpedantic",
+   "-Wstrict-aliasing",
+   "-Wno-pointer-arith",
+   "-Wno-newline-eof",
+   "-Wno-unused-parameter",
+   "-Wno-gnu-statement-expression",
+   "-Wno-gnu-compound-literal-initializer",
+   "-Wno-gnu-zero-variadic-macro-arguments",
+   "-I/Users/zzlinus/dev/cpp/rm_rx78-2/include"
+  ],
+  "file": "src/gimbal/gimbal.cc"
+ }
+]
