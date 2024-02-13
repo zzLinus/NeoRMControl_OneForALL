@@ -1,5 +1,6 @@
-#ifndef __PID__
-#define __PID__
+#ifndef __PID_CONTROLLER__
+#define __PID_CONTROLLER__
+
 #include "types.hpp"
 
 enum PID_MODE
@@ -30,4 +31,5 @@ typedef struct
     fp32 error[3]; //误差项 0最新 1上一次 2上上次
 
 } pid_type_def;
+
 #endif
