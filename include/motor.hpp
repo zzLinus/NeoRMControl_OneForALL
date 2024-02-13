@@ -2,6 +2,7 @@
 #define __MOTOR__
 
 #include "types.hpp"
+#include "pid_controller.hpp"
 
 namespace Hardware
 {
@@ -14,10 +15,10 @@ namespace Hardware
         ~Motor();
 
        private:
-        PID *getPid();
+		Pid::Pid_controller *getPid();
 
        public:
-        PID pid;
+		Pid::Pid_controller pid_ctrl;
 
         typedef struct
         {

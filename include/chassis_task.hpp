@@ -10,12 +10,14 @@ namespace Chassis
         Chassis_task();
         ~Chassis_task();
         void task(void);
-        void init(Chassis_ctrl *cc);
+        void init(void);
+		void update_feedback(void);
 
        private:
+
        public:
        private:
-        Chassis_ctrl *cc;  // NOTE: cc stand for chassis control
+        Chassis_ctrl *cc;               // NOTE: cc stand for chassis control
     };
 
 }  // namespace Chassis

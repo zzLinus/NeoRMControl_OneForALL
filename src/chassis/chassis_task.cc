@@ -4,7 +4,6 @@
 
 namespace Chassis
 {
-
     Chassis_task::Chassis_task()
     {
         cc = new Chassis_ctrl();
@@ -15,14 +14,15 @@ namespace Chassis
         delete cc;
     }
 
-    void Chassis_task::init(Chassis_ctrl *cc)
+    void Chassis_task::update_feedback()
     {
-        cc->init();
+    }
 
-        // TODO: 考虑一下谐波函数要封装在哪里
-        // const static fp32 chassis_x_order_filter[1] = { CHASSIS_ACCEL_X_NUM };
-        // const static fp32 chassis_y_order_filter[1] = { CHASSIS_ACCEL_Y_NUM };
-        uint8_t i;
+    void Chassis_task::init()
+    {
+        // chassis init
+        // 底盘初始化
+        cc->init();
 
         // in beginning， chassis mode is raw
         // 底盘开机状态为原始
@@ -40,67 +40,56 @@ namespace Chassis
 
         // get chassis motor data point,  initialize motor speed PID
         // 获取底盘电机数据指针，初始化PID
-		// TODO: PID应该被封装到电机里还是？
-        for (i = 0; i < 4; i++)
+        // WARN: PID应该被封装到电机里还是？
+        for (auto& m : cc->mecanum_wheel)
         {
-            // PID_init(
-            //     &chassis_move_init->motor_speed_pid[i],
-            //     PID_POSITION,
-            //     motor_speed_pid,
-            //     M3505_MOTOR_SPEED_PID_MAX_OUT,
-            //     M3505_MOTOR_SPEED_PID_MAX_IOUT);
+            m->pid_ctrl.init();
         }
-        // initialize angle PID
+        // for (i = 0; i < 4; i++)
+        //{
+        //  PID_init(
+        //      &chassis_move_init->motor_speed_pid[i],
+        //      PID_POSITION,
+        //      motor_speed_pid,
+        //      M3505_MOTOR_SPEED_PID_MAX_OUT,
+        //      M3505_MOTOR_SPEED_PID_MAX_IOUT);
+        //}
+
+        // HACK:initialize angle PID
         // 初始化角度PID
-        PID_init(
-            &chassis_move_init->chassis_angle_pid,
-            PID_POSITION,
-            chassis_yaw_pid,
-            CHASSIS_FOLLOW_GIMBAL_PID_MAX_OUT,
-            CHASSIS_FOLLOW_GIMBAL_PID_MAX_IOUT);
-
-        // 初始化chassis_no_follow_angle_pid
-        PID_init(
-            &chassis_move_init->chassis_no_follow_angle_pid,
-            PID_POSITION,
-            chassis_no_follow_yaw_pid,
-            CHASSIS_FOLLOW_GIMBAL_PID_MAX_OUT,
-            CHASSIS_FOLLOW_GIMBAL_PID_MAX_IOUT);
-
-        // first order low-pass filter  replace ramp function
-        // 用一阶滤波代替斜波函数生成
-        first_order_filter_init(
-            &chassis_move_init->chassis_cmd_slow_set_vx, CHASSIS_CONTROL_TIME, chassis_x_order_filter);
-        first_order_filter_init(
-            &chassis_move_init->chassis_cmd_slow_set_vy, CHASSIS_CONTROL_TIME, chassis_y_order_filter);
+        cc->follow_angle_pid.init();
+        cc->no_follow_angle_pid.init();
+        // PID_init(
+        //     &chassis_move_init->chassis_angle_pid,
+        //     PID_POSITION,
+        //     chassis_yaw_pid,
+        //     CHASSIS_FOLLOW_GIMBAL_PID_MAX_OUT,
+        //     CHASSIS_FOLLOW_GIMBAL_PID_MAX_IOUT);
+        //  初始化chassis_no_follow_angle_pid
+        // PID_init(
+        //     &chassis_move_init->chassis_no_follow_angle_pid,
+        //     PID_POSITION,
+        //     chassis_no_follow_yaw_pid,
+        //     CHASSIS_FOLLOW_GIMBAL_PID_MAX_OUT,
+        //     CHASSIS_FOLLOW_GIMBAL_PID_MAX_IOUT);
 
         // max and min speed
         // 最大 最小速度
-        chassis_move_init->vx_max_speed = NORMAL_MAX_CHASSIS_SPEED_X;
-        chassis_move_init->vx_min_speed = -NORMAL_MAX_CHASSIS_SPEED_X;
+        cc->vx_max_speed = NORMAL_MAX_CHASSIS_SPEED_X;
+        cc->vx_min_speed = -NORMAL_MAX_CHASSIS_SPEED_X;
 
-        chassis_move_init->vy_max_speed = NORMAL_MAX_CHASSIS_SPEED_Y;
-        chassis_move_init->vy_min_speed = -NORMAL_MAX_CHASSIS_SPEED_Y;
-
-        // 键盘控制斜波函数初始化
-        ramp_init(&chassis_move_init->key_vx_ramp, 0.1f, NORMAL_MAX_CHASSIS_SPEED_X, -NORMAL_MAX_CHASSIS_SPEED_X);
-        ramp_init(&chassis_move_init->key_vy_ramp, 0.1f, NORMAL_MAX_CHASSIS_SPEED_Y, -NORMAL_MAX_CHASSIS_SPEED_Y);
-
-        // 小陀螺缓启停斜波函数初始化
-        ramp_init(&chassis_move_init->chassis_spin_ramp, 0.1f, CHASSIS_WZ_SPIN, 0);
+        cc->vy_max_speed = NORMAL_MAX_CHASSIS_SPEED_Y;
+        cc->vy_min_speed = -NORMAL_MAX_CHASSIS_SPEED_Y;
 
         // update data
         // 更新一下数据
-        chassis_feedback_update(chassis_move_init);
+        update_feedback();
     }
 
     void Chassis_task::task(void)
     {
         // TODO: wait for initialization
         // vTaskDelay(CHASSIS_TASK_INIT_TIME);
-        // chassis init
-        // 底盘初始化
-        chassis_init(&cc);
         // make sure all chassis motor is online,
         // 判断底盘电机是否都在线
         // while (toe_is_error(CHASSIS_MOTOR1_TOE) || toe_is_error(CHASSIS_MOTOR2_TOE) ||
@@ -156,6 +145,7 @@ namespace Chassis
             // chassis_high_water = uxTaskGetStackHighWaterMark(NULL);
             // #endif
             //  std::cout << "Chassis_task \n";
+			std::cout << "Chassis task\n";
         }
     }
 

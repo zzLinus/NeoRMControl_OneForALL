@@ -3,7 +3,7 @@
 
 #include "chassis_types.hpp"
 #include "motor.hpp"
-#include "pid.hpp"
+#include "pid_controller.hpp"
 
 namespace Chassis
 {
@@ -13,10 +13,17 @@ namespace Chassis
         Chassis_ctrl();
         ~Chassis_ctrl();
         void init();
+        void first_order_filter(fp32 intupt);
 
        private:
        public:
         Hardware::Motor *mecanum_wheel[4];
+        first_order_filter_type_t fof_x;  // HACK: better come up with a better name
+        first_order_filter_type_t fof_y;  // HACK: better come up with a better name
+
+        ramp_t kb_vx_ramp;  // 用于键盘控制的斜波函数
+        ramp_t kb_vy_ramp;  // 用于键盘控制的斜波函数
+        ramp_t spin_ramp;
 
         // FIXME: remote controller && imu && gimbal related
         const RC_ctrl_t *chassis_RC;  // 底盘使用的遥控器指针, the point to remote control
@@ -29,12 +36,13 @@ namespace Chassis
 
         chassis_mode_e chassis_mode;       // state machine. 底盘控制状态机
         chassis_mode_e last_chassis_mode;  // last state machine.底盘上次控制状态机
-		// FIXME: drop this, instade use mecanum_wheel
-        //chassis_motor_t motor_chassis[4];  // chassis motor data.底盘电机数据
-        pid_type_def motor_speed_pid[4];   // motor speed PID.底盘电机速度pid
-        pid_type_def chassis_angle_pid;    // follow angle PID.底盘跟随角度pid
+                                           //
+        // HACK: drop motor_speed_pid motor_chassis, put all these mess in to motor class
+        // chassis_motor_t motor_chassis[4];  // chassis motor data.底盘电机数据
+        // pid_type_def motor_speed_pid[4];   // motor speed PID.底盘电机速度pid
 
-        pid_type_def chassis_no_follow_angle_pid;  // 底盘不跟随角度pid  added by 片哥
+        Pid::Pid_controller follow_angle_pid;     // follow angle PID.底盘跟随角度pid
+        Pid::Pid_controller no_follow_angle_pid;  // 底盘不跟随角度pid  added by 片哥
 
         first_order_filter_type_t
             chassis_cmd_slow_set_vx;  // use first order filter to slow set-point.使用一阶低通滤波减缓设定值
@@ -66,12 +74,7 @@ namespace Chassis
         fp32 chassis_roll;   // the roll angle calculated by gyro sensor and gimbal
                              // motor.陀螺仪和云台电机叠加的roll角度
 
-        // TODO: keyboard controller logic
-        // ramp_function_source_t key_vx_ramp;  //用于键盘控制的斜波函数
-        // ramp_function_source_t key_vy_ramp;  //用于键盘控制的斜波函数
-
-        ramp_function_source_t chassis_spin_ramp;  // 用于小陀螺缓启停的斜波函数
-        fp32 chassis_spin_ramp_add;                // 小陀螺缓启停的增量
+        fp32 chassis_spin_ramp_add;  // 小陀螺缓启停的增量
        private:
     };
 }  // namespace Chassis

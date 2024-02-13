@@ -1,10 +1,10 @@
 [
  {
-  "directory": "/Users/zzlinus/dev/cpp/rm_rx78-2",
+  "directory": "/Users/zzlinus/dev/cpp/rx78-2",
   "arguments": [
    "g++-13",
    "-o",
-   "/Users/zzlinus/dev/cpp/rm_rx78-2/build/src/main.o",
+   "/Users/zzlinus/dev/cpp/rx78-2/build/src/main.o",
    "-c",
    "src/main.cc",
    "-std=c++14",
@@ -15,24 +15,25 @@
    "-Wextra",
    "-Wpedantic",
    "-Wstrict-aliasing",
+   "-lp",
    "-Wno-pointer-arith",
    "-Wno-newline-eof",
    "-Wno-unused-parameter",
    "-Wno-gnu-statement-expression",
    "-Wno-gnu-compound-literal-initializer",
    "-Wno-gnu-zero-variadic-macro-arguments",
-   "-I/Users/zzlinus/dev/cpp/rm_rx78-2/include"
+   "-I/Users/zzlinus/dev/cpp/rx78-2/include"
   ],
   "file": "src/main.cc"
  },
  {
-  "directory": "/Users/zzlinus/dev/cpp/rm_rx78-2",
+  "directory": "/Users/zzlinus/dev/cpp/rx78-2",
   "arguments": [
    "g++-13",
    "-o",
-   "/Users/zzlinus/dev/cpp/rm_rx78-2/build/src/chassis/chassis.o",
+   "/Users/zzlinus/dev/cpp/rx78-2/build/src/chassis/chassis_ctrl.o",
    "-c",
-   "src/chassis/chassis.cc",
+   "src/chassis/chassis_ctrl.cc",
    "-std=c++14",
    "-O3",
    "-g",
@@ -41,24 +42,25 @@
    "-Wextra",
    "-Wpedantic",
    "-Wstrict-aliasing",
+   "-lp",
    "-Wno-pointer-arith",
    "-Wno-newline-eof",
    "-Wno-unused-parameter",
    "-Wno-gnu-statement-expression",
    "-Wno-gnu-compound-literal-initializer",
    "-Wno-gnu-zero-variadic-macro-arguments",
-   "-I/Users/zzlinus/dev/cpp/rm_rx78-2/include"
+   "-I/Users/zzlinus/dev/cpp/rx78-2/include"
   ],
-  "file": "src/chassis/chassis.cc"
+  "file": "src/chassis/chassis_ctrl.cc"
  },
  {
-  "directory": "/Users/zzlinus/dev/cpp/rm_rx78-2",
+  "directory": "/Users/zzlinus/dev/cpp/rx78-2",
   "arguments": [
    "g++-13",
    "-o",
-   "/Users/zzlinus/dev/cpp/rm_rx78-2/build/src/gimbal/gimbal.o",
+   "/Users/zzlinus/dev/cpp/rx78-2/build/src/chassis/chassis_task.o",
    "-c",
-   "src/gimbal/gimbal.cc",
+   "src/chassis/chassis_task.cc",
    "-std=c++14",
    "-O3",
    "-g",
@@ -67,14 +69,96 @@
    "-Wextra",
    "-Wpedantic",
    "-Wstrict-aliasing",
+   "-lp",
    "-Wno-pointer-arith",
    "-Wno-newline-eof",
    "-Wno-unused-parameter",
    "-Wno-gnu-statement-expression",
    "-Wno-gnu-compound-literal-initializer",
    "-Wno-gnu-zero-variadic-macro-arguments",
-   "-I/Users/zzlinus/dev/cpp/rm_rx78-2/include"
+   "-I/Users/zzlinus/dev/cpp/rx78-2/include"
   ],
-  "file": "src/gimbal/gimbal.cc"
+  "file": "src/chassis/chassis_task.cc"
+ },
+ {
+  "directory": "/Users/zzlinus/dev/cpp/rx78-2",
+  "arguments": [
+   "g++-13",
+   "-o",
+   "/Users/zzlinus/dev/cpp/rx78-2/build/src/gimbal/gimbal_task.o",
+   "-c",
+   "src/gimbal/gimbal_task.cc",
+   "-std=c++14",
+   "-O3",
+   "-g",
+   "-Wall",
+   "-Werror",
+   "-Wextra",
+   "-Wpedantic",
+   "-Wstrict-aliasing",
+   "-lp",
+   "-Wno-pointer-arith",
+   "-Wno-newline-eof",
+   "-Wno-unused-parameter",
+   "-Wno-gnu-statement-expression",
+   "-Wno-gnu-compound-literal-initializer",
+   "-Wno-gnu-zero-variadic-macro-arguments",
+   "-I/Users/zzlinus/dev/cpp/rx78-2/include"
+  ],
+  "file": "src/gimbal/gimbal_task.cc"
+ },
+ {
+  "directory": "/Users/zzlinus/dev/cpp/rx78-2",
+  "arguments": [
+   "g++-13",
+   "-o",
+   "/Users/zzlinus/dev/cpp/rx78-2/build/src/motor/motor.o",
+   "-c",
+   "src/motor/motor.cc",
+   "-std=c++14",
+   "-O3",
+   "-g",
+   "-Wall",
+   "-Werror",
+   "-Wextra",
+   "-Wpedantic",
+   "-Wstrict-aliasing",
+   "-lp",
+   "-Wno-pointer-arith",
+   "-Wno-newline-eof",
+   "-Wno-unused-parameter",
+   "-Wno-gnu-statement-expression",
+   "-Wno-gnu-compound-literal-initializer",
+   "-Wno-gnu-zero-variadic-macro-arguments",
+   "-I/Users/zzlinus/dev/cpp/rx78-2/include"
+  ],
+  "file": "src/motor/motor.cc"
+ },
+ {
+  "directory": "/Users/zzlinus/dev/cpp/rx78-2",
+  "arguments": [
+   "g++-13",
+   "-o",
+   "/Users/zzlinus/dev/cpp/rx78-2/build/src/pid/pid_controller.o",
+   "-c",
+   "src/pid/pid_controller.cc",
+   "-std=c++14",
+   "-O3",
+   "-g",
+   "-Wall",
+   "-Werror",
+   "-Wextra",
+   "-Wpedantic",
+   "-Wstrict-aliasing",
+   "-lp",
+   "-Wno-pointer-arith",
+   "-Wno-newline-eof",
+   "-Wno-unused-parameter",
+   "-Wno-gnu-statement-expression",
+   "-Wno-gnu-compound-literal-initializer",
+   "-Wno-gnu-zero-variadic-macro-arguments",
+   "-I/Users/zzlinus/dev/cpp/rx78-2/include"
+  ],
+  "file": "src/pid/pid_controller.cc"
  }
 ]
