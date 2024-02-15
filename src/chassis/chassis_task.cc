@@ -14,6 +14,7 @@ namespace Chassis
         delete cc;
     }
 
+
     void Chassis_task::update_feedback()
     {
     }
@@ -90,7 +91,7 @@ namespace Chassis
     {
         // TODO: wait for initialization
         // vTaskDelay(CHASSIS_TASK_INIT_TIME);
-        // make sure all chassis motor is online,
+        // TODO:make sure all chassis motor is online,
         // 判断底盘电机是否都在线
         // while (toe_is_error(CHASSIS_MOTOR1_TOE) || toe_is_error(CHASSIS_MOTOR2_TOE) ||
         //        toe_is_error(CHASSIS_MOTOR3_TOE) || toe_is_error(CHASSIS_MOTOR4_TOE) || toe_is_error(DBUS_TOE))
@@ -101,6 +102,7 @@ namespace Chassis
         {
             // set chassis control mode
             // 设置底盘控制模式
+            cc->set_mode();
             // chassis_set_mode(&chassis_move);
             // when mode changes, some data save
             // 模式切换数据保存
@@ -145,7 +147,7 @@ namespace Chassis
             // chassis_high_water = uxTaskGetStackHighWaterMark(NULL);
             // #endif
             //  std::cout << "Chassis_task \n";
-			std::cout << "Chassis task\n";
+            std::cout << "Chassis task\n";
         }
     }
 

@@ -14,6 +14,7 @@ namespace Chassis
         ~Chassis_ctrl();
         void init();
         void first_order_filter(fp32 intupt);
+		void set_mode();
 
        private:
        public:
@@ -80,3 +81,22 @@ namespace Chassis
 }  // namespace Chassis
 
 #endif
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -3,6 +3,10 @@
 namespace Chassis
 {
 
+    void Chassis_ctrl::set_mode()
+    {
+    }
+
     Chassis_ctrl::Chassis_ctrl()
     {
         // FIXME:
