@@ -3,8 +3,49 @@
 namespace Chassis
 {
 
+    void Chassis_ctrl::ecex_mode_switch(void)
+    {
+        // TODO: implement modo shift behaviour here
+        switch (mode)
+        {
+            case CHSMODE_FOLLOW_GIMBAL_YAW:;
+            case CHSMODE_FOLLOW_CHASSIS_YAW:;
+            case CHSMODE_NO_FOLLOW_GIMBAL_YAW:;
+            default:;
+        }
+    }
+
+    void Chassis_ctrl::control_get_error()
+    {
+    }
+
+    void Chassis_ctrl::control_set_target()
+    {
+    }
+
+    void Chassis_ctrl::control_calc_pid()
+    {
+    }
+
+    bool Chassis_ctrl::is_motor_online(void)
+    {
+        // TODO: implement can interface here
+        return true;
+    }
+
+    void Chassis_ctrl::set_motor_currten()
+    {
+        // TODO: implement can interface here
+    }
+
     void Chassis_ctrl::set_mode()
     {
+        mode_e last_mode = mode;
+
+        // TODO: mode shifting
+
+        if (last_mode != mode)
+            ecex_mode_switch();
     }
 
     Chassis_ctrl::Chassis_ctrl()
@@ -42,8 +83,10 @@ namespace Chassis
         kb_vy_ramp.input = 0.0f;
         kb_vy_ramp.out = 0.0f;
 
+        mode = CHSMODE_ZERO_FORCE;
+
         // TODO: move all pid configureation to a config file and load it in when init
-        for (auto& m : mecanum_wheel)
+        for (auto& m : motors)
         {
             m = new Hardware::Motor(1.0, 1.0, 1.0);
         }
@@ -51,7 +94,7 @@ namespace Chassis
 
     Chassis_ctrl::~Chassis_ctrl()
     {
-        for (auto& m : mecanum_wheel)
+        for (auto& m : motors)
         {
             delete m;
         }

@@ -12,21 +12,30 @@ namespace Chassis
        public:
         Chassis_ctrl();
         ~Chassis_ctrl();
-        void init();
+        void init(void);
         void first_order_filter(fp32 intupt);
-		void set_mode();
+        void set_mode(void);
+        bool is_motor_online(void);
+        void set_motor_currten();
+		void control_get_error();
+		void control_set_target();
+		void control_calc_pid();
 
        private:
+        void ecex_mode_switch(void);
+
        public:
-        Hardware::Motor *mecanum_wheel[4];
-        first_order_filter_type_t fof_x;  // HACK: better come up with a better name
-        first_order_filter_type_t fof_y;  // HACK: better come up with a better name
+        Hardware::Motor *motors[4];
+        fof_t fof_x;  // HACK: better come up with a better name
+        fof_t fof_y;  // HACK: better come up with a better name
 
         ramp_t kb_vx_ramp;  // 用于键盘控制的斜波函数
         ramp_t kb_vy_ramp;  // 用于键盘控制的斜波函数
         ramp_t spin_ramp;
 
-        // FIXME: remote controller && imu && gimbal related
+        mode_e mode;
+
+        // TODO: remote controller && imu && gimbal related
         const RC_ctrl_t *chassis_RC;  // 底盘使用的遥控器指针, the point to remote control
         // const gimbal_motor_t *chassis_yaw_motor;   //will use the relative angle of yaw gimbal motor to calculate
         // the euler angle.底盘使用到yaw云台电机的相对角度来计算底盘的欧拉角. const gimbal_motor_t
@@ -34,9 +43,6 @@ namespace Chassis
         // angle.底盘使用到pitch云台电机的相对角度来计算底盘的欧拉角
         const fp32 *chassis_INS_angle;  // the point to
         // the euler angle of gyro sensor.获取陀螺仪解算出的欧拉角指针
-
-        chassis_mode_e chassis_mode;       // state machine. 底盘控制状态机
-        chassis_mode_e last_chassis_mode;  // last state machine.底盘上次控制状态机
                                            //
         // HACK: drop motor_speed_pid motor_chassis, put all these mess in to motor class
         // chassis_motor_t motor_chassis[4];  // chassis motor data.底盘电机数据
@@ -45,9 +51,9 @@ namespace Chassis
         Pid::Pid_controller follow_angle_pid;     // follow angle PID.底盘跟随角度pid
         Pid::Pid_controller no_follow_angle_pid;  // 底盘不跟随角度pid  added by 片哥
 
-        first_order_filter_type_t
+        fof_t
             chassis_cmd_slow_set_vx;  // use first order filter to slow set-point.使用一阶低通滤波减缓设定值
-        first_order_filter_type_t
+        fof_t
             chassis_cmd_slow_set_vy;  // use first order filter to slow set-point.使用一阶低通滤波减缓设定值
 
         fp32 vx;  // chassis vertical speed, positive means forward,unit m/s. 底盘速度 前进方向 前为正，单位 m/s
@@ -81,22 +87,3 @@ namespace Chassis
 }  // namespace Chassis
 
 #endif
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

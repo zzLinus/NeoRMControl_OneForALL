@@ -2,7 +2,7 @@ UNAME_S = $(shell uname -s)
 WORK_DIR  = $(shell pwd)
 BUILD_DIR = $(WORK_DIR)/build
 
-CC = g++-13
+CC = g++
 CPPFLAGS = -std=c++14 -O3 -g -Wall -Werror -Wextra -Wpedantic -Wstrict-aliasing -lp
 CPPFLAGS += -Wno-pointer-arith -Wno-newline-eof -Wno-unused-parameter -Wno-gnu-statement-expression
 CPPFLAGS += -Wno-gnu-compound-literal-initializer -Wno-gnu-zero-variadic-macro-arguments
