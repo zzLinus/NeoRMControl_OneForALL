@@ -33,7 +33,7 @@ namespace Pid
 
     bool Pid_controller::init()
     {
-        return OK;
+        return Status::OK;
     }
 
 }  // namespace Pid

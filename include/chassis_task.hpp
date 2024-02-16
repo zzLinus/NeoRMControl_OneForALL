@@ -11,7 +11,6 @@ namespace Chassis
         ~Chassis_task();
         void task(void);
         void init(void);
-        void update_feedback(void);
 
        private:
        public:

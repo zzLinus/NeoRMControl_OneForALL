@@ -6,7 +6,7 @@ namespace Chassis
     void Chassis_ctrl::ecex_mode_switch(void)
     {
         // TODO: implement modo shift behaviour here
-        switch (mode)
+        switch (this->mode)
         {
             case CHSMODE_FOLLOW_GIMBAL_YAW:;
             case CHSMODE_FOLLOW_CHASSIS_YAW:;
@@ -33,18 +33,19 @@ namespace Chassis
         return true;
     }
 
-    void Chassis_ctrl::set_motor_currten()
+    void Chassis_ctrl::set_motor_current()
     {
         // TODO: implement can interface here
+        can_itrf->can_send();
     }
 
     void Chassis_ctrl::set_mode()
     {
-        mode_e last_mode = mode;
+        mode_e last_mode = this->mode;
 
         // TODO: mode shifting
 
-        if (last_mode != mode)
+        if (last_mode != this->mode)
             ecex_mode_switch();
     }
 
@@ -84,9 +85,10 @@ namespace Chassis
         kb_vy_ramp.out = 0.0f;
 
         mode = CHSMODE_ZERO_FORCE;
+        can_itrf = new Hardware::Can_interface();
 
         // TODO: move all pid configureation to a config file and load it in when init
-        for (auto& m : motors)
+        for (auto& m : this->motors)
         {
             m = new Hardware::Motor(1.0, 1.0, 1.0);
         }
@@ -94,7 +96,8 @@ namespace Chassis
 
     Chassis_ctrl::~Chassis_ctrl()
     {
-        for (auto& m : motors)
+        delete can_itrf;
+        for (auto& m : this->motors)
         {
             delete m;
         }
@@ -106,6 +109,7 @@ namespace Chassis
 
     void Chassis_ctrl::init()
     {
+		can_itrf->init();
     }
 
 }  // namespace Chassis

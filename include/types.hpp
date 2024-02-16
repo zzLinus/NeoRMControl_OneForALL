@@ -1,5 +1,6 @@
 #ifndef __TYPES__
 #define __TYPES__
+#include "string"
 
 // NOTE: defines and type defines
 typedef signed char int8_t;
@@ -10,15 +11,22 @@ typedef unsigned char bool_t;
 typedef float fp32;
 typedef double fp64;
 
-#define OK    true
-#define ERROR false
+namespace Status
+{
+    const bool OK = true;
+    const bool ERROR = false;
+}  // namespace Status
+
+namespace Config
+{
+    const char CAN_CHANNEL[] = "can0";
+}
 
 enum PID_MODE
 {
     PID_POSITION = 0,
     PID_DELTA
 };
-
 
 typedef struct
 {

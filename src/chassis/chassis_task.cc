@@ -14,10 +14,6 @@ namespace Chassis
         delete cc;
     }
 
-    void Chassis_task::update_feedback()
-    {
-    }
-
     void Chassis_task::init()
     {
         // chassis init
@@ -82,11 +78,12 @@ namespace Chassis
 
         // update data
         // 更新一下数据
-        update_feedback();
+        cc->control_get_error();
     }
 
     void Chassis_task::task(void)
     {
+        init();
         // TODO: wait for initialization
         // vTaskDelay(CHASSIS_TASK_INIT_TIME);
         // TODO:make sure all chassis motor is online,
@@ -109,16 +106,16 @@ namespace Chassis
             // chassis data update
 
             // 底盘数据更新
-			cc->control_get_error();
-            //chassis_feedback_update(&chassis_move);
-            // set chassis control set-point
-            // 底盘控制量设置
-			cc->control_set_target();
-            //chassis_set_contorl(&chassis_move);
-            // chassis control pid calculate
-            // 底盘控制PID计算
-			cc->control_calc_pid();
-            //chassis_control_loop(&chassis_move);
+            cc->control_get_error();
+            // chassis_feedback_update(&chassis_move);
+            //  set chassis control set-point
+            //  底盘控制量设置
+            cc->control_set_target();
+            // chassis_set_contorl(&chassis_move);
+            //  chassis control pid calculate
+            //  底盘控制PID计算
+            cc->control_calc_pid();
+            // chassis_control_loop(&chassis_move);
 
             // make sure  one motor is online at least, so that the control CAN message can be received
             // 确保至少一个电机在线， 这样CAN控制包可以被接收到
@@ -134,7 +131,7 @@ namespace Chassis
                 //{
                 // send control current
                 // 发送控制电流
-                cc->set_motor_currten();
+                cc->set_motor_current();
                 //}
             }
 
