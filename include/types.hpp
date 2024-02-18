@@ -20,13 +20,55 @@ namespace Status
 namespace Config
 {
     const char CAN_CHANNEL[] = "can0";
-}
 
-enum PID_MODE
-{
-    PID_POSITION = 0,
-    PID_DELTA
-};
+    // NOTE: PID CONFIG
+    const fp32 M3505_MOTOR_SPEED_PID_KP = 15000.0f;  // 15000.0f
+    const fp32 M3505_MOTOR_SPEED_PID_KI = 10.0f;
+    const fp32 M3505_MOTOR_SPEED_PID_KD = 0.0f;
+    // 3508 MAX_MOTOR_CAN_CURRENT 14000.0f
+    const fp32 M3505_MOTOR_SPEED_PID_MAX_OUT = 14000.0f;
+    const fp32 M3505_MOTOR_SPEED_PID_MAX_IOUT = 2000.0f;
+
+    // chassis follow angle PID
+    // 底盘旋转跟随PID
+    const fp32 CHASSIS_FOLLOW_GIMBAL_PID_KP = 20.0f;  // 原始40.0f
+    const fp32 CHASSIS_FOLLOW_GIMBAL_PID_KI = 0.0f;
+    const fp32 CHASSIS_FOLLOW_GIMBAL_PID_KD = 100.0f;  // 原始0.0f
+    const fp32 CHASSIS_FOLLOW_GIMBAL_PID_MAX_OUT = 6.0f;
+    const fp32 CHASSIS_FOLLOW_GIMBAL_PID_MAX_IOUT = 0.2f;
+
+    // NOTE: chassis
+    // chassis no follow angle PID
+    // 底盘旋转不跟随PID
+    // NOTE: const static fp32 chassis_no_follow_yaw_pid[3] = {4.5, 0.0002, 0}; ZHANG
+    //       const static fp32 chassis_no_follow_yaw_pid[3] = {3.5, 0.0002, 0}; HUAN
+    const fp32 CHASSIS_NO_FOLLOW_GIMBAL_PID_KP = 4.5f;  // 原始40.0f
+    const fp32 CHASSIS_NO_FOLLOW_GIMBAL_PID_KI = 0.0002f;
+    const fp32 CHASSIS_NO_FOLLOW_GIMBAL_PID_KD = 0.0f;  // 原始0.0f
+    const fp32 CHASSIS_NO_FOLLOW_GIMBAL_PID_MAX_OUT = 6.0f;
+    const fp32 CHASSIS_NO_FOLLOW_GIMBAL_PID_MAX_IOUT = 0.2f;
+
+    const fp32 NORMAL_MAX_CHASSIS_SPEED_X = 2.0f;       // origin: 2.0f
+    const fp32 NORMAL_MAX_CHASSIS_SPIN_SPEED_X = 3.0f;  // origin: 2.0f
+    const fp32 NORMAL_MAX_CHASSIS_SPEED_Y = 2.0f;       // origin: 1.5f
+    const fp32 NORMAL_MAX_CHASSIS_SPIN_SPEED_Y = 3.0f;  // origin: 1.5f
+                                                        //
+    const fp32 CHASSIS_WZ_SPIN = 7;
+    //
+    const fp32 RAMP_KEY_ADD_VX = 0.06f;
+    const fp32 RAMP_KEY_ADD_VY = 0.06f;
+    // 小陀螺缓启停的增量
+    // 小陀螺缓启停的增量
+    const fp32 RAMP_SPIN_INC = 0.06f;
+    const fp32 RAMP_SPIN_DEC = 0.06f;
+
+    enum PID_MODE
+    {
+        PID_POSITION = 0,
+        PID_DELTA
+    };
+
+}  // namespace Config
 
 typedef struct
 {

@@ -11,7 +11,7 @@ namespace Gimbal
 			Gimbal_info();
 			~Gimbal_info();
 
-			void Gimbal_task();
+			void task();
     };
 
 }  // namespace Gimbal

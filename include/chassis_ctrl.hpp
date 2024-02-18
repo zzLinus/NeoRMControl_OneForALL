@@ -18,7 +18,7 @@ namespace Chassis
         void set_mode(void);
         bool is_motor_online(void);
         void set_motor_current();
-        void control_get_error();
+        void control_get_feedback();
         void control_set_target();
         void control_calc_pid();
 
@@ -36,6 +36,17 @@ namespace Chassis
 
         mode_e mode;
 
+        //
+        // HACK: drop motor_speed_pid motor_chassis, put all these mess in to motor class
+        // chassis_motor_t motor_chassis[4];  // chassis motor data.底盘电机数据
+        // pid_type_def motor_speed_pid[4];   // motor speed PID.底盘电机速度pid
+
+        Pid::Pid_controller *follow_angle_pid;     // follow angle PID.底盘跟随角度pid
+        Pid::Pid_controller *no_follow_angle_pid;  // 底盘不跟随角度pid  added by 片哥
+
+        fof_t chassis_cmd_slow_set_vx;  // use first order filter to slow set-point.使用一阶低通滤波减缓设定值
+        fof_t chassis_cmd_slow_set_vy;  // use first order filter to slow set-point.使用一阶低通滤波减缓设定值
+
         // TODO: remote controller && imu && gimbal related
         // const RC_ctrl_t *chassis_RC;  // 底盘使用的遥控器指针, the point to remote control
         // const gimbal_motor_t *chassis_yaw_motor;   //will use the relative angle of yaw gimbal motor to calculate
@@ -44,16 +55,6 @@ namespace Chassis
         // angle.底盘使用到pitch云台电机的相对角度来计算底盘的欧拉角
         // const fp32 *chassis_INS_angle;  // the point to
         // the euler angle of gyro sensor.获取陀螺仪解算出的欧拉角指针
-        //
-        // HACK: drop motor_speed_pid motor_chassis, put all these mess in to motor class
-        // chassis_motor_t motor_chassis[4];  // chassis motor data.底盘电机数据
-        // pid_type_def motor_speed_pid[4];   // motor speed PID.底盘电机速度pid
-
-        Pid::Pid_controller follow_angle_pid;     // follow angle PID.底盘跟随角度pid
-        Pid::Pid_controller no_follow_angle_pid;  // 底盘不跟随角度pid  added by 片哥
-
-        fof_t chassis_cmd_slow_set_vx;  // use first order filter to slow set-point.使用一阶低通滤波减缓设定值
-        fof_t chassis_cmd_slow_set_vy;  // use first order filter to slow set-point.使用一阶低通滤波减缓设定值
 
         fp32 vx;  // chassis vertical speed, positive means forward,unit m/s. 底盘速度 前进方向 前为正，单位 m/s
         fp32 vy;  // chassis horizontal speed, positive means letf,unit m/s.底盘速度 左右方向 左为正  单位 m/s
@@ -79,8 +80,6 @@ namespace Chassis
                              // motor.陀螺仪和云台电机叠加的pitch角度
         fp32 chassis_roll;   // the roll angle calculated by gyro sensor and gimbal
                              // motor.陀螺仪和云台电机叠加的roll角度
-
-        fp32 chassis_spin_ramp_add;  // 小陀螺缓启停的增量
        private:
         Hardware::Can_interface *can_itrf;
     };

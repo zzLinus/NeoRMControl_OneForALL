@@ -3,8 +3,23 @@
 namespace Pid
 {
 
-    Pid_controller::Pid_controller()
+    Pid_controller::Pid_controller(
+        uint8_t mode,
+        const fp32 kp,
+        const fp32 ki,
+        const fp32 kd,
+        const fp32 max_out,
+        const fp32 max_iout)
     {
+        this->mode = mode;
+        this->kp = kp;
+        this->ki = ki;
+        this->kd = kd;
+
+        this->max_out = max_out;
+        this->max_iout = max_iout;
+        this->Dbuf[0] = this->Dbuf[1] = this->Dbuf[2] = 0.0f;
+        this->error[0] = this->error[1] = this->error[2] = this->Pout = this->Iout = this->Dout = this->out = 0.0f;
     }
     Pid_controller::~Pid_controller()
     {
@@ -30,10 +45,5 @@ namespace Pid
      * @param[in]      max_iout: pid最大积分输出
      * @retval         none
      */
-
-    bool Pid_controller::init()
-    {
-        return Status::OK;
-    }
 
 }  // namespace Pid

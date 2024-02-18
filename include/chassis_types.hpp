@@ -4,6 +4,7 @@
 // NOTE: chassis mode
 
 #include "types.hpp"
+
 namespace Chassis
 {
 
@@ -12,11 +13,6 @@ namespace Chassis
 #define CHASSIS_CONTROL_TIME            0.002f
 #define CHASSIS_ACCEL_X_NUM             0.1666666667f
 #define CHASSIS_ACCEL_Y_NUM             0.3333333333f
-#define NORMAL_MAX_CHASSIS_SPEED_X      2.0f  // origin: 2.0f
-#define NORMAL_MAX_CHASSIS_SPIN_SPEED_X 3.0f  // origin: 2.0f
-#define NORMAL_MAX_CHASSIS_SPEED_Y      2.0f  // origin: 1.5f
-#define NORMAL_MAX_CHASSIS_SPIN_SPEED_Y 3.0f  // origin: 1.5f
-#define CHASSIS_WZ_SPIN                 7
 
     typedef enum
     {

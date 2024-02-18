@@ -10,7 +10,7 @@ int main(int argv, char *argc[])
     Gimbal::Gimbal_info gimbal;
 
     std::thread ct(&Chassis::Chassis_task::task, chassis);
-    std::thread gt(&Gimbal::Gimbal_info::Gimbal_task, gimbal);
+    std::thread gt(&Gimbal::Gimbal_info::task, gimbal);
 
     ct.join();
     gt.join();

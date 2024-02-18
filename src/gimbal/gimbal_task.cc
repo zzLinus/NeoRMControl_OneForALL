@@ -4,10 +4,10 @@
 namespace Gimbal
 {
 
-    void Gimbal_info::Gimbal_task()
+    void Gimbal_info::task()
     {
 		while(1){
-			std::cout << "Gimbal task\n";
+			//std::cout << "Gimbal task\n";
 		}
     }
 

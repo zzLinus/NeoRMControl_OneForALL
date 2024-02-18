@@ -19,15 +19,14 @@ namespace Hardware
     class Motor
     {
        public:
-        Motor() = delete;
-        Motor(fp32 kp, fp32 ki, fp32 kd);
+        Motor();
         ~Motor();
 
        private:
         Pid::Pid_controller *getPid();
 
        public:
-        Pid::Pid_controller pid_ctrl;
+        Pid::Pid_controller *pid_ctrler;
 
        private:
     };
