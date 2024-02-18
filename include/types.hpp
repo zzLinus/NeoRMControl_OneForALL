@@ -54,6 +54,12 @@ namespace Config
     const fp32 NORMAL_MAX_CHASSIS_SPIN_SPEED_Y = 3.0f;  // origin: 1.5f
                                                         //
     const fp32 CHASSIS_WZ_SPIN = 7;
+
+    const fp32 MOTOR_SPEED_TO_CHASSIS_SPEED_VX = 0.25f;
+    const fp32 MOTOR_SPEED_TO_CHASSIS_SPEED_VY = 0.25f;
+    const fp32 MOTOR_SPEED_TO_CHASSIS_SPEED_WZ = 0.25f;
+    const fp32 MOTOR_DISTANCE_TO_CENTER = 0.2f;
+
     //
     const fp32 RAMP_KEY_ADD_VX = 0.06f;
     const fp32 RAMP_KEY_ADD_VY = 0.06f;
@@ -70,27 +76,6 @@ namespace Config
 
 }  // namespace Config
 
-typedef struct
-{
-    struct
-    {
-        int16_t ch[5];
-        char s[2];
-    } rc;
-    struct
-    {
-        int16_t x;
-        int16_t y;
-        int16_t z;
-        uint8_t press_l;
-        uint8_t press_r;
-    } mouse;
-    struct
-    {
-        uint16_t v;
-    } key;
-
-} RC_ctrl_t;
 
 typedef struct
 {

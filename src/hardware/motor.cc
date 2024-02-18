@@ -5,6 +5,7 @@ namespace Hardware
 
     Motor::Motor()
     {
+		motor_measure = new motor_can_message;
         // TODO: get chassis motor data point,  initialize motor speed PID
         // 获取底盘电机数据指针，初始化PID
         pid_ctrler = new Pid::Pid_controller(
@@ -19,6 +20,7 @@ namespace Hardware
     Motor::~Motor()
     {
         delete pid_ctrler;
+		delete motor_measure;
     }
 
 }  // namespace Hardware

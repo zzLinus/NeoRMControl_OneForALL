@@ -27,6 +27,12 @@ namespace Hardware
 
        public:
         Pid::Pid_controller *pid_ctrler;
+        // TODO: can bus api related
+        motor_can_message *motor_measure;
+        fp32 accel;
+        fp32 speed;
+        fp32 speed_set;
+        int16_t give_current;
 
        private:
     };
