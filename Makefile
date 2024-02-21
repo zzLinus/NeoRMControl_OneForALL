@@ -3,12 +3,20 @@ WORK_DIR  = $(shell pwd)
 BUILD_DIR = $(WORK_DIR)/build
 
 CC = g++
-CPPFLAGS = -std=c++14 -O3 -g -Wall -Werror -Wextra -Wpedantic -Wstrict-aliasing -lp
+CPPFLAGS = -std=c++14 -O3 -g -Wall -Werror -Wextra -Wpedantic -Wstrict-aliasing
 CPPFLAGS += -Wno-pointer-arith -Wno-newline-eof -Wno-unused-parameter -Wno-gnu-statement-expression
 CPPFLAGS += -Wno-gnu-compound-literal-initializer -Wno-gnu-zero-variadic-macro-arguments
 CPPFLAGS += -I$(WORK_DIR)/include
+#CPPFLAGS += `pkg-config sdl --cflags`
+#CPPFLAGS += -DDEBUG
+# FIXME: imtui dependency linking
+CPPFLAGS += -I "/home/zzlinus/dev/cpp/imtui/build/dist/include"
+CPPFLAGS += -I "/home/zzlinus/dev/cpp/imtui/build/dist/include/imgui-for-imtui"
+CPPFLAGS += -L "/home/zzlinus/dev/cpp/imtui/build/dist/lib/"
 
-#LDFLAGS = `pkg-config sdl2 --libs`
+LDFLAGS += -limtui -limtui-ncurses -limgui-for-imtui -lncurses
+
+#LDFLAGS = `pkg-config sdl --libs`
 
 SRC = $(wildcard src/*.cc) $(wildcard src/**/*.cc)
 OBJ = $(addprefix $(BUILD_DIR)/, $(addsuffix .o, $(basename $(SRC))))
@@ -25,7 +33,7 @@ run: all
 	$(BUILD_DIR)/$(BIN)
 
 $(BIN): $(OBJ)
-	$(CC) -o $(BUILD_DIR)/$(BIN) $^ $(LDFLAGS)
+	$(CC) -o $(BUILD_DIR)/$(BIN) $^ $(CPPFLAGS) $(LDFLAGS)
 
 $(BUILD_DIR)/%.o: %.cc
 	@mkdir -p $(dir $@) && echo + CC $<

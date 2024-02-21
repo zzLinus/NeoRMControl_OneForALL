@@ -67,7 +67,9 @@ namespace Hardware
 
         if (nbytes != -1)
         {
+#ifdef DEBUG
             std::cout << "Wrote " << nbytes << " bytes\n";
+#endif
             ret = Status::OK;
         }
 
