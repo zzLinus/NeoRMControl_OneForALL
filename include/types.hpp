@@ -93,6 +93,7 @@ namespace Types
         fp32 vx;
         fp32 vy;
         fp32 wz;
+		fp32 wheel_speed[4];
 		uint64_t pkg;
     } debug_info_t;
 

@@ -263,6 +263,8 @@ namespace Chassis
                 for (uint8_t i = 0; i < 4; i++)
                 {
                     motors[i]->give_current = (int16_t)(wheel_speed[i]);
+                    // FIXME:
+                    debug_info->wheel_speed[i] = wheel_speed[i] / 0x03ff;
                 }
                 return;
 
