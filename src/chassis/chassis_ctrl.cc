@@ -1,5 +1,7 @@
 #include "chassis_ctrl.hpp"
 
+#include <iostream>
+
 namespace Chassis
 {
 
@@ -61,7 +63,6 @@ namespace Chassis
         mode = Types::CHSMODE_ZERO_FORCE;
 
         can_itrf = new Hardware::Can_interface();
-        rc_ctrl = new Types::RC_ctrl_t;
 
         for (auto& m : this->motors)
         {
@@ -74,7 +75,6 @@ namespace Chassis
         delete can_itrf;
         delete follow_angle_pid;
         delete no_follow_angle_pid;
-        delete rc_ctrl;
         for (auto& m : this->motors)
         {
             delete m;
@@ -229,9 +229,16 @@ namespace Chassis
             case Types::CHSMODE_OPEN:;
                 // in raw mode, set-point is sent to CAN bus
                 // 在原始模式，设置值是发送到CAN总线
-                vx_set = (rc_ctrl->key.a - rc_ctrl->key.s) * rc_ctrl->key.speed;
-                vy_set = (rc_ctrl->key.w - rc_ctrl->key.r) * rc_ctrl->key.speed;
-                wz_set = (rc_ctrl->key.q - rc_ctrl->key.f) * rc_ctrl->key.speed;
+                vx_set = (((rc_ctrl->key.dir & (1 << 2)) >> 2) - ((rc_ctrl->key.dir & (1 << 3)) >> 3)) *
+                         rc_ctrl->key.speed;
+                vy_set = (((rc_ctrl->key.dir & (1 << 0)) >> 0) - ((rc_ctrl->key.dir & (1 << 1)) >> 1)) *
+                         rc_ctrl->key.speed;
+
+                wz_set = (rc_ctrl->key.dir - rc_ctrl->key.dir) * rc_ctrl->key.speed;
+
+                debug_info->vx = vx_set;
+                debug_info->vy = vy_set;
+                debug_info->wz = wz_set;
                 cmd_slow_set_vx.out = 0.0f;
                 cmd_slow_set_vy.out = 0.0f;
             default: return;
@@ -316,13 +323,23 @@ namespace Chassis
     void Chassis_ctrl::set_motor_current()
     {
         // TODO: implement can interface here
-        can_itrf->can_send();
+        uint64_t pkg = 0;
+        int idx = 0;
+        for (auto& m : motors)
+        {
+            pkg = pkg | (((uint64_t)m->give_current & 0xffff) << (16 * (3 - idx)));
+            // printf("status : %d, %0lx %0lx\n", idx, (uint64_t)m->give_current << (16 * idx), pkg);
+            idx++;
+        }
+        // std::cout << std::endl;
+        debug_info->pkg = pkg;
+        can_itrf->can_send(pkg);
     }
 
     void Chassis_ctrl::set_mode()
     {
         Types::mode_e last_mode = this->mode;
-        bool is_spin = true;
+        bool is_spin = false;
 
         // TODO: mode shifting
         // remote control  set chassis behaviour mode
@@ -334,8 +351,10 @@ namespace Chassis
         {
             if (this->spin_ramp.out <= this->spin_ramp.max_value / 1.5)  // 若小陀螺速度已减至足够小
             {
-                this->mode = Types::CHSMODE_NO_FOLLOW_GIMBAL_YAW;  // 则退出小陀螺模式
-                this->spin_ramp.out = 0;                           // 清空输出
+                // FIXME:no follow gimbal yaw
+                // this->mode = Types::CHSMODE_NO_FOLLOW_GIMBAL_YAW;  // 则退出小陀螺模式
+                this->mode = Types::CHSMODE_OPEN;  // 则退出小陀螺模式
+                this->spin_ramp.out = 0;           // 清空输出
             }
         }
         else
@@ -363,13 +382,22 @@ namespace Chassis
     {
     }
 
-    void Chassis_ctrl::init()
+    void Chassis_ctrl::init(Controller::Kb_ctrl* kb_ctrl)
     {
         // NOTE: init sub devices here
         can_itrf->init();
+        rc_ctrl = kb_ctrl->rc_ctrl;
+        debug_info = kb_ctrl->debug;
+        if (rc_ctrl != nullptr && rc_ctrl != nullptr)
+        {
+            mode = Types::CHSMODE_OPEN;
+        }
+        else
+        {
+            mode = Types::CHSMODE_ZERO_FORCE;
+        }
         // TODO: get remote control point
         // 获取遥控器指针
-        // cc->chassis_RC = get_remote_control_point();
         // get gyro sensor euler angle point
         // TODO: 获取陀螺仪姿态角指针
         // cc->chassis_INS_angle = get_INS_angle_point();

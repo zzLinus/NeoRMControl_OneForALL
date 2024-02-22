@@ -14,20 +14,15 @@ namespace Chassis
         delete cc;
     }
 
-    void Chassis_task::init()
+    void Chassis_task::task(Controller::Kb_ctrl *kb_ctrl)
     {
         // chassis init
         // 底盘初始化
-        cc->init();
+        cc->init(kb_ctrl);
 
         // update data
         // 更新一下数据
         cc->control_get_feedback();
-    }
-
-    void Chassis_task::task(void)
-    {
-        init();
         // TODO: wait for initialization
         // vTaskDelay(CHASSIS_TASK_INIT_TIME);
         // TODO:make sure all chassis motor is online,

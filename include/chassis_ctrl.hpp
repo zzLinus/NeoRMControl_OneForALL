@@ -3,6 +3,7 @@
 
 #include "can.hpp"
 #include "chassis_types.hpp"
+#include "kb_ctrl.hpp"
 #include "motor.hpp"
 #include "pid_controller.hpp"
 
@@ -13,7 +14,7 @@ namespace Chassis
        public:
         Chassis_ctrl();
         ~Chassis_ctrl();
-        void init(void);
+        void init(Controller::Kb_ctrl *kb_ctrl);
         void first_order_filter(fp32 intupt);
         void set_mode(void);
         bool is_motor_online(void);
@@ -51,8 +52,9 @@ namespace Chassis
         Types::fof_t cmd_slow_set_vx;  // use first order filter to slow set-point.使用一阶低通滤波减缓设定值
         Types::fof_t cmd_slow_set_vy;  // use first order filter to slow set-point.使用一阶低通滤波减缓设定值
 
+        const Types::RC_ctrl_t *rc_ctrl;  // 底盘使用的遥控器指针, the point to remote control
+        Types::debug_info_t *debug_info;  // 底盘使用的遥控器指针, the point to remote control
         // TODO: remote controller && imu && gimbal related
-        const Types::RC_ctrl_t * rc_ctrl;  // 底盘使用的遥控器指针, the point to remote control
         // const gimbal_motor_t *chassis_yaw_motor;   //will use the relative angle of yaw gimbal motor to calculate
         // the euler angle.底盘使用到yaw云台电机的相对角度来计算底盘的欧拉角. const gimbal_motor_t
         // *chassis_pitch_motor; //will use the relative angle of pitch gimbal motor to calculate the euler

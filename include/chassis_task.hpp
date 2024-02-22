@@ -1,6 +1,7 @@
 #ifndef __CHASSIS__
 #define __CHASSIS__
 #include "chassis_ctrl.hpp"
+#include "kb_ctrl.hpp"
 
 namespace Chassis
 {
@@ -9,8 +10,7 @@ namespace Chassis
        public:
         Chassis_task();
         ~Chassis_task();
-        void task(void);
-        void init(void);
+        void task(Controller::Kb_ctrl *kb_ctrl);
 
        private:
        public:

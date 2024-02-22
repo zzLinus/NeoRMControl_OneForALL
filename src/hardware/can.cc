@@ -45,7 +45,7 @@ namespace Hardware
         delete ifr;
     }
 
-    bool Can_interface::can_send()
+    bool Can_interface::can_send(uint64_t pkg)
     {
         int nbytes = -1;
         int ret = Status::ERROR;
@@ -53,14 +53,14 @@ namespace Hardware
         // eg : test can pkd <01BB117001BBEE90>
         frame->can_id = 0x200;
         frame->can_dlc = 8;
-        frame->data[0] = 0x01;
-        frame->data[1] = 0xBB;
-        frame->data[2] = 0x11;
-        frame->data[3] = 0x70;
-        frame->data[4] = 0x01;
-        frame->data[5] = 0xBB;
-        frame->data[6] = 0xEE;
-        frame->data[7] = 0x90;
+        frame->data[1] = (uint8_t)(pkg >> 0);
+        frame->data[0] = (uint8_t)(pkg >> 8);
+        frame->data[3] = (uint8_t)(pkg >> 16);
+        frame->data[2] = (uint8_t)(pkg >> 24);
+        frame->data[5] = (uint8_t)(pkg >> 32);
+        frame->data[4] = (uint8_t)(pkg >> 40);
+        frame->data[7] = (uint8_t)(pkg >> 48);
+        frame->data[6] = (uint8_t)(pkg >> 56);
 
         /* send CAN frame */
         nbytes = write(soket_id, frame, sizeof(can_frame));

@@ -11,7 +11,7 @@ int main(int argv, char *argc[])
     Gimbal::Gimbal_info gimbal;
     Controller::Kb_ctrl kb_ctrl;
 
-    std::thread ct(&Chassis::Chassis_task::task, chassis);
+    std::thread ct(&Chassis::Chassis_task::task, chassis, &kb_ctrl);
     std::thread gt(&Gimbal::Gimbal_info::task, gimbal);
     std::thread kt(&Controller::Kb_ctrl::task, kb_ctrl);  // keyboard input thread
 
