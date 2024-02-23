@@ -31,7 +31,7 @@ namespace Hardware
         addr->can_ifindex = ifr->ifr_ifindex;
 
         // bind CAN socket to the given interface
-        if (bind(soket_id, (sockaddr*)addr, sizeof(*addr)) < 0)
+        if (bind(soket_id, (sockaddr *)addr, sizeof(*addr)) < 0)
         {
             perror("Error in socket bind");
             exit(-1);
@@ -43,6 +43,30 @@ namespace Hardware
         delete addr;
         delete frame;
         delete ifr;
+    }
+
+    bool Can_interface::can_dump(Types::debug_info_t *debug)
+    {
+        for (;;)
+        {
+            if (soket_id != -1)
+            {
+				 //read CAN frame
+				//if (read(soket_id, frame, sizeof(can_frame)) <= 0)
+				//{
+				//    perror("Error reading CAN frame");
+				//    return Status::ERROR;
+				//}
+
+                debug->can_f.can_id = frame->can_id;
+                debug->can_f.can_dlc = frame->can_dlc;
+
+                for (int i = 0; i < frame->can_dlc; i++)
+                {
+                    debug->can_f.data[i] = frame->data[i];
+                }
+            }
+        }
     }
 
     bool Can_interface::can_send(uint64_t pkg)

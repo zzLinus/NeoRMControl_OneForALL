@@ -8,11 +8,12 @@
 #include <sys/socket.h>
 #include <sys/types.h>
 #include <unistd.h>
+
 #include <cstdint>
 
-#include "types.hpp"
-#include "string"
 #include "stdlib.h"
+#include "string"
+#include "types.hpp"
 
 namespace Hardware
 {
@@ -21,8 +22,9 @@ namespace Hardware
        public:
         Can_interface();
         ~Can_interface();
-		void init();
-		bool can_send(uint64_t pkg);
+        void init();
+        bool can_send(uint64_t pkg);
+        bool can_dump(Types::debug_info_t *debug);
 
        private:
         sockaddr_can *addr;

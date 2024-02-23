@@ -1,4 +1,5 @@
 #include "ramp_controller.hpp"
+#include <math.h>
 
 namespace Ramp
 {
@@ -10,11 +11,7 @@ namespace Ramp
             output = 0;
             return output;
         }
-        else if (input < 0 && output - input < diff)
-        {
-            output = input;
-        }
-        else if (input > 0 && input - output < diff)
+        else if (fabs(input - output) < diff)
         {
             output = input;
         }

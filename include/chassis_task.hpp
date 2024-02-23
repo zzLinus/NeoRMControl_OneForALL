@@ -14,8 +14,8 @@ namespace Chassis
 
        private:
        public:
-       private:
         Chassis_ctrl *cc;  // NOTE: cc stand for chassis control
+       private:
     };
 
 }  // namespace Chassis

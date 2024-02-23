@@ -1,5 +1,7 @@
 #ifndef __TYPES__
 #define __TYPES__
+#include <linux/can.h>
+
 #include <cstdint>
 
 #include "string"
@@ -102,6 +104,7 @@ namespace Types
         fp32 vy;
         fp32 wz;
         fp32 wheel_speed[4];
+        can_frame can_f;
         uint64_t pkg;
     } debug_info_t;
 

@@ -32,6 +32,9 @@ namespace Input
         uint64_t last = std::chrono::duration_cast<std::chrono::milliseconds>(
                             std::chrono::high_resolution_clock::now().time_since_epoch())
                             .count();
+        uint64_t last_x = std::chrono::duration_cast<std::chrono::milliseconds>(
+                              std::chrono::high_resolution_clock::now().time_since_epoch())
+                              .count();
         // NOTE: UI and keyboard event
         while (true)
         {
@@ -60,36 +63,64 @@ namespace Input
 
             ImGui::Text("time %lu %lu %lu", last, now, now - last);
             ImGui::Text("ramp %f", kb_vy_ramp->output);
+
+            ImGui::Text(
+                "candump id :%d\n dlc %d \n%02x %02x %02x %02x %02x %02x %02x %02x",
+                debug->can_f.can_id,
+                debug->can_f.can_dlc,
+                debug->can_f.data[0],
+                debug->can_f.data[1],
+                debug->can_f.data[2],
+                debug->can_f.data[3],
+                debug->can_f.data[4],
+                debug->can_f.data[5],
+                debug->can_f.data[6],
+                debug->can_f.data[7]);
+
             if (ImGui::IsKeyPressed('w', true) && now - last > 70)
             {
-                rc_ctrl->key.speed_y = kb_vy_ramp->ramp_calc(spdslider, spdslider / 20);
+                rc_ctrl->key.speed_y = kb_vy_ramp->ramp_calc(spdslider, spdslider / 10);
                 last = std::chrono::duration_cast<std::chrono::milliseconds>(
                            std::chrono::high_resolution_clock::now().time_since_epoch())
                            .count();
             }
-
             if (ImGui::IsKeyPressed('r', true) && now - last > 70)
             {
-                rc_ctrl->key.speed_y = kb_vy_ramp->ramp_calc(-spdslider, spdslider / 20);
+                rc_ctrl->key.speed_y = kb_vy_ramp->ramp_calc(-spdslider, spdslider / 10);
                 last = std::chrono::duration_cast<std::chrono::milliseconds>(
                            std::chrono::high_resolution_clock::now().time_since_epoch())
                            .count();
             }
 
-            if (ImGui::IsKeyPressed('a', true) && now - last > 70)
+            if (ImGui::IsKeyPressed('a', true) && now - last_x > 70)
             {
-                rc_ctrl->key.speed_x = kb_vx_ramp->ramp_calc(-spdslider, spdslider / 20);
+                rc_ctrl->key.speed_x = kb_vx_ramp->ramp_calc(-spdslider, spdslider / 10);
+                last_x = std::chrono::duration_cast<std::chrono::milliseconds>(
+                             std::chrono::high_resolution_clock::now().time_since_epoch())
+                             .count();
+            }
+            if (ImGui::IsKeyPressed('s', true) && now - last_x > 70)
+            {
+                rc_ctrl->key.speed_x = kb_vx_ramp->ramp_calc(spdslider, spdslider / 10);
+                last_x = std::chrono::duration_cast<std::chrono::milliseconds>(
+                             std::chrono::high_resolution_clock::now().time_since_epoch())
+                             .count();
+            }
+
+            // NOTE: dec velocity over time
+            if (now - last > 300)
+            {
+                rc_ctrl->key.speed_y = kb_vy_ramp->ramp_calc(0, spdslider / 4);
                 last = std::chrono::duration_cast<std::chrono::milliseconds>(
                            std::chrono::high_resolution_clock::now().time_since_epoch())
                            .count();
             }
-
-            if (ImGui::IsKeyPressed('s', true) && now - last > 70)
+            if (now - last_x > 300)
             {
-                rc_ctrl->key.speed_x = kb_vx_ramp->ramp_calc(spdslider, spdslider / 20);
-                last = std::chrono::duration_cast<std::chrono::milliseconds>(
-                           std::chrono::high_resolution_clock::now().time_since_epoch())
-                           .count();
+                rc_ctrl->key.speed_x = kb_vx_ramp->ramp_calc(0, spdslider / 4);
+                last_x = std::chrono::duration_cast<std::chrono::milliseconds>(
+                             std::chrono::high_resolution_clock::now().time_since_epoch())
+                             .count();
             }
 
             if (ImGui::IsKeyPressed('q', true))

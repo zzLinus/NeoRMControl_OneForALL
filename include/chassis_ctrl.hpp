@@ -53,7 +53,9 @@ namespace Chassis
 
         const Types::RC_ctrl_t *rc_ctrl;  // 底盘使用的遥控器指针, the point to remote control
         Types::debug_info_t *debug_info;  // 底盘使用的遥控器指针, the point to remote control
-        // TODO: remote controller && imu && gimbal related
+										  //
+        Hardware::Can_interface *can_itrf;
+        //// TODO: remote controller && imu && gimbal related
         // const gimbal_motor_t *chassis_yaw_motor;   //will use the relative angle of yaw gimbal motor to calculate
         // the euler angle.底盘使用到yaw云台电机的相对角度来计算底盘的欧拉角. const gimbal_motor_t
         // *chassis_pitch_motor; //will use the relative angle of pitch gimbal motor to calculate the euler
@@ -69,7 +71,6 @@ namespace Chassis
         fp32 chassis_roll;   // the roll angle calculated by gyro sensor and gimbal
                              // motor.陀螺仪和云台电机叠加的roll角度
        private:
-        Hardware::Can_interface *can_itrf;
     };
 }  // namespace Chassis
 
