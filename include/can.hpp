@@ -29,6 +29,7 @@ namespace Hardware
        private:
         sockaddr_can *addr;
         can_frame *frame;
+        can_frame *frame_r;
         ifreq *ifr;
 		Types::debug_info_t *debug;
         int soket_id;
