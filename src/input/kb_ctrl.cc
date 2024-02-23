@@ -64,6 +64,7 @@ namespace Input
             ImGui::Text("time %lu %lu %lu", last, now, now - last);
             ImGui::Text("ramp %f", kb_vy_ramp->output);
 
+            ImGui::Text("Hi mon! %d: ", debug->err);
             ImGui::Text(
                 "candump id :%x\n dlc : %d \n%02x %02x %02x %02x %02x %02x %02x %02x",
                 debug->can_f.can_id,
@@ -123,7 +124,7 @@ namespace Input
                              .count();
             }
 
-			// FIXME:
+            // FIXME:
             if (ImGui::IsKeyPressed('q', true))
             {
                 rc_ctrl->key.q = 0x1;

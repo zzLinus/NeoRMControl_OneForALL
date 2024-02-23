@@ -106,6 +106,7 @@ namespace Types
         fp32 wheel_speed[4];
         can_frame can_f;
         uint64_t pkg;
+		bool err;
     } debug_info_t;
 
     typedef struct

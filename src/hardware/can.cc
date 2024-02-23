@@ -12,6 +12,7 @@ namespace Hardware
         frame = new can_frame;
         ifr = new ifreq;
         soket_id = -1;
+        init_flag = false;
     }
 
     void Can_interface::init()
@@ -22,6 +23,11 @@ namespace Hardware
             perror("Error while creating socket");
             exit(-1);
         }
+
+        struct can_filter rfilter[1];
+        rfilter[0].can_id = 0x201;
+        rfilter[0].can_mask = 0x3ff;
+        setsockopt(soket_id, SOL_CAN_RAW, CAN_RAW_FILTER, &rfilter, sizeof(rfilter));
 
         std::strcpy(ifr->ifr_name, Config::CAN_CHANNEL);
         ioctl(soket_id, SIOCGIFINDEX, ifr);
@@ -35,6 +41,7 @@ namespace Hardware
             perror("Error in socket bind");
             exit(-1);
         }
+        init_flag = true;
     }
 
     Can_interface::~Can_interface()
@@ -48,8 +55,9 @@ namespace Hardware
     {
         for (;;)
         {
-            if (soket_id != -1)
+            if (init_flag != false)
             {
+                debug->err = false;
                 // eg : test can pkd <01BB117001BBEE90>
                 frame->can_id = 0x200;
                 frame->can_dlc = 8;
@@ -84,6 +92,7 @@ namespace Hardware
                     debug->can_f.data[i] = frame->data[i];
                 }
             }
+            debug->err = true;
         }
     }
 
