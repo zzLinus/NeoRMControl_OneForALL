@@ -10,7 +10,7 @@ namespace Chassis
        public:
         Chassis_task();
         ~Chassis_task();
-        void task(Controller::Kb_ctrl *kb_ctrl);
+        void task(Input::Kb_ctrl *kb_ctrl);
 
        private:
        public:

@@ -6,12 +6,18 @@
 namespace Pid
 {
 
-    class Pid_controller
+    class Pid_ctrller
     {
        public:
-        Pid_controller() = delete;
-        Pid_controller(uint8_t mode, const fp32 kp, const fp32 ki,const fp32 kd,const fp32 max_out, const fp32 max_iout);
-        ~Pid_controller();
+        Pid_ctrller() = delete;
+        Pid_ctrller(
+            uint8_t mode,
+            const fp32 kp,
+            const fp32 ki,
+            const fp32 kd,
+            const fp32 max_out,
+            const fp32 max_iout);
+        ~Pid_ctrller();
 
        private:
        public:

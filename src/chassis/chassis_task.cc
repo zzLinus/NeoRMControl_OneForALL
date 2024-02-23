@@ -14,7 +14,7 @@ namespace Chassis
         delete cc;
     }
 
-    void Chassis_task::task(Controller::Kb_ctrl *kb_ctrl)
+    void Chassis_task::task(Input::Kb_ctrl *kb_ctrl)
     {
         // chassis init
         // 底盘初始化
@@ -23,8 +23,7 @@ namespace Chassis
         // update data
         // 更新一下数据
         cc->control_get_feedback();
-        // TODO: wait for initialization
-        // vTaskDelay(CHASSIS_TASK_INIT_TIME);
+		//
         // TODO:make sure all chassis motor is online,
         // 判断底盘电机是否都在线
         while (!cc->is_motor_online())
@@ -35,7 +34,7 @@ namespace Chassis
 
         while (1)
         {
-            // TODO: set chassis control mode
+            // set chassis control mode
             // 设置底盘控制模式
             cc->set_mode();
 
@@ -57,12 +56,6 @@ namespace Chassis
             {
                 // TODO: move this else where
                 // 当遥控器掉线的时候，发送给底盘电机零电流.
-                // if (toe_is_error(DBUS_TOE))
-                //{
-                //    CAN_cmd_chassis(0, 0, 0, 0);
-                //}
-                // else
-                //{
                 // send control current
                 // 发送控制电流
                 cc->set_motor_current();

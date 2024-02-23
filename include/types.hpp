@@ -1,6 +1,7 @@
 #ifndef __TYPES__
 #define __TYPES__
 #include <cstdint>
+
 #include "string"
 
 // NOTE: defines and type defines
@@ -49,17 +50,23 @@ namespace Config
     const fp32 CHASSIS_NO_FOLLOW_GIMBAL_PID_MAX_OUT = 6.0f;
     const fp32 CHASSIS_NO_FOLLOW_GIMBAL_PID_MAX_IOUT = 0.2f;
 
-    const fp32 NORMAL_MAX_CHASSIS_SPEED_X = 2.0f;       // origin: 2.0f
-    const fp32 NORMAL_MAX_CHASSIS_SPIN_SPEED_X = 3.0f;  // origin: 2.0f
-    const fp32 NORMAL_MAX_CHASSIS_SPEED_Y = 2.0f;       // origin: 1.5f
-    const fp32 NORMAL_MAX_CHASSIS_SPIN_SPEED_Y = 3.0f;  // origin: 1.5f
-                                                        //
     const fp32 CHASSIS_WZ_SPIN = 7;
 
     const fp32 MOTOR_SPEED_TO_CHASSIS_SPEED_VX = 0.25f;
     const fp32 MOTOR_SPEED_TO_CHASSIS_SPEED_VY = 0.25f;
     const fp32 MOTOR_SPEED_TO_CHASSIS_SPEED_WZ = 0.25f;
     const fp32 MOTOR_DISTANCE_TO_CENTER = 0.2f;
+
+    // m3508 rmp change to chassis speed,
+    // m3508转化成底盘速度(m/s)的比例，
+    const fp32 CHASSIS_MOTOR_RPM_TO_VECTOR_SEN = 0.000415809748903494517209f;
+    const fp32 CHASSIS_CONTROL_FREQUENCE = 500.0f;
+
+    // NOTE: chassis task control time 0.002s
+    // 底盘任务控制间隔 0.002s
+    const fp32 CHASSIS_CONTROL_TIME = 0.002f;
+    const fp32 CHASSIS_ACCEL_X_NUM = 0.1666666667f;
+    const fp32 CHASSIS_ACCEL_Y_NUM = 0.3333333333f;
 
     //
     const fp32 RAMP_KEY_ADD_VX = 0.06f;
@@ -69,32 +76,33 @@ namespace Config
     const fp32 RAMP_SPIN_INC = 0.06f;
     const fp32 RAMP_SPIN_DEC = 0.06f;
 
-    enum PID_MODE
-    {
-        PID_POSITION = 0,
-        PID_DELTA
-    };
-
+    const int32_t OPEN_LOOP_MAX_SPEED = 0x03ff;
 }  // namespace Config
-
-typedef struct
-{
-    fp32 input;         // 输入数据
-    fp32 out;           // 滤波输出的数据
-    fp32 num[1];        // 滤波参数
-    fp32 frame_period;  // 滤波的时间间隔 单位 s
-} first_order_filter_type_t;
 
 namespace Types
 {
 
     typedef struct
     {
+        fp32 input;         // 输入数据
+        fp32 out;           // 滤波输出的数据
+        fp32 num[1];        // 滤波参数
+        fp32 frame_period;  // 滤波的时间间隔 单位 s
+    } first_order_filter_type_t;
+
+    enum PID_MODE
+    {
+        PID_POSITION = 0,
+        PID_DELTA
+    };
+
+    typedef struct
+    {
         fp32 vx;
         fp32 vy;
         fp32 wz;
-		fp32 wheel_speed[4];
-		uint64_t pkg;
+        fp32 wheel_speed[4];
+        uint64_t pkg;
     } debug_info_t;
 
     typedef struct
@@ -114,19 +122,14 @@ namespace Types
         } mouse;
         struct
         {
-			uint8_t dir;
             bool q;  //  spin clock wise
             bool f;  //  spin counter clock wise
-            uint16_t speed;
-            uint16_t v;
+            fp32 speed_x;
+            fp32 speed_y;
+            int16_t v;
         } key;
 
     } RC_ctrl_t;
-
-    // m3508 rmp change to chassis speed,
-    // m3508转化成底盘速度(m/s)的比例，
-    const fp32 CHASSIS_MOTOR_RPM_TO_VECTOR_SEN = 0.000415809748903494517209f;
-    const fp32 CHASSIS_CONTROL_FREQUENCE = 500.0f;
 
     typedef enum
     {
@@ -151,11 +154,6 @@ namespace Types
 
     typedef struct
     {
-        fp32 input;         // 输入数据
-        fp32 out;           // 输出数据
-        fp32 min_value;     // 限幅最小值
-        fp32 max_value;     // 限幅最大值
-        fp32 frame_period;  // 时间间隔
     } ramp_t;
 }  // namespace Types
 

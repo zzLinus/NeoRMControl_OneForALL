@@ -7,51 +7,39 @@ namespace Chassis
 
     Chassis_ctrl::Chassis_ctrl()
     {
-        // FIXME:
+        // WARN:
         // first order low-pass filter  replace ramp function
         // 用一阶滤波代替斜波函数生成
-        fof_x.num = CHASSIS_ACCEL_X_NUM;
-        fof_x.frame_period = CHASSIS_CONTROL_TIME;
+        fof_x.num = Config::CHASSIS_ACCEL_X_NUM;
+        fof_x.frame_period = Config::CHASSIS_CONTROL_TIME;
         fof_x.input = 0.0f;
         fof_x.out = 0.0f;
 
-        // HACK: 键盘控制斜波函数初始化
-        // 小陀螺缓启停斜波函数初始化
-        fof_y.num = CHASSIS_ACCEL_Y_NUM;
-        fof_y.frame_period = CHASSIS_CONTROL_TIME;
+        fof_y.num = Config::CHASSIS_ACCEL_Y_NUM;
+        fof_y.frame_period = Config::CHASSIS_CONTROL_TIME;
         fof_y.input = 0.0f;
         fof_y.out = 0.0f;
 
-        kb_vx_ramp.frame_period = 0.1;
-        kb_vx_ramp.max_value = Config::NORMAL_MAX_CHASSIS_SPEED_X;
-        kb_vx_ramp.min_value = -Config::NORMAL_MAX_CHASSIS_SPEED_X;
-        kb_vx_ramp.input = 0.0f;
-        kb_vx_ramp.out = 0.0f;
-
-        kb_vy_ramp.frame_period = 0.1;
-        kb_vy_ramp.max_value = Config::NORMAL_MAX_CHASSIS_SPEED_Y;
-        kb_vy_ramp.min_value = -Config::NORMAL_MAX_CHASSIS_SPEED_Y;
-        kb_vy_ramp.input = 0.0f;
-        kb_vy_ramp.out = 0.0f;
-
-        spin_ramp.frame_period = 0.1;
-        spin_ramp.max_value = Config::CHASSIS_WZ_SPIN;
-        spin_ramp.min_value = 0;
-        spin_ramp.input = 0.0f;
-        spin_ramp.out = 0.0f;
+        // HACK:
+        // 小陀螺缓启停斜波函数初始化
+        // spin_ramp.frame_period = 0.1;
+        // spin_ramp.max_value = Config::CHASSIS_WZ_SPIN;
+        // spin_ramp.min_value = 0;
+        // spin_ramp.input = 0.0f;
+        // spin_ramp.out = 0.0f;
 
         // HACK:initialize angle PID
         // 初始化角度PID
-        follow_angle_pid = new Pid::Pid_controller(
-            Config::PID_POSITION,
+        follow_angle_pid = new Pid::Pid_ctrller(
+            Types::PID_POSITION,
             Config::CHASSIS_FOLLOW_GIMBAL_PID_KP,
             Config::CHASSIS_FOLLOW_GIMBAL_PID_KI,
             Config::CHASSIS_FOLLOW_GIMBAL_PID_KD,
             Config::CHASSIS_FOLLOW_GIMBAL_PID_MAX_OUT,
             Config::CHASSIS_FOLLOW_GIMBAL_PID_MAX_IOUT);
 
-        no_follow_angle_pid = new Pid::Pid_controller(
-            Config::PID_POSITION,
+        no_follow_angle_pid = new Pid::Pid_ctrller(
+            Types::PID_POSITION,
             Config::CHASSIS_NO_FOLLOW_GIMBAL_PID_KP,
             Config::CHASSIS_NO_FOLLOW_GIMBAL_PID_KI,
             Config::CHASSIS_NO_FOLLOW_GIMBAL_PID_KD,
@@ -110,9 +98,8 @@ namespace Chassis
         {
             //      update motor speed, accel is differential of speed PID
             //      更新电机速度，加速度是速度的PID微分
-            //
-            m->speed = Types::CHASSIS_MOTOR_RPM_TO_VECTOR_SEN * m->motor_measure->speed_rpm;
-            m->accel = Types::CHASSIS_CONTROL_FREQUENCE * m->pid_ctrler->Dbuf[0];
+            m->speed = Config::CHASSIS_MOTOR_RPM_TO_VECTOR_SEN * m->motor_measure->speed_rpm;
+            m->accel = Config::CHASSIS_CONTROL_FREQUENCE * m->pid_ctrler->Dbuf[0];
         }
 
         // calculate vertical speed, horizontal speed ,rotation speed, left hand rule
@@ -124,8 +111,8 @@ namespace Chassis
         wz = (-motors[0]->speed - motors[1]->speed - motors[2]->speed - motors[3]->speed) *
              Config::MOTOR_SPEED_TO_CHASSIS_SPEED_WZ / Config::MOTOR_DISTANCE_TO_CENTER;
 
-        // calculate chassis euler angle, if chassis add a new gyro sensor,please change this code
         // TODO: 计算底盘姿态角度, 如果底盘上有陀螺仪请更改这部分代码
+        // calculate chassis euler angle, if chassis add a new gyro sensor,please change this code
         // chassis_move_update->chassis_yaw = rad_format(
         //     *(chassis_move_update->chassis_INS_angle + INS_YAW_ADDRESS_OFFSET) -
         //     chassis_move_update->chassis_yaw_motor->relative_angle);
@@ -142,34 +129,34 @@ namespace Chassis
                 // follow gimbal mode
                 // 跟随云台模式
             case Types::CHSMODE_FOLLOW_GIMBAL_YAW:;
-            // TODO: implement FOLLOW_GIMBAL_YAW mode
-            // fp32 sin_yaw = 0.0f, cos_yaw = 0.0f;
-            //// rotate chassis direction, make sure vertial direction follow gimbal
-            //// 旋转控制底盘速度方向，保证前进方向是云台方向，有利于运动平稳
-            // sin_yaw = arm_sin_f32(-chassis_move_control->chassis_yaw_motor->relative_angle);
-            // cos_yaw = arm_cos_f32(-chassis_move_control->chassis_yaw_motor->relative_angle);
-            // chassis_move_control->vx_set = cos_yaw * vx_set + sin_yaw * vy_set;
-            // chassis_move_control->vy_set = -sin_yaw * vx_set + cos_yaw * vy_set;
-            //// set control relative angle  set-point
-            //// 设置控制相对云台角度
-            // chassis_move_control->chassis_relative_angle_set =
-            //     rad_format(angle_set);  // 此模式下如果不开启摇摆，angle_set始终为0
-            //// calculate ratation speed
-            //// 计算旋转PID角速度
-            // chassis_move_control->wz_set = -PID_calc(
-            //     &chassis_move_control->chassis_angle_pid,
-            //     chassis_move_control->chassis_yaw_motor->relative_angle,
-            //     chassis_move_control->chassis_relative_angle_set);
-            //// speed limit
-            //// 速度限幅
-            // chassis_move_control->vx_set = fp32_constrain(
-            //     chassis_move_control->vx_set,
-            //     chassis_move_control->vx_min_speed,
-            //     chassis_move_control->vx_max_speed);
-            // chassis_move_control->vy_set = fp32_constrain(
-            //     chassis_move_control->vy_set,
-            //     chassis_move_control->vy_min_speed,
-            //     chassis_move_control->vy_max_speed);
+                //// TODO: implement FOLLOW_GIMBAL_YAW mode
+                // fp32 sin_yaw = 0.0f, cos_yaw = 0.0f;
+                //// rotate chassis direction, make sure vertial direction follow gimbal
+                //// 旋转控制底盘速度方向，保证前进方向是云台方向，有利于运动平稳
+                // sin_yaw = arm_sin_f32(-chassis_move_control->chassis_yaw_motor->relative_angle);
+                // cos_yaw = arm_cos_f32(-chassis_move_control->chassis_yaw_motor->relative_angle);
+                // chassis_move_control->vx_set = cos_yaw * vx_set + sin_yaw * vy_set;
+                // chassis_move_control->vy_set = -sin_yaw * vx_set + cos_yaw * vy_set;
+                //// set control relative angle  set-point
+                //// 设置控制相对云台角度
+                // chassis_move_control->chassis_relative_angle_set =
+                //     rad_format(angle_set);  // 此模式下如果不开启摇摆，angle_set始终为0
+                //                             // calculate ratation speed
+                //                             // 计算旋转PID角速度
+                // chassis_move_control->wz_set = -PID_calc(
+                //     &chassis_move_control->chassis_angle_pid,
+                //     chassis_move_control->chassis_yaw_motor->relative_angle,
+                //     chassis_move_control->chassis_relative_angle_set);
+                //// speed limit
+                //// 速度限幅
+                // chassis_move_control->vx_set = fp32_constrain(
+                //     chassis_move_control->vx_set,
+                //     chassis_move_control->vx_min_speed,
+                //     chassis_move_control->vx_max_speed);
+                // chassis_move_control->vy_set = fp32_constrain(
+                //     chassis_move_control->vy_set,
+                //     chassis_move_control->vy_min_speed,
+                //     chassis_move_control->vy_max_speed);
             case Types::CHSMODE_FOLLOW_CHASSIS_YAW:;
                 // fp32 delat_angle = 0.0f;
                 //// set chassis yaw angle set-point
@@ -190,9 +177,9 @@ namespace Chassis
                 //     fp32_constrain(vy_set, chassis_move_control->vy_min_speed,
                 //     chassis_move_control->vy_max_speed);
 
+            case Types::CHSMODE_SPIN:
+            case Types::CHSMODE_NO_MOVE:
             case Types::CHSMODE_NO_FOLLOW_GIMBAL_YAW:;
-                ////"angle_set" is rotation speed set-point
-                //// “angle_set” 是旋转速度控制
                 // fp32 sin_yaw = 0.0f, cos_yaw = 0.0f;
                 //// 控制vx vy
                 // sin_yaw = arm_sin_f32(-chassis_move_control->chassis_yaw_motor->relative_angle);
@@ -208,12 +195,12 @@ namespace Chassis
                 //     chassis_move_control->vy_min_speed,
                 //     chassis_move_control->vy_max_speed);
                 //// 控制wz
-                // if (mode == Types::CHSMODE_SPIN)  // 如果处在小陀螺模式
+                // if (chassis_behaviour_mode == CHASSIS_SPIN)  // 如果处在小陀螺模式
                 //{
                 //     chassis_move_control->wz_set = angle_set;
                 // }
                 // else  // 如果未在小陀螺模式 (angle_set来自遥控器,
-                // chassis_no_follow_angle_pid用于以较慢的速度回正底盘)
+                //       // chassis_no_follow_angle_pid用于以较慢的速度回正底盘)
                 //{
                 //     // 设置控制相对云台角度
                 //     chassis_move_control->chassis_relative_angle_set = 0;
@@ -225,16 +212,20 @@ namespace Chassis
                 //                         chassis_move_control->chassis_relative_angle_set);
                 // }
 
-            case Types::CHSMODE_ZERO_FORCE:;
-            case Types::CHSMODE_OPEN:;
+            case Types::CHSMODE_ZERO_FORCE:
+                vx_set = 0;
+                vx_set = 0;
+                vx_set = 0;
+                cmd_slow_set_vx.out = 0.0f;
+                cmd_slow_set_vy.out = 0.0f;
+                return;
+            case Types::CHSMODE_OPEN:
                 // in raw mode, set-point is sent to CAN bus
                 // 在原始模式，设置值是发送到CAN总线
-                vx_set = (((rc_ctrl->key.dir & (1 << 2)) >> 2) - ((rc_ctrl->key.dir & (1 << 3)) >> 3)) *
-                         rc_ctrl->key.speed;
-                vy_set = (((rc_ctrl->key.dir & (1 << 0)) >> 0) - ((rc_ctrl->key.dir & (1 << 1)) >> 1)) *
-                         rc_ctrl->key.speed;
+                vx_set = rc_ctrl->key.speed_x;
+                vy_set = rc_ctrl->key.speed_y;
 
-                wz_set = (rc_ctrl->key.dir - rc_ctrl->key.dir) * rc_ctrl->key.speed;
+                wz_set = (rc_ctrl->key.q - rc_ctrl->key.f) * Config::OPEN_LOOP_MAX_SPEED;
 
                 debug_info->vx = vx_set;
                 debug_info->vy = vy_set;
@@ -247,14 +238,18 @@ namespace Chassis
 
     void Chassis_ctrl::control_calc_pid()
     {
-        fp32 wheel_speed[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
+        fp32 wheel_speed[4];
 
         // mecanum wheel speed calculation
         // 麦轮运动分解
-        wheel_speed[0] = -vx_set - vy_set + -wz_set;
-        wheel_speed[1] = vx_set - vy_set + -wz_set;
-        wheel_speed[2] = vx_set + vy_set + -wz_set;
-        wheel_speed[3] = -vx_set + vy_set + -wz_set;
+        // [3]  [0]
+        //
+        // [2]  [1]
+        //
+        wheel_speed[0] = vx_set - vy_set + wz_set;
+        wheel_speed[1] = -vx_set - vy_set + wz_set;
+        wheel_speed[2] = -vx_set + vy_set + wz_set;
+        wheel_speed[3] = vx_set + vy_set + wz_set;
 
         switch (this->mode)
         {
@@ -264,12 +259,11 @@ namespace Chassis
                 {
                     motors[i]->give_current = (int16_t)(wheel_speed[i]);
                     // FIXME:
-                    debug_info->wheel_speed[i] = wheel_speed[i] / 0x03ff;
+                    debug_info->wheel_speed[i] = wheel_speed[i];
                 }
                 return;
 
             default:
-
                 // TODO: PID control
                 // calculate the max speed in four wheels, limit the max speed
                 // 计算轮子控制最大速度，并限制其最大速度
@@ -324,16 +318,13 @@ namespace Chassis
 
     void Chassis_ctrl::set_motor_current()
     {
-        // TODO: implement can interface here
         uint64_t pkg = 0;
         int idx = 0;
         for (auto& m : motors)
         {
             pkg = pkg | (((uint64_t)m->give_current & 0xffff) << (16 * (3 - idx)));
-            // printf("status : %d, %0lx %0lx\n", idx, (uint64_t)m->give_current << (16 * idx), pkg);
             idx++;
         }
-        // std::cout << std::endl;
         debug_info->pkg = pkg;
         can_itrf->can_send(pkg);
     }
@@ -343,20 +334,15 @@ namespace Chassis
         Types::mode_e last_mode = this->mode;
         bool is_spin = false;
 
-        // TODO: mode shifting
-        // remote control  set chassis behaviour mode
-        // 遥控器设置模式
-        //
         // TODO: set spin mode with RC controller && keyboard (0/2)
-
         if (!is_spin)
         {
-            if (this->spin_ramp.out <= this->spin_ramp.max_value / 1.5)  // 若小陀螺速度已减至足够小
+            // if (this->spin_ramp.out <= this->spin_ramp.max_value / 1.5)  // 若小陀螺速度已减至足够小
             {
-                // FIXME:no follow gimbal yaw
+                // FIXME: didn't implement follow gimbal yaw mode yet
                 // this->mode = Types::CHSMODE_NO_FOLLOW_GIMBAL_YAW;  // 则退出小陀螺模式
                 this->mode = Types::CHSMODE_OPEN;  // 则退出小陀螺模式
-                this->spin_ramp.out = 0;           // 清空输出
+                // this->spin_ramp.out = 0;           // 清空输出
             }
         }
         else
@@ -365,16 +351,13 @@ namespace Chassis
         }
         //		last_state = chassis_behaviour_mode;
 
+        // TODO: 当云台在某些模式下，像初始化， 底盘不动 遥控器离线，底盘不动
         // when gimbal in some mode, such as init mode, chassis must's move
-        // TODO: 当云台在某些模式下，像初始化， 底盘不动
         // if (gimbal_cmd_to_chassis_stop())
         if (0)
         {
             this->mode = Types::CHSMODE_NO_MOVE;
         }
-
-        // add your own logic to enter the new mode
-        // 添加自己的逻辑判断进入新模式
 
         if (last_mode != this->mode)
             ecex_mode_switch();
@@ -384,13 +367,16 @@ namespace Chassis
     {
     }
 
-    void Chassis_ctrl::init(Controller::Kb_ctrl* kb_ctrl)
+    void Chassis_ctrl::init(Input::Kb_ctrl* kb_ctrl)
     {
         // NOTE: init sub devices here
         can_itrf->init();
+
+        // NOTE: get remote control point
+        // 获取遥控器指针
         rc_ctrl = kb_ctrl->rc_ctrl;
         debug_info = kb_ctrl->debug;
-        if (rc_ctrl != nullptr && rc_ctrl != nullptr)
+        if (rc_ctrl != nullptr)
         {
             mode = Types::CHSMODE_OPEN;
         }
@@ -398,13 +384,11 @@ namespace Chassis
         {
             mode = Types::CHSMODE_ZERO_FORCE;
         }
-        // TODO: get remote control point
-        // 获取遥控器指针
-        // get gyro sensor euler angle point
         // TODO: 获取陀螺仪姿态角指针
+        // get gyro sensor euler angle point
         // cc->chassis_INS_angle = get_INS_angle_point();
-        // get gimbal motor data point
         // TODO:获取云台电机数据指针
+        // get gimbal motor data point
         // cc->chassis_yaw_motor = get_yaw_motor_point();
         // cc->chassis_pitch_motor = get_pitch_motor_point();
     }
