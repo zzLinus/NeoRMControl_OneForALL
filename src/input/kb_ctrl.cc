@@ -48,7 +48,7 @@ namespace Input
             ImGui::NewFrame();
 
             ImGui::SetNextWindowPos(ImVec2(4, 27), ImGuiCond_Once);
-            ImGui::SetNextWindowSize(ImVec2(50.0, 10.0), ImGuiCond_Once);
+            ImGui::SetNextWindowSize(ImVec2(50.0, 15.0), ImGuiCond_Once);
             ImGui::Begin("Debug");
             ImGui::Text(
                 "Time per frame %.3f ms/frame (%.1f FPS)",
@@ -65,7 +65,7 @@ namespace Input
             ImGui::Text("ramp %f", kb_vy_ramp->output);
 
             ImGui::Text(
-                "candump id :%d\n dlc %d \n%02x %02x %02x %02x %02x %02x %02x %02x",
+                "candump id :%x\n dlc : %d \n%02x %02x %02x %02x %02x %02x %02x %02x",
                 debug->can_f.can_id,
                 debug->can_f.can_dlc,
                 debug->can_f.data[0],
@@ -123,13 +123,16 @@ namespace Input
                              .count();
             }
 
+			// FIXME:
             if (ImGui::IsKeyPressed('q', true))
             {
                 rc_ctrl->key.q = 0x1;
+                rc_ctrl->key.f = 0x0;
             }
             if (ImGui::IsKeyPressed('f', true))
             {
                 rc_ctrl->key.f = 0x1;
+                rc_ctrl->key.q = 0x0;
             }
 
             ImGui::PopStyleColor(1);

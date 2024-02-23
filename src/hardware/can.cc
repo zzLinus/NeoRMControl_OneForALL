@@ -23,7 +23,6 @@ namespace Hardware
             exit(-1);
         }
 
-        // get interface index
         std::strcpy(ifr->ifr_name, Config::CAN_CHANNEL);
         ioctl(soket_id, SIOCGIFINDEX, ifr);
 
@@ -51,12 +50,31 @@ namespace Hardware
         {
             if (soket_id != -1)
             {
-				 //read CAN frame
-				//if (read(soket_id, frame, sizeof(can_frame)) <= 0)
-				//{
-				//    perror("Error reading CAN frame");
-				//    return Status::ERROR;
-				//}
+                // eg : test can pkd <01BB117001BBEE90>
+                frame->can_id = 0x200;
+                frame->can_dlc = 8;
+                frame->data[1] = (uint8_t)(can_pkg >> 0);
+                frame->data[0] = (uint8_t)(can_pkg >> 8);
+                frame->data[3] = (uint8_t)(can_pkg >> 16);
+                frame->data[2] = (uint8_t)(can_pkg >> 24);
+                frame->data[5] = (uint8_t)(can_pkg >> 32);
+                frame->data[4] = (uint8_t)(can_pkg >> 40);
+                frame->data[7] = (uint8_t)(can_pkg >> 48);
+                frame->data[6] = (uint8_t)(can_pkg >> 56);
+
+                /* send CAN frame */
+                write(soket_id, frame, sizeof(can_frame));
+
+                // read CAN frame
+                if (read(soket_id, frame, sizeof(can_frame)) <= 0)
+                {
+                    perror("Error reading CAN frame");
+                    return Status::ERROR;
+                }
+                else
+                {
+                    // printf("not reading!\n");
+                }
 
                 debug->can_f.can_id = frame->can_id;
                 debug->can_f.can_dlc = frame->can_dlc;
@@ -71,33 +89,9 @@ namespace Hardware
 
     bool Can_interface::can_send(uint64_t pkg)
     {
-        int nbytes = -1;
-        int ret = Status::ERROR;
+        can_pkg = pkg;
 
-        // eg : test can pkd <01BB117001BBEE90>
-        frame->can_id = 0x200;
-        frame->can_dlc = 8;
-        frame->data[1] = (uint8_t)(pkg >> 0);
-        frame->data[0] = (uint8_t)(pkg >> 8);
-        frame->data[3] = (uint8_t)(pkg >> 16);
-        frame->data[2] = (uint8_t)(pkg >> 24);
-        frame->data[5] = (uint8_t)(pkg >> 32);
-        frame->data[4] = (uint8_t)(pkg >> 40);
-        frame->data[7] = (uint8_t)(pkg >> 48);
-        frame->data[6] = (uint8_t)(pkg >> 56);
-
-        /* send CAN frame */
-        nbytes = write(soket_id, frame, sizeof(can_frame));
-
-        if (nbytes != -1)
-        {
-#ifdef DEBUG
-            std::cout << "Wrote " << nbytes << " bytes\n";
-#endif
-            ret = Status::OK;
-        }
-
-        return ret;
+        return true;
     }
 
 }  // namespace Hardware
