@@ -367,15 +367,15 @@ namespace Chassis
     {
     }
 
-    void Chassis_ctrl::init(Input::Kb_ctrl* kb_ctrl)
+    void Chassis_ctrl::init(Types::RC_ctrl_t* rc_ctrller, Types::debug_info_t* debug)
     {
         // NOTE: init sub devices here
         can_itrf->init();
 
         // NOTE: get remote control point
         // 获取遥控器指针
-        rc_ctrl = kb_ctrl->rc_ctrl;
-        debug_info = kb_ctrl->debug;
+        rc_ctrl = rc_ctrller;
+        debug_info = debug;
         if (rc_ctrl != nullptr)
         {
             mode = Types::CHSMODE_OPEN;

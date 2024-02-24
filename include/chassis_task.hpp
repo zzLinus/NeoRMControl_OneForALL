@@ -10,11 +10,11 @@ namespace Chassis
        public:
         Chassis_task();
         ~Chassis_task();
-        void task(Input::Kb_ctrl *kb_ctrl);
+        void task(Types::RC_ctrl_t* rc_ctrller, Types::debug_info_t* debug);
 
        private:
        public:
-        Chassis_ctrl *cc;  // NOTE: cc stand for chassis control
+        Chassis_ctrl* cc;  // NOTE: cc stand for chassis control
        private:
     };
 

@@ -13,7 +13,7 @@ namespace Chassis
        public:
         Chassis_ctrl();
         ~Chassis_ctrl();
-        void init(Input::Kb_ctrl *kb_ctrl);
+        void init(Types::RC_ctrl_t *rc_ctrller, Types::debug_info_t *debug);
         void first_order_filter(fp32 intupt);
         void set_mode(void);
         bool is_motor_online(void);
@@ -53,8 +53,8 @@ namespace Chassis
 
         const Types::RC_ctrl_t *rc_ctrl;  // 底盘使用的遥控器指针, the point to remote control
         Types::debug_info_t *debug_info;  // 底盘使用的遥控器指针, the point to remote control
-										  //
         Hardware::Can_interface *can_itrf;
+
         //// TODO: remote controller && imu && gimbal related
         // const gimbal_motor_t *chassis_yaw_motor;   //will use the relative angle of yaw gimbal motor to calculate
         // the euler angle.底盘使用到yaw云台电机的相对角度来计算底盘的欧拉角. const gimbal_motor_t
@@ -62,7 +62,8 @@ namespace Chassis
         // angle.底盘使用到pitch云台电机的相对角度来计算底盘的欧拉角
         // const fp32 *chassis_INS_angle;  // the point to
         // the euler angle of gyro sensor.获取陀螺仪解算出的欧拉角指针
-        fp32 chassis_relative_angle;  // the relative angle between chassis and gimbal.底盘与云台的相对角度，单位 rad
+        fp32
+            chassis_relative_angle;  // the relative angle between chassis and gimbal.底盘与云台的相对角度，单位 rad
         fp32 chassis_relative_angle_set;  // the set relative angle.设置相对云台控制角度
         fp32 chassis_yaw_set;
         fp32 chassis_yaw;  // the yaw angle calculated by gyro sensor and gimbal motor.陀螺仪和云台电机叠加的yaw角度

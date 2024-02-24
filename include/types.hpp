@@ -98,6 +98,18 @@ namespace Types
         PID_DELTA
     };
 
+    enum Kb_event
+    {
+        UP = 0,
+        DOWN,
+        LEFT,
+        RIGHT,
+        SPIN_R,
+        SPIN_L,
+		STOP_X,
+		STOP_Y,
+    };
+
     typedef struct
     {
         fp32 vx;
@@ -106,7 +118,7 @@ namespace Types
         fp32 wheel_speed[4];
         can_frame can_f;
         uint64_t pkg;
-		bool err;
+        bool err;
     } debug_info_t;
 
     typedef struct

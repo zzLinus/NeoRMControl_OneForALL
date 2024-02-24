@@ -14,16 +14,16 @@ namespace Chassis
         delete cc;
     }
 
-    void Chassis_task::task(Input::Kb_ctrl *kb_ctrl)
+    void Chassis_task::task(Types::RC_ctrl_t* rc_ctrller, Types::debug_info_t* debug)
     {
         // chassis init
         // 底盘初始化
-        cc->init(kb_ctrl);
+        cc->init(rc_ctrller, debug);
 
         // update data
         // 更新一下数据
         cc->control_get_feedback();
-		//
+        //
         // TODO:make sure all chassis motor is online,
         // 判断底盘电机是否都在线
         while (!cc->is_motor_online())
