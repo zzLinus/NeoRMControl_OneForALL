@@ -14,6 +14,7 @@ int main(int argv, char *argc[])
     std::thread io_t(&Io::Io_handler::task, io);
     std::thread gimbal_t(&Gimbal::Gimbal_info::task, gimbal);
     std::thread chassis_t(&Chassis::Chassis_task::task, chassis, io.kb->rc_ctrl, io.ui->debug);
+
     std::thread candump_t(
         &Hardware::Can_interface::can_dump, chassis.cc->can_itrf, io.ui->debug);  // keyboard input thread
 

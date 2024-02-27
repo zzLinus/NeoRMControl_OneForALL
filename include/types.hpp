@@ -78,7 +78,7 @@ namespace Config
     const fp32 RAMP_SPIN_INC = 0.06f;
     const fp32 RAMP_SPIN_DEC = 0.06f;
 
-    const int32_t OPEN_LOOP_MAX_SPEED = 0x03ff;
+    const int32_t OPEN_LOOP_MAX_SPEED = 0x0aff;
 }  // namespace Config
 
 namespace Types

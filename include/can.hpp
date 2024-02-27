@@ -34,7 +34,6 @@ namespace Hardware
 		Types::debug_info_t *debug;
         int soket_id;
 		bool init_flag;
-		uint64_t can_pkg;
 
        public:
        private:

@@ -83,9 +83,8 @@ namespace Hardware
         }
     }
 
-    bool Can_interface::can_send(uint64_t pkg)
+    bool Can_interface::can_send(uint64_t can_pkg)
     {
-        can_pkg = pkg;
 
         // eg : test can pkd <01BB117001BBEE90>
         frame_w->can_id = 0x200;

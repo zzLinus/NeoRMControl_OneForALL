@@ -2,10 +2,6 @@
 
 namespace Input
 {
-    Types::RC_ctrl_t *Kb_ctrl::rc_ctrl;
-    Ramp::Ramp_ctrller *Kb_ctrl::kb_vx_ramp;
-    Ramp::Ramp_ctrller *Kb_ctrl::kb_vy_ramp;
-
     Kb_ctrl::Kb_ctrl()
     {
         // HACK:键盘控制斜波函数初始化
@@ -27,16 +23,18 @@ namespace Input
         switch (event)
         {
             case Types::Kb_event::UP:
-                rc_ctrl->key.speed_y = kb_vy_ramp->ramp_calc(spdslider, spdslider / 10);
+                rc_ctrl->key.speed_y = kb_vy_ramp->ramp_calc(spdslider, spdslider / 2);
+                rc_ctrl->key.q = 0x0;
+                rc_ctrl->key.f = 0x0;
                 return rc_ctrl->key.speed_y;
             case Types::Kb_event::DOWN:
-                rc_ctrl->key.speed_y = kb_vy_ramp->ramp_calc(-spdslider, spdslider / 10);
+                rc_ctrl->key.speed_y = kb_vy_ramp->ramp_calc(-spdslider, spdslider / 2);
                 return rc_ctrl->key.speed_y;
             case Types::Kb_event::LEFT:
-                rc_ctrl->key.speed_x = kb_vx_ramp->ramp_calc(-spdslider, spdslider / 10);
+                rc_ctrl->key.speed_x = kb_vx_ramp->ramp_calc(-spdslider, spdslider / 2);
                 return rc_ctrl->key.speed_x;
             case Types::Kb_event::RIGHT:
-                rc_ctrl->key.speed_x = kb_vx_ramp->ramp_calc(spdslider, spdslider / 10);
+                rc_ctrl->key.speed_x = kb_vx_ramp->ramp_calc(spdslider, spdslider / 2);
                 return rc_ctrl->key.speed_x;
             case Types::Kb_event::SPIN_L:
                 rc_ctrl->key.q = 0x1;

@@ -2,7 +2,7 @@
 
 namespace Ui
 {
-    Ncurses_ui::Ncurses_ui(fp32 (*event_handler)(Types::Kb_event event, fp32 spdslider))
+    Ncurses_ui::Ncurses_ui(std::function<fp32(Types::Kb_event, fp32)> event_handler)
     {
         input_handler = event_handler;
         debug = new Types::debug_info_t;
