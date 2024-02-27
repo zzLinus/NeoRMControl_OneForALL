@@ -4,7 +4,8 @@
 
 #include "iostream"
 
-namespace Hardware {
+namespace Hardware
+{
     Can_interface::Can_interface() {
         addr = new sockaddr_can;
         ifr = new ifreq;

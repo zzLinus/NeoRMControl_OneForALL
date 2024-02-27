@@ -106,8 +106,8 @@ namespace Types
         RIGHT,
         SPIN_R,
         SPIN_L,
-		STOP_X,
-		STOP_Y,
+        STOP_X,
+        STOP_Y,
     };
 
     typedef struct
@@ -157,7 +157,7 @@ namespace Types
         // 底盘不跟随云台，但左右推左摇杆时底盘也会向左向右转
         CHSMODE_NO_FOLLOW_GIMBAL_YAW = 0x1 << 4,
         CHSMODE_OPEN = 0x1 << 5,  //  遥控器的值乘以比例成电流值 直接发送到can总线上
-        CHSMODE_SPIN = 0x1 << 6,   // 新增：小陀螺模式
+        CHSMODE_SPIN = 0x1 << 6,  // 新增：小陀螺模式
     } mode_e;
 
     typedef struct

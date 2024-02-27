@@ -2,8 +2,7 @@
 
 namespace Input
 {
-    Kb_ctrl::Kb_ctrl()
-    {
+    Kb_ctrl::Kb_ctrl() {
         // HACK:键盘控制斜波函数初始化
         kb_vx_ramp = new Ramp::Ramp_ctrller();
         kb_vy_ramp = new Ramp::Ramp_ctrller();
@@ -11,17 +10,14 @@ namespace Input
         rc_ctrl = new Types::RC_ctrl_t();
     }
 
-    Kb_ctrl::~Kb_ctrl()
-    {
+    Kb_ctrl::~Kb_ctrl() {
         delete kb_vx_ramp;
         delete kb_vy_ramp;
         delete rc_ctrl;
     }
 
-    fp32 Kb_ctrl::event_handler(Types::Kb_event event, fp32 spdslider)
-    {
-        switch (event)
-        {
+    fp32 Kb_ctrl::event_handler(Types::Kb_event event, fp32 spdslider) {
+        switch (event) {
             case Types::Kb_event::UP:
                 rc_ctrl->key.speed_y = kb_vy_ramp->ramp_calc(spdslider, spdslider / 2);
                 rc_ctrl->key.q = 0x0;

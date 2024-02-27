@@ -6,12 +6,12 @@ namespace Gimbal
 
     class Gimbal_info
     {
-		private:
-		public:
-			Gimbal_info();
-			~Gimbal_info();
+       private:
+       public:
+        Gimbal_info();
+        ~Gimbal_info();
 
-			void task();
+        void task();
     };
 
 }  // namespace Gimbal

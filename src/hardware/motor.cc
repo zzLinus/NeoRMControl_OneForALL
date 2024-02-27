@@ -3,9 +3,8 @@
 namespace Hardware
 {
 
-    Motor::Motor()
-    {
-		motor_measure = new motor_can_message;
+    Motor::Motor() {
+        motor_measure = new motor_can_message;
         // TODO: get chassis motor data point,  initialize motor speed PID
         // 获取底盘电机数据指针，初始化PID
         pid_ctrler = new Pid::Pid_ctrl(
@@ -17,10 +16,9 @@ namespace Hardware
             Config::M3505_MOTOR_SPEED_PID_MAX_IOUT);
     }
 
-    Motor::~Motor()
-    {
+    Motor::~Motor() {
         delete pid_ctrler;
-		delete motor_measure;
+        delete motor_measure;
     }
 
 }  // namespace Hardware

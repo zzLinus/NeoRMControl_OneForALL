@@ -4,8 +4,9 @@
 
 #pragma once
 
-namespace ImTui {
-struct TScreen;
+namespace ImTui
+{
+    struct TScreen;
 }
 
 // the interface below allows the user to decide when the application is active or not
@@ -14,7 +15,7 @@ struct TScreen;
 
 // fps_active - specify the redraw rate when the application is active
 // fps_idle - specify the redraw rate when the application is not active
-ImTui::TScreen * ImTui_ImplNcurses_Init(bool mouseSupport, float fps_active = 60.0, float fps_idle = -1.0);
+ImTui::TScreen* ImTui_ImplNcurses_Init(bool mouseSupport, float fps_active = 60.0, float fps_idle = -1.0);
 
 void ImTui_ImplNcurses_Shutdown();
 

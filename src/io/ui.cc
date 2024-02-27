@@ -1,6 +1,7 @@
 #include "ui.hpp"
 
-namespace Ui {
+namespace Ui
+{
     Ncurses_ui::Ncurses_ui(const InputHandler &event_handler) {
         input_handler = event_handler;
         debug = new Types::debug_info_t;

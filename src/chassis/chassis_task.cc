@@ -4,18 +4,15 @@
 
 namespace Chassis
 {
-    Chassis_task::Chassis_task()
-    {
+    Chassis_task::Chassis_task() {
         cc = new Chassis_ctrl();
     }
 
-    Chassis_task::~Chassis_task()
-    {
+    Chassis_task::~Chassis_task() {
         delete cc;
     }
 
-    void Chassis_task::task(Types::RC_ctrl_t* rc_ctrller, Types::debug_info_t* debug)
-    {
+    void Chassis_task::task(Types::RC_ctrl_t* rc_ctrller, Types::debug_info_t* debug) {
         // chassis init
         // 底盘初始化
         cc->init(rc_ctrller, debug);
@@ -26,14 +23,12 @@ namespace Chassis
         //
         // TODO:make sure all chassis motor is online,
         // 判断底盘电机是否都在线
-        while (!cc->is_motor_online())
-        {
+        while (!cc->is_motor_online()) {
             // TODO: spin or error handling should be done here
             // vTaskDelay(CHASSIS_CONTROL_TIME_MS);
         }
 
-        while (1)
-        {
+        while (1) {
             // set chassis control mode
             // 设置底盘控制模式
             cc->set_mode();
@@ -52,8 +47,7 @@ namespace Chassis
 
             // make sure  one motor is online at least, so that the control CAN message can be received
             // 确保至少一个电机在线， 这样CAN控制包可以被接收到
-            if (cc->is_motor_online())
-            {
+            if (cc->is_motor_online()) {
                 // TODO: move this else where
                 // 当遥控器掉线的时候，发送给底盘电机零电流.
                 // send control current

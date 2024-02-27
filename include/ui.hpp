@@ -9,8 +9,10 @@
 #include "kb_ctrl.hpp"
 #include "types.hpp"
 
-namespace Ui {
-    class Ncurses_ui {
+namespace Ui
+{
+    class Ncurses_ui
+    {
        public:
         using InputHandler = std::function<fp32(Types::Kb_event, fp32)>;
 

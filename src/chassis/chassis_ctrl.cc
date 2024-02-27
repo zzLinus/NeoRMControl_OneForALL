@@ -2,7 +2,8 @@
 
 #include <iostream>
 
-namespace Chassis {
+namespace Chassis
+{
 
     Chassis_ctrl::Chassis_ctrl() {
         // WARN:
@@ -64,7 +65,7 @@ namespace Chassis {
         }
     }
 
-    void Chassis_ctrl::ecex_mode_switch(void) {
+    void Chassis_ctrl::ecex_mode_switch() {
         // TODO: implement modo shift behaviour here
         switch (this->mode) {
                 // change to follow gimbal angle mode
@@ -259,18 +260,18 @@ namespace Chassis {
                 }
                 return;
             case Types::CHSMODE_FOLLOW_CHASSIS_YAW: {
-                for(int i = 0; i < 4; i++) {
+                for (int i = 0; i < 4; i++) {
                     motors[i]->speed_set = wheel_speed[i];
                     max_speed = std::max(max_speed, fabsf(wheel_speed[i]));
                 }
                 const fp32 max_wheel_speed = 2.5f;
-                if(max_speed > max_wheel_speed) {
+                if (max_speed > max_wheel_speed) {
                     fp32 speed_rate = max_wheel_speed / max_speed;
-                    for(auto & m : motors) {
+                    for (auto& m : motors) {
                         m->speed_set *= speed_rate;
                     }
                 }
-                for(auto & m : motors) {
+                for (auto& m : motors) {
                     m->pid_ctrler->calc(m->speed, m->speed_set);
                     m->give_current = (int16_t)(m->pid_ctrler->out);
                 }
@@ -323,7 +324,7 @@ namespace Chassis {
         }
     }
 
-    bool Chassis_ctrl::is_motor_online(void) {
+    bool Chassis_ctrl::is_motor_online() {
         // TODO: implement motor on line check with candump here
         return true;
     }
@@ -382,7 +383,7 @@ namespace Chassis {
 
     void Chassis_ctrl::init(Types::RC_ctrl_t* rc_ctrller, Types::debug_info_t* debug) {
         // NOTE: init sub devices here
-        can_itrf->init([&](auto frame){unpack(frame);});
+        can_itrf->init([&](auto frame) { unpack(frame); });
 
         // NOTE: get remote control point
         // 获取遥控器指针

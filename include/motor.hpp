@@ -23,7 +23,6 @@ namespace Hardware
         ~Motor();
 
        private:
-
        public:
         Pid::Pid_ctrl *pid_ctrler;
         // TODO: can bus api related

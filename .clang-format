@@ -8,7 +8,13 @@ AllowShortCaseLabelsOnASingleLine: 'true'
 AllowShortFunctionsOnASingleLine: 'None'
 AllowShortIfStatementsOnASingleLine: 'Never'
 AllowShortLoopsOnASingleLine: 'false'
-BreakBeforeBraces: Attach
+BreakBeforeBraces: Custom
+BraceWrapping:
+  AfterEnum: true
+  AfterStruct: true
+  AfterNamespace: true
+  AfterClass: true
+  SplitEmptyFunction: false
 BinPackArguments: 'false'
 BinPackParameters: 'false'
 Cpp11BracedListStyle: 'false'

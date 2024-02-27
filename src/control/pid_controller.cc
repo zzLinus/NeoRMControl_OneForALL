@@ -1,13 +1,21 @@
 #include "pid_controller.hpp"
 
-namespace Pid {
+namespace Pid
+{
 
     Pid_ctrl::Pid_ctrl(
         uint8_t mode,
-        const fp32 kp, const fp32 ki, const fp32 kd,
-        const fp32 max_out, const fp32 max_iout)
-        : mode(mode), kp(kp), ki(ki), kd(kd), max_out(max_out), max_iout(max_iout) {
-
+        const fp32 kp,
+        const fp32 ki,
+        const fp32 kd,
+        const fp32 max_out,
+        const fp32 max_iout)
+        : mode(mode),
+          kp(kp),
+          ki(ki),
+          kd(kd),
+          max_out(max_out),
+          max_iout(max_iout) {
         this->Dbuf[0] = this->Dbuf[1] = this->Dbuf[2] = 0.0f;
         this->error[0] = this->error[1] = this->error[2] = this->Pout = this->Iout = this->Dout = this->out = 0.0f;
     }

@@ -16,17 +16,18 @@
 #include "string"
 #include "types.hpp"
 
-namespace Hardware {
-    class Can_interface {
+namespace Hardware
+{
+    class Can_interface
+    {
        public:
-        using CallbackType = std::function<void(const can_frame&)>;
+        using CallbackType = std::function<void(const can_frame &)>;
 
         Can_interface();
         ~Can_interface();
         bool can_send(uint64_t pkg);
         bool can_dump(Types::debug_info_t *debug);
         void init(const CallbackType &callback);
-
 
        private:
         sockaddr_can *addr;

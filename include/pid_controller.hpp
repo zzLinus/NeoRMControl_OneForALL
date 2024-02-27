@@ -1,28 +1,25 @@
 #ifndef __PID_CONTROLLER__
 #define __PID_CONTROLLER__
 
-#include "types.hpp"
-#include <cmath>
 #include <climits>
+#include <cmath>
+
+#include "types.hpp"
 
 namespace Pid
 {
 
-    enum PID_MODE {
+    enum PID_MODE
+    {
         PID_POSITION,
         PID_DELTA,
     };
 
-    class Pid_ctrl {
+    class Pid_ctrl
+    {
        public:
         Pid_ctrl() = delete;
-        Pid_ctrl(
-            uint8_t mode,
-            fp32 kp,
-            fp32 ki,
-            fp32 kd,
-            fp32 max_out,
-            fp32 max_iout);
+        Pid_ctrl(uint8_t mode, fp32 kp, fp32 ki, fp32 kd, fp32 max_out, fp32 max_iout);
         ~Pid_ctrl();
         void calc(fp32 ref, fp32 set);
 
