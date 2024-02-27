@@ -13,6 +13,7 @@ namespace Chassis
        public:
         Chassis_ctrl();
         ~Chassis_ctrl();
+        void unpack(const can_frame& frame);
         void init(Types::RC_ctrl_t *rc_ctrller, Types::debug_info_t *debug);
         void first_order_filter(fp32 intupt);
         void set_mode(void);
@@ -45,8 +46,8 @@ namespace Chassis
 
         Types::mode_e mode;
 
-        Pid::Pid_ctrller *follow_angle_pid;     // follow angle PID.底盘跟随角度pid
-        Pid::Pid_ctrller *no_follow_angle_pid;  // 底盘不跟随角度pid  added by 片哥
+        Pid::Pid_ctrl *follow_angle_pid;     // follow angle PID.底盘跟随角度pid
+        Pid::Pid_ctrl *no_follow_angle_pid;  // 底盘不跟随角度pid  added by 片哥
 
         Types::fof_t cmd_slow_set_vx;  // use first order filter to slow set-point.使用一阶低通滤波减缓设定值
         Types::fof_t cmd_slow_set_vy;  // use first order filter to slow set-point.使用一阶低通滤波减缓设定值

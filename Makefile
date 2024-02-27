@@ -3,16 +3,16 @@ WORK_DIR  = $(shell pwd)
 BUILD_DIR = $(WORK_DIR)/build
 
 CC = g++
-CPPFLAGS = -std=c++14 -O3 -g -Wall -Werror -Wextra -Wpedantic -Wstrict-aliasing
+CPPFLAGS = -std=c++14 -O0 -g -Wall -Wextra -Wpedantic -Wstrict-aliasing
 CPPFLAGS += -Wno-pointer-arith -Wno-newline-eof -Wno-unused-parameter -Wno-gnu-statement-expression
 CPPFLAGS += -Wno-gnu-compound-literal-initializer -Wno-gnu-zero-variadic-macro-arguments
 CPPFLAGS += -I$(WORK_DIR)/include
 #CPPFLAGS += `pkg-config sdl --cflags`
 #CPPFLAGS += -DDEBUG
 # FIXME: imtui dependency linking
-CPPFLAGS += -I "3rdparty/include"
-CPPFLAGS += -I "3rdparty/include/imgui-for-imtui"
-CPPFLAGS += -L "3rdparty/lib/"
+CPPFLAGS += -I "../imtui/build/dist/include"
+CPPFLAGS += -I "../imtui/build/dist/include/imgui-for-imtui"
+CPPFLAGS += -L "../imtui/build/dist/lib/"
 
 LDFLAGS += -limtui -limtui-ncurses -limgui-for-imtui -lncurses
 

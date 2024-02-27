@@ -12,7 +12,7 @@ namespace Io
        public:
         Io_handler();
         ~Io_handler();
-        void task(void);
+        void task();
 
        private:
        public:

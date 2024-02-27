@@ -23,10 +23,9 @@ namespace Hardware
         ~Motor();
 
        private:
-        Pid::Pid_ctrller *getPid();
 
        public:
-        Pid::Pid_ctrller *pid_ctrler;
+        Pid::Pid_ctrl *pid_ctrler;
         // TODO: can bus api related
         motor_can_message *motor_measure;
         fp32 accel;

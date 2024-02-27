@@ -10,33 +10,35 @@
 #include <unistd.h>
 
 #include <cstdint>
+#include <functional>
 
 #include "stdlib.h"
 #include "string"
 #include "types.hpp"
 
-namespace Hardware
-{
-    class Can_interface
-    {
+namespace Hardware {
+    class Can_interface {
        public:
+        using CallbackType = std::function<void(const can_frame&)>;
+
         Can_interface();
         ~Can_interface();
-        void init();
         bool can_send(uint64_t pkg);
         bool can_dump(Types::debug_info_t *debug);
+        void init(const CallbackType &callback);
+
 
        private:
         sockaddr_can *addr;
-        can_frame *frame_w;
-        can_frame *frame_r;
+        can_frame frame_w;
+        can_frame frame_r;
         ifreq *ifr;
-		Types::debug_info_t *debug;
+        Types::debug_info_t *debug;
         int soket_id;
-		bool init_flag;
+        bool init_flag;
+        CallbackType callback_fun;
 
        public:
-       private:
     };
 
 }  // namespace Hardware

@@ -2,22 +2,29 @@
 #define __PID_CONTROLLER__
 
 #include "types.hpp"
+#include <cmath>
+#include <climits>
 
 namespace Pid
 {
 
-    class Pid_ctrller
-    {
+    enum PID_MODE {
+        PID_POSITION,
+        PID_DELTA,
+    };
+
+    class Pid_ctrl {
        public:
-        Pid_ctrller() = delete;
-        Pid_ctrller(
+        Pid_ctrl() = delete;
+        Pid_ctrl(
             uint8_t mode,
-            const fp32 kp,
-            const fp32 ki,
-            const fp32 kd,
-            const fp32 max_out,
-            const fp32 max_iout);
-        ~Pid_ctrller();
+            fp32 kp,
+            fp32 ki,
+            fp32 kd,
+            fp32 max_out,
+            fp32 max_iout);
+        ~Pid_ctrl();
+        void calc(fp32 ref, fp32 set);
 
        private:
        public:
@@ -29,9 +36,6 @@ namespace Pid
 
         fp32 max_out;   // 最大输出
         fp32 max_iout;  // 最大积分输出
-
-        fp32 set;
-        fp32 fdb;
 
         fp32 out;
         fp32 Pout;

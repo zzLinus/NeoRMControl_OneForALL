@@ -5,8 +5,7 @@
 #include "gimbal_task.hpp"
 #include "io.hpp"
 
-int main(int argv, char *argc[])
-{
+int main(int argv, char *argc[]) {
     Chassis::Chassis_task chassis;
     Gimbal::Gimbal_info gimbal;
     Io::Io_handler io;
