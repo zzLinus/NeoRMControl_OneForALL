@@ -78,7 +78,8 @@ namespace Config
     const fp32 RAMP_SPIN_INC = 0.06f;
     const fp32 RAMP_SPIN_DEC = 0.06f;
 
-    const int32_t OPEN_LOOP_MAX_SPEED = 0x0aff;
+    const int32_t OPEN_LOOP_MAX_SPEED = 0x0eff;
+    const int32_t PIDCTRL_MAX_SPEED = 0x003;
 }  // namespace Config
 
 namespace Types
@@ -119,6 +120,10 @@ namespace Types
         can_frame can_f;
         uint64_t pkg;
         bool err;
+		std::string debuginfo1;
+		std::string debuginfo2;
+		std::string debuginfo3;
+
     } debug_info_t;
 
     typedef struct

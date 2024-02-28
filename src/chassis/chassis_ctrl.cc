@@ -158,6 +158,7 @@ namespace Chassis
                 debug_info->wz = wz_set;
                 cmd_slow_set_vx.out = 0.0f;
                 cmd_slow_set_vy.out = 0.0f;
+                return;
                 // fp32 delat_angle = 0.0f;
                 //// set chassis yaw angle set-point
                 //// 设置底盘控制的角度
@@ -263,6 +264,7 @@ namespace Chassis
                 for (int i = 0; i < 4; i++) {
                     motors[i]->speed_set = wheel_speed[i];
                     max_speed = std::max(max_speed, fabsf(wheel_speed[i]));
+                    debug_info->wheel_speed[i] = wheel_speed[i];
                 }
                 const fp32 max_wheel_speed = 2.5f;
                 if (max_speed > max_wheel_speed) {
@@ -271,10 +273,15 @@ namespace Chassis
                         m->speed_set *= speed_rate;
                     }
                 }
+
                 for (auto& m : motors) {
                     m->pid_ctrler->calc(m->speed, m->speed_set);
-                    m->give_current = (int16_t)(m->pid_ctrler->out);
+                    m->give_current = (int16_t)(-m->pid_ctrler->out);
                 }
+
+                debug_info->debuginfo1 = std::to_string(motors[0]->speed_set);
+                debug_info->debuginfo2 = std::to_string(motors[0]->speed);
+                debug_info->debuginfo3 = std::to_string(motors[0]->give_current);
                 return;
             }
             default:
@@ -333,11 +340,10 @@ namespace Chassis
         uint64_t pkg = 0;
         int idx = 0;
         for (auto& m : motors) {
-            pkg = pkg | (((uint64_t)m->give_current & 0xffff) << (16 * (3 - idx)));
-            idx++;
+            pkg = pkg | (((uint64_t)m->give_current & 0xffff) << (16 * idx++));
         }
         debug_info->pkg = pkg;
-        can_itrf->can_send(pkg);
+		can_itrf->can_send(pkg);
     }
 
     void Chassis_ctrl::set_mode() {
@@ -376,7 +382,7 @@ namespace Chassis
         auto motor_t = motors[frame.can_id - 0x201]->motor_measure;
         motor_t->last_ecd = motor_t->last_ecd;
         motor_t->ecd = (uint16_t)(frame.data[0] << 8 | frame.data[1]);
-        motor_t->speed_rpm = (uint16_t)(frame.data[2] << 8 | frame.data[3]);
+        motor_t->speed_rpm = -(uint16_t)(frame.data[2] << 8 | frame.data[3]);
         motor_t->given_current = (uint16_t)(frame.data[4] << 8 | frame.data[5]);
         motor_t->temperate = frame.data[6];
     }

@@ -3,6 +3,7 @@
 
 #include "pid_controller.hpp"
 #include "types.hpp"
+#include "string"
 
 namespace Hardware
 {
@@ -30,6 +31,11 @@ namespace Hardware
         fp32 accel;
         fp32 speed;
         fp32 speed_set;
+
+		std::string debuginfo1;
+		std::string debuginfo2;
+		std::string debuginfo3;
+
         int16_t give_current;
 
        private:

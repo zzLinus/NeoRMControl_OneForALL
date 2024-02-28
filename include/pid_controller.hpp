@@ -9,12 +9,6 @@
 namespace Pid
 {
 
-    enum PID_MODE
-    {
-        PID_POSITION,
-        PID_DELTA,
-    };
-
     class Pid_ctrl
     {
        public:

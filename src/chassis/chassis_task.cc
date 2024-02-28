@@ -1,7 +1,5 @@
 #include "chassis_task.hpp"
 
-#include "iostream"
-
 namespace Chassis
 {
     Chassis_task::Chassis_task() {
@@ -54,7 +52,7 @@ namespace Chassis
                 // 发送控制电流
                 cc->set_motor_current();
             }
-
+			std::this_thread::sleep_for(std::chrono::milliseconds(2));
             // std::cout << "Chassis task\n";
         }
     }
