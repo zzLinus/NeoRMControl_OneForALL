@@ -3,9 +3,8 @@
 
 #include <chrono>
 #include <functional>
+#include <raylib-cpp.hpp>
 
-#include "imtui/imtui-impl-ncurses.h"
-#include "imtui/imtui.h"
 #include "kb_ctrl.hpp"
 #include "types.hpp"
 
@@ -25,6 +24,7 @@ namespace Ui
         fp32 cur_speed_x;
         fp32 cur_speed_y;
         InputHandler input_handler;
+        raylib::Window* w;
 
        public:
         Types::debug_info_t* debug;

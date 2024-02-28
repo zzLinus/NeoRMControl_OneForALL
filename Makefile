@@ -10,11 +10,10 @@ CPPFLAGS += -I$(WORK_DIR)/include
 #CPPFLAGS += `pkg-config sdl --cflags`
 #CPPFLAGS += -DDEBUG
 # FIXME: imtui dependency linking
-CPPFLAGS += -I "../imtui/build/dist/include"
-CPPFLAGS += -I "../imtui/build/dist/include/imgui-for-imtui"
-CPPFLAGS += -L "../imtui/build/dist/lib/"
+CPPFLAGS += -I "./3rdparty/include"
+CPPFLAGS += -L "./3rdparty/lib"
 
-LDFLAGS += -limtui -limtui-ncurses -limgui-for-imtui -lncurses
+LDFLAGS += -lraylib -lGL -lm -lpthread -ldl -lrt -lX11
 
 #LDFLAGS = `pkg-config sdl --libs`
 

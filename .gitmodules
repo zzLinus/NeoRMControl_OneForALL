@@ -1,0 +1,3 @@
+[submodule "3rdparty/raylib-cpp"]
+	path = 3rdparty/raylib-cpp
+	url = git@github.com:RobLoach/raylib-cpp.git
