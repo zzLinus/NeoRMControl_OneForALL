@@ -43,10 +43,10 @@ namespace Input
                 /* IEEE Not A Number.  */
                 return NAN;
             case Types::Kb_event::STOP_X:;
-                rc_ctrl->key.speed_x = kb_vx_ramp->ramp_calc(spdslider, (fp32)Config::PIDCTRL_MAX_SPEED / 20);
+                //rc_ctrl->key.speed_x = kb_vx_ramp->ramp_calc(spdslider, (fp32)Config::PIDCTRL_MAX_SPEED / 20);
                 return rc_ctrl->key.speed_x;
             case Types::Kb_event::STOP_Y:;
-                rc_ctrl->key.speed_y = kb_vy_ramp->ramp_calc(spdslider, (fp32)Config::PIDCTRL_MAX_SPEED / 20);
+                //rc_ctrl->key.speed_y = kb_vy_ramp->ramp_calc(spdslider, (fp32)Config::PIDCTRL_MAX_SPEED / 20);
                 return rc_ctrl->key.speed_y;
         }
         return NAN;

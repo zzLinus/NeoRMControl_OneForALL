@@ -1,6 +1,5 @@
 #include "ui.hpp"
 
-
 namespace Ui
 {
     Ncurses_ui::Ncurses_ui(const InputHandler &event_handler) {
@@ -48,12 +47,12 @@ namespace Ui
             ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(1, 1, 0, 1));
             ImGui::Text("velocity : vx vy wz");
             ImGui::Text(" %f %f %f", debug->vx, debug->vy, debug->wz);
-            ImGui::SliderFloat(
-                "speed percent",
-                &spdslider,
-                Config::PIDCTRL_MAX_SPEED / 2,
-                Config::PIDCTRL_MAX_SPEED,
-                "ratio = %.3f");
+            // ImGui::SliderFloat(
+            //     "speed percent",
+            //     &spdslider,
+            // Config::PIDCTRL_MAX_SPEED / 2,
+            // Config::PIDCTRL_MAX_SPEED,
+            //"ratio = %.3f");
             ImGui::TextColored(ImVec4(1, 1, 1, 1), "can pkg : %0lx", debug->pkg);
 
             ImGui::Text("time %lu %lu %lu", last, now, now - last);
