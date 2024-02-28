@@ -87,7 +87,7 @@ namespace Types
     enum ROBOT_MODE {
         ROBOT_NO_FORCE,
         ROBOT_FOLLOW_GIMBAL,
-        ROBOT_SPIN
+        ROBOT_NOT_FOLLOW
     };
 
     typedef enum
