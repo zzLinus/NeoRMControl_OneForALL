@@ -19,8 +19,8 @@ void run(Robot::Robot_ctrl * robot) {
     }
 }
 
-Robot::Robot_ctrl robot;
 int main() {
+	Robot::Robot_ctrl robot;
     robot.start();
     std::thread main_thread(run, &robot);
     main_thread.join();
