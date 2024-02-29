@@ -18,7 +18,7 @@ BraceWrapping:
 BinPackArguments: 'false'
 BinPackParameters: 'false'
 Cpp11BracedListStyle: 'false'
-ColumnLimit: 116
+ColumnLimit: 80
 NamespaceIndentation: All
 SpaceAfterTemplateKeyword: 'false'
 SpaceBeforeCtorInitializerColon: 'true'
