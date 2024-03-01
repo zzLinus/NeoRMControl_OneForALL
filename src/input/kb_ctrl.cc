@@ -23,10 +23,10 @@ namespace Input
                 p_robot_set->vy_set = kb_vy_ramp->ramp_calc(-spdslider, spdslider / 30);
                 return p_robot_set->vy_set;
             case Types::Kb_event::LEFT:
-                p_robot_set->vx_set = kb_vx_ramp->ramp_calc(-spdslider, spdslider / 30);
+                p_robot_set->vx_set = kb_vx_ramp->ramp_calc(spdslider, spdslider / 30);
                 return p_robot_set->vx_set;
             case Types::Kb_event::RIGHT:
-                p_robot_set->vx_set = kb_vx_ramp->ramp_calc(spdslider, spdslider / 30);
+                p_robot_set->vx_set = kb_vx_ramp->ramp_calc(-spdslider, spdslider / 30);
                 return p_robot_set->vx_set;
             case Types::Kb_event::SPIN_L:
                 return 0;
