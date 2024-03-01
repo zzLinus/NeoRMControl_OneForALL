@@ -6,11 +6,11 @@
 namespace Io
 {
     Io_handler::Io_handler(std::shared_ptr<Robot::Robot_set> robot_set) {
-        p_robot_set = robot_set;
-        kb = new Input::Kb_ctrl(p_robot_set);
-        ui = new Ui::Ncurses_ui([&](Types::Kb_event event, fp32 spdslider) {
-            return kb->event_handler(event, spdslider);
-        });
+        kb = new Input::Kb_ctrl();
+        ui = new Ui::raylib_ui(
+            robot_set, [&](std::shared_ptr<Robot::Robot_set> p_robot_set, Types::Kb_event event, fp32 spdslider) {
+                return kb->event_handler(p_robot_set, event, spdslider);
+            });
     }
 
     Io_handler::~Io_handler() {

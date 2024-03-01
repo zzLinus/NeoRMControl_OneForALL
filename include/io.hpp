@@ -18,11 +18,9 @@ namespace Io
         void task();
 
        private:
-        std::shared_ptr<Robot::Robot_set> p_robot_set;
-
        public:
         Input::Kb_ctrl* kb;
-        Ui::Ncurses_ui* ui;
+        Ui::raylib_ui* ui;
 
        private:
     };

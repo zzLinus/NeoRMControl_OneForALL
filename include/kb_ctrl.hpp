@@ -14,10 +14,9 @@ namespace Input
     class Kb_ctrl
     {
        public:
-        Kb_ctrl() = delete;
-        Kb_ctrl(std::shared_ptr<Robot::Robot_set> robot_set);
+        Kb_ctrl();
         ~Kb_ctrl();
-        fp32 event_handler(Types::Kb_event event, fp32 spdslider);
+        fp32 event_handler(std::shared_ptr<Robot::Robot_set> p_robot_set, Types::Kb_event event, fp32 spdslider);
 
        private:
         void ramp_calc(Types::ramp_t *ramp_source_type, fp32 input);
@@ -27,7 +26,6 @@ namespace Input
         Ramp::Ramp_ctrller *kb_vy_ramp;  // 用于键盘控制的斜波函数
 
        private:
-        std::shared_ptr<Robot::Robot_set> p_robot_set;
     };
 }  // namespace Input
 

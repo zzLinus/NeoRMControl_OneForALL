@@ -4,18 +4,15 @@
 
 namespace Robot
 {
-    Robot_ctrl::Robot_ctrl()
-        : chassis_angle_pid(Config::M3508_SPEED_PID_CONFIG) {
+    Robot_ctrl::Robot_ctrl() : chassis_angle_pid(Config::M3508_SPEED_PID_CONFIG) {
         robot_set = std::make_shared<Robot_set>();
         chassis.init();
     }
 
     bool Robot_ctrl::start() {
         auto f = &Hardware::Can_interface::can_dump;
-        chassis_can_tread = std::make_unique<std::thread>(
-            &Hardware::Can_interface::can_dump, chassis.can_itrf);
-        chassis_tread =
-            std::make_unique<std::thread>(&Robot_ctrl::chassis_task, this);
+        chassis_can_tread = std::make_unique<std::thread>(&Hardware::Can_interface::can_dump, chassis.can_itrf);
+        chassis_tread = std::make_unique<std::thread>(&Robot_ctrl::chassis_task, this);
         robot_set->mode = Types::ROBOT_MODE::ROBOT_FOLLOW_GIMBAL;
         return true;
     }
@@ -29,14 +26,11 @@ namespace Robot
 
                 fp32 sin_yaw, cos_yaw;
                 sincosf(-robot_set->chassis_relative_angle, &sin_yaw, &cos_yaw);
-                chassis.vx_set =
-                    cos_yaw * robot_set->vx_set + sin_yaw * robot_set->vy_set;
-                chassis.vy_set =
-                    -sin_yaw * robot_set->vx_set + cos_yaw * robot_set->vy_set;
+                chassis.vx_set = cos_yaw * robot_set->vx_set + sin_yaw * robot_set->vy_set;
+                chassis.vy_set = -sin_yaw * robot_set->vx_set + cos_yaw * robot_set->vy_set;
 
                 if (robot_set->mode == Types::ROBOT_MODE::ROBOT_FOLLOW_GIMBAL) {
-                    chassis_angle_pid.calc(
-                        robot_set->chassis_relative_angle, 0.f);
+                    chassis_angle_pid.calc(robot_set->chassis_relative_angle, 0.f);
                     chassis.wz_set = chassis_angle_pid.out;
                 } else {
                     chassis.wz_set = robot_set->wz_set;
