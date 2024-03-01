@@ -13,7 +13,7 @@ CPPFLAGS += -I$(WORK_DIR)/include
 CPPFLAGS += -I "./3rdparty/include"
 CPPFLAGS += -L "./3rdparty/lib"
 
-LDFLAGS += -lraylib -lGL -lm -lpthread -ldl -lrt -lX11
+LDFLAGS += -lraylib -lGL -lm -lpthread -ldl -lrt -lX11 -lserial
 
 #LDFLAGS = `pkg-config sdl --libs`
 
@@ -29,7 +29,7 @@ dirs:
 	mkdir -p $(BUILD_DIR)
 
 run: all
-	$(BUILD_DIR)/$(BIN)
+	$(BUILD_DIR)/$(BIN) -e /dev/ttyACM1
 
 $(BIN): $(OBJ)
 	$(CC) -o $(BUILD_DIR)/$(BIN) $^ $(CPPFLAGS) $(LDFLAGS)

@@ -27,7 +27,6 @@ namespace Ui
                      std::chrono::high_resolution_clock::now().time_since_epoch())
                      .count();
 
-        startAngle = 0.0f;
     }
 
     inline void raylib_ui::draw_menu() {
@@ -44,8 +43,7 @@ namespace Ui
 
     inline void raylib_ui::draw_motor_speed() {
         // NOTE: Draw Slidebar
-        GuiSliderBar((Rectangle){ 600, 40, 120, 20 }, "StartAngle", NULL, &startAngle, -360, 360);
-        GuiSliderBar((Rectangle){ 600, 200, 120, 20 }, "Max speed", NULL, &max_speed, 0, 2.5);
+		GuiSliderBar((Rectangle){ 600, 200, 120, 20 }, "Max speed", NULL, &max_speed, 0, 2.5);
 
         Vector2 center = { 280, 130 };
         float vx_per = (p_robot_set->vx_set / 2.5) * 360;

@@ -49,8 +49,6 @@ namespace Ui
         uint32_t screenW;
         uint32_t screenH;
         raylib::Color textColor;
-
-        float startAngle;
     };
 }  // namespace Ui
 
