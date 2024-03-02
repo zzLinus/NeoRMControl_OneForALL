@@ -1,6 +1,11 @@
 UNAME_S = $(shell uname -s)
 WORK_DIR  = $(shell pwd)
 BUILD_DIR = $(WORK_DIR)/build
+MAKE = make
+MV = mv
+
+RAY_DIR = $(shell find ./3rdparty -name "src-raylib")
+SERIAL_DIR= $(shell find ./3rdparty -name "src-serial")
 
 CC = g++
 CPPFLAGS = -std=c++20 -O0 -g -Wall -Wextra -Wpedantic -Wstrict-aliasing
@@ -31,12 +36,28 @@ dirs:
 run: all
 	$(BUILD_DIR)/$(BIN)
 
-$(BIN): $(OBJ)
-	$(CC) -o $(BUILD_DIR)/$(BIN) $^ $(CPPFLAGS) $(LDFLAGS)
+raylib: $(RAY_DIR)
+	$(MAKE) -C $< -j8
+	$(MV) $(RAY_DIR)/libraylib.a 3rdparty/lib
+
+serial: $(SERIAL_DIR)
+	$(MAKE) -C $< -j8
+	$(MV) $(SERIAL_DIR)/build/libserial.a 3rdparty/lib
+
+$(BIN): $(OBJ) serial raylib
+	$(CC) -o $(BUILD_DIR)/$(BIN) $(OBJ) $(CPPFLAGS) $(LDFLAGS)
 
 $(BUILD_DIR)/%.o: %.cc
 	@mkdir -p $(dir $@) && echo + CC $<
 	$(CC) -o $@ -c $< $(CPPFLAGS)
 
-clean:
+clean-raylib: $(RAY_DIR)
+	$(MAKE) -C $< clean
+
+clean-serial: $(SERIAL_DIR)
+	$(MAKE) -C $< clean
+
+clean: clean-serial clean-raylib
+	rm 3rdparty/lib/libraylib.a
+	rm 3rdparty/lib/libserial.a
 	rm -rf $(BUILD_DIR)/$(BIN) $(OBJ)

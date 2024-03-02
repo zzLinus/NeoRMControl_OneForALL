@@ -5,7 +5,7 @@
 namespace Hardware
 {
     Serial_interface::Serial_interface()
-        : serial::Serial(std::string("/dev/ttyACM2"), 115200, serial::Timeout::simpleTimeout(1000)) {
+        : serial::Serial(std::string("/dev/ttyACM1"), 115200, serial::Timeout::simpleTimeout(1000)) {
     }
 
     Serial_interface::~Serial_interface() {

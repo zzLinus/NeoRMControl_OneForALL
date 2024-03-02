@@ -19,7 +19,7 @@ LDFLAGS += -lraylib -lGL -lm -lpthread -ldl -lrt -lX11
 
 SRC = $(wildcard src/*.cc) $(wildcard src/**/*.cc) $(wildcard src/**/**/*.cc)
 OBJ = $(addprefix $(BUILD_DIR)/, $(addsuffix .o, $(basename $(SRC))))
-BIN = serial.a
+BIN = libserial.a
 
 .PHONY: all clean
 
@@ -39,4 +39,4 @@ $(BUILD_DIR)/%.o: %.cc
 	$(CC) -o $@ -c $< $(CPPFLAGS)
 
 clean:
-	rm -rf $(BUILD_DIR)/$(BIN) $(OBJ)
+	rm -rf $(BUILD_DIR)
