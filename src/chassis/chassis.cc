@@ -69,7 +69,7 @@ namespace Chassis
     }
 
     void Chassis::update_speed() {
-        for(auto & m : motors) {
+        for (auto &m : motors) {
             m.speed = Config::CHASSIS_MOTOR_RPM_TO_VECTOR_SEN * (fp32)m.motor_measure.speed_rpm;
             m.accel = Config::CHASSIS_CONTROL_FREQUENCE * m.pid_ctrler.Dbuf;
         }

@@ -21,7 +21,7 @@ namespace Hardware
             exit(-1);
         }
 
-        struct can_filter rfilter[4];
+        struct can_filter rfilter[5];
         rfilter[0].can_id = 0x201;
         rfilter[0].can_mask = 0x3ff;
         rfilter[1].can_id = 0x202;
@@ -30,8 +30,8 @@ namespace Hardware
         rfilter[2].can_mask = 0x3ff;
         rfilter[3].can_id = 0x204;
         rfilter[3].can_mask = 0x3ff;
-        rfilter[3].can_id = 0x205;
-        rfilter[3].can_mask = 0x3ff;
+        rfilter[4].can_id = 0x205;
+        rfilter[4].can_mask = 0x3ff;
         setsockopt(soket_id, SOL_CAN_RAW, CAN_RAW_FILTER, &rfilter, sizeof(rfilter));
 
         std::strcpy(ifr->ifr_name, Config::CAN_CHANNEL);
@@ -70,8 +70,8 @@ namespace Hardware
 
     bool Can_interface::can_send(const can_frame &frame) {
         /* send CAN frame */
+        printf("can send %d %d %d %d %d\n", frame.data[0], frame.data[1], frame.data[2], frame.data[3], frame.data[4]);
         write(soket_id, &frame, sizeof(can_frame));
-
         return true;
     }
 

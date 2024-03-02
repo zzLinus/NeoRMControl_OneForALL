@@ -6,6 +6,7 @@
 namespace Io
 {
     Io_handler::Io_handler(std::shared_ptr<Robot::Robot_set> robot_set) {
+		robot_set->mode = Types::ROBOT_NOT_FOLLOW;
         kb = new Input::Kb_ctrl();
         ui = new Ui::raylib_ui(
             robot_set, [&](std::shared_ptr<Robot::Robot_set> p_robot_set, Types::Kb_event event, fp32 spdslider) {
