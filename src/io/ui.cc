@@ -3,9 +3,9 @@
 namespace Ui
 {
     raylib_ui::raylib_ui(std::shared_ptr<Robot::Robot_set> robot_set, const InputHandler &event_handler) {
+        debug = new Types::debug_info_t;
         input_handler = event_handler;
         p_robot_set = robot_set;
-        debug = new Types::debug_info_t;
         cur_speed_x = 0;
         cur_speed_y = 0;
         screenW = 800;
@@ -26,13 +26,13 @@ namespace Ui
         last_x = std::chrono::duration_cast<std::chrono::milliseconds>(
                      std::chrono::high_resolution_clock::now().time_since_epoch())
                      .count();
-
     }
 
     inline void raylib_ui::draw_menu() {
         DrawFPS(screenW - 100, 10);
         DrawLine(500, 0, 500, GetScreenHeight(), Fade(LIGHTGRAY, 0.6f));
         DrawRectangle(500, 0, GetScreenWidth() - 500, GetScreenHeight(), Fade(LIGHTGRAY, 0.3f));
+        textColor.DrawText(" Hi Mom", 10, 10, 20);
 
         Vector2 dir_center = { 100, 130 };
         DrawRectangle(dir_center.x, dir_center.y - 20, 20, 20, IsKeyDown(KEY_W) ? RED : LIGHTGRAY);
@@ -43,7 +43,7 @@ namespace Ui
 
     inline void raylib_ui::draw_motor_speed() {
         // NOTE: Draw Slidebar
-		GuiSliderBar((Rectangle){ 600, 200, 120, 20 }, "Max speed", NULL, &max_speed, 0, 2.5);
+        GuiSliderBar((Rectangle){ 600, 200, 120, 20 }, "Max speed", NULL, &max_speed, 0, 2.5);
 
         Vector2 center = { 280, 130 };
         float vx_per = (p_robot_set->vx_set / 2.5) * 360;
@@ -65,7 +65,6 @@ namespace Ui
                            std::chrono::high_resolution_clock::now().time_since_epoch())
                            .count();
         if (IsKeyDown(KEY_W)) {
-            textColor.DrawText(" Hi Mom", 50, 50, 20);
             cur_speed_y = input_handler(p_robot_set, Types::Kb_event::UP, max_speed);
             last = std::chrono::duration_cast<std::chrono::milliseconds>(
                        std::chrono::high_resolution_clock::now().time_since_epoch())
@@ -76,21 +75,18 @@ namespace Ui
             last_x = std::chrono::duration_cast<std::chrono::milliseconds>(
                          std::chrono::high_resolution_clock::now().time_since_epoch())
                          .count();
-            textColor.DrawText(" Hi Mom", 20, 70, 20);
         }
         if (IsKeyDown(KEY_S)) {
             cur_speed_x = input_handler(p_robot_set, Types::Kb_event::RIGHT, max_speed);
             last_x = std::chrono::duration_cast<std::chrono::milliseconds>(
                          std::chrono::high_resolution_clock::now().time_since_epoch())
                          .count();
-            textColor.DrawText(" Hi Mom", 80, 70, 20);
         }
         if (IsKeyDown(KEY_R)) {
             cur_speed_y = input_handler(p_robot_set, Types::Kb_event::DOWN, max_speed);
             last = std::chrono::duration_cast<std::chrono::milliseconds>(
                        std::chrono::high_resolution_clock::now().time_since_epoch())
                        .count();
-            textColor.DrawText(" Hi Mom", 50, 90, 20);
         }
 
         // NOTE: dec velocity over time

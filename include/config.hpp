@@ -4,7 +4,7 @@
 
 namespace Config
 {
-    const char CAN_CHANNEL[] = "can0";
+    const char CAN_CHANNEL[] = "can1";
 
     // NOTE: PID CONFIG
 

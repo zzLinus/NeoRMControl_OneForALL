@@ -29,7 +29,7 @@ dirs:
 	mkdir -p $(BUILD_DIR)
 
 run: all
-	$(BUILD_DIR)/$(BIN) -e /dev/ttyACM1
+	$(BUILD_DIR)/$(BIN)
 
 $(BIN): $(OBJ)
 	$(CC) -o $(BUILD_DIR)/$(BIN) $^ $(CPPFLAGS) $(LDFLAGS)
