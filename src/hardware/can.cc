@@ -70,7 +70,6 @@ namespace Hardware
 
     bool Can_interface::can_send(const can_frame &frame) {
         /* send CAN frame */
-        printf("can send %d %d %d %d %d\n", frame.data[0], frame.data[1], frame.data[2], frame.data[3], frame.data[4]);
         write(soket_id, &frame, sizeof(can_frame));
         return true;
     }
