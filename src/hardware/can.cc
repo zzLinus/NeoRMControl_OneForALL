@@ -10,7 +10,7 @@ namespace Hardware
         init_flag = false;
     }
 
-    void Can_interface::init(const CallbackType &callback) {
+    void Can_interface::init(const CallbackType& callback, const char* can_channel) {
         callback_fun = callback;
         // create CAN socket
         if ((soket_id = socket(PF_CAN, SOCK_RAW, CAN_RAW)) < 0) {
@@ -31,7 +31,7 @@ namespace Hardware
         rfilter[4].can_mask = 0x3ff;
         setsockopt(soket_id, SOL_CAN_RAW, CAN_RAW_FILTER, &rfilter, sizeof(rfilter));
 
-        std::strcpy(ifr->ifr_name, Config::CAN_CHANNEL);
+        std::strcpy(ifr->ifr_name, can_channel);
         ioctl(soket_id, SIOCGIFINDEX, ifr);
 
         addr->can_family = AF_CAN;

@@ -25,12 +25,20 @@ namespace Config
     };
 
     const typename Pid::Pid_config GIMBAL_YAW_ABSOLUTE_PID_CONFIG{
-        32.0f,  // KP
-        0.0f,   // KI
-        0.3f,   // KD
+        10.0f,  // KP
+        3.0f,   // KI
+        1.f,    // KD
         10.0f,  // MAX_OUT
         0.0f,   // MAX_IOUT
-    };
+    };          // MAX_IOUT
+
+//    const typename Pid::Pid_config GIMBAL_YAW_ABSOLUTE_PID_CONFIG{
+//        8300.0f,   // KP
+//        10.0f,     // KI
+//        1.f,       // KD
+//        15000.0f,  // MAX_OUT
+//        4000.0f,   // MAX_IOUT
+//    };
 
     const typename Pid::Pid_config GIMBAL_PITCH_ABSOLUTE_PID_CONFIG{
         15.0f,  // KP
@@ -41,7 +49,7 @@ namespace Config
     };
 
     const typename Pid::Pid_config YAW_SPEED_PID_CONFIG{
-        40.0f, 3.0f, 0.0f, 30000.0f, 5000.0f,
+        40.0f, 3.0f, 5.0f, 30000.0f, 5000.0f,
     };
 
     constexpr fp32 CHASSIS_SPIN_SPEED = 7;

@@ -18,7 +18,7 @@ namespace Hardware
        private:
         inline void enumerate_ports();
         inline int unpack();
-        inline void fromVector(uint8_t *data, T *pkg);
+        inline void fromVector(const uint8_t *data, ReceivePacket *pkg);
 
        public:
         T rp;
