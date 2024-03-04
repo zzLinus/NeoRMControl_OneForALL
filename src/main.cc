@@ -16,15 +16,11 @@ int main(int argc, char **argv) {
 
     Io::Io_handler io(robot.robot_set);
 
-    fp32 time = 0.002, input = 0.;
-
     auto start = system_clock::now();
 
     auto copySerialData = [&]() {
         UserLib::RealRad rad;
-        auto f = fopen("test_pid.txt", "w");
 
-        fp32 angle = 0.f, da = 0.001f;
         robot.robot_set->mode = Types::ROBOT_MODE::ROBOT_FOLLOW_GIMBAL;
 
         while (true) {
@@ -38,33 +34,19 @@ int main(int argc, char **argv) {
             robot.robot_set->ins_roll_v = serial.rp.roll_v;
             robot.robot_set->mode = Types::ROBOT_MODE::ROBOT_NOT_FOLLOW;
             rad.update(UserLib::rad_format((fp32)robot.gimbal.yaw_motor.motor_measure.ecd * Config::M6020_ECD_TO_RAD));
-            printf("%f\n", robot.robot_set->pitch_relative);
-//            printf("%f,%f,%f\n", (fp32)step / 1000.f, input, rad.now);
-
-//            if(fabs(angle) >= 0.5f) {
-//                da *= -1;
-//            }
-//            angle += da;
-            robot.robot_set->yaw_set = angle;
+            printf("%f,%f\n", robot.robot_set->yaw_relative, robot.robot_set->pitch_relative);
 
             std::this_thread::sleep_for(2ms);
         }
     };
 
-    robot.start();
-
     std::thread io_thread(&Io::Io_handler::task, &io);
     std::thread socket_thread(&Io::Server_socket_interface::task, &socket_intrf);
     std::thread copy_thread(copySerialData);
 
-    try {
-        Hardware::Serial_interface<Types::ReceivePacket> serial;
-        std::thread serial_thread(&Hardware::Serial_interface<Types::ReceivePacket>::task, &serial);
-        serial_thread.join();
-    } catch (serial::IOException) {
-        LOG_ERR("there's no such serial device\n");
-    }
-
-    io_thread.join();
+    robot.start_init();
+    robot.init_join();
+    robot.start();
+    robot.join();
     return 0;
 }
