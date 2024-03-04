@@ -5,6 +5,7 @@
 
 #include "kb_ctrl.hpp"
 #include "robot.hpp"
+#include "socket_interface.hpp"
 #include "types.hpp"
 #include "ui.hpp"
 

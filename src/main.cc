@@ -8,14 +8,21 @@
 
 int main(int argc, char **argv) {
     Robot::Robot_ctrl robot;
-    Hardware::Serial_interface<Types::ReceivePacket> serial;
+    Io::Socket_interface socket_intrf;
 
     Io::Io_handler io(robot.robot_set);
 
     robot.start();
 
     std::thread io_thread(&Io::Io_handler::task, &io);
-    std::thread serial_thread(&Hardware::Serial_interface<Types::ReceivePacket>::task, &serial);
+    std::thread socket_thread(&Io::Socket_interface::task, &socket_intrf);
+
+    try {
+        Hardware::Serial_interface<Types::ReceivePacket> serial;
+        std::thread serial_thread(&Hardware::Serial_interface<Types::ReceivePacket>::task, &serial);
+    } catch (serial::IOException) {
+        printf("there's no such serial device\n");
+    }
 
     io_thread.join();
     return 0;
