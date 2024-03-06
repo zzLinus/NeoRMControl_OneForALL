@@ -5,6 +5,7 @@
 #include "serial_interface.hpp"
 #include "thread"
 #include "types.hpp"
+#include "utils.hpp"
 
 int main(int argc, char **argv) {
     Robot::Robot_ctrl robot;
@@ -22,7 +23,7 @@ int main(int argc, char **argv) {
         std::thread serial_thread(&Hardware::Serial_interface<Types::ReceivePacket>::task, &serial);
         serial_thread.join();
     } catch (serial::IOException) {
-        printf("there's no such serial device\n");
+        LOG_ERR("there's no such serial device\n");
     }
 
     io_thread.join();

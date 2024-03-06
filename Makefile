@@ -12,8 +12,10 @@ CPPFLAGS = -std=c++20 -O0 -g -Wall -Wextra -Wpedantic -Wstrict-aliasing
 CPPFLAGS += -Wno-pointer-arith -Wno-newline-eof -Wno-unused-parameter -Wno-gnu-statement-expression
 CPPFLAGS += -Wno-gnu-compound-literal-initializer -Wno-gnu-zero-variadic-macro-arguments
 CPPFLAGS += -I$(WORK_DIR)/include
-#CPPFLAGS += `pkg-config sdl --cflags`
-#CPPFLAGS += -DDEBUG
+
+# NOTE: turn on debug here
+CPPFLAGS += -D__DEBUG__
+
 # FIXME: imtui dependency linking
 CPPFLAGS += -I "./3rdparty/include"
 CPPFLAGS += -L "./3rdparty/lib"

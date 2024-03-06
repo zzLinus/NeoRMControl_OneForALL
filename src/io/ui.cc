@@ -106,17 +106,17 @@ namespace Ui
 
     bool raylib_ui::render() {
         // Initialization
-        if (w->ShouldClose())
-            return false;
+        //if (w->ShouldClose())
+        //    return false;
 
-        BeginDrawing();
-        ClearBackground(Color{ 6, 0, 37, 255 });
+        //BeginDrawing();
+        //ClearBackground(Color{ 6, 0, 37, 255 });
 
-        draw_menu();
-        draw_motor_speed();
-        handle_kbevent();
+        //draw_menu();
+        //draw_motor_speed();
+        //handle_kbevent();
 
-        EndDrawing();
-        return true;
+        //EndDrawing();
+        //return true;
     }
 }  // namespace Ui

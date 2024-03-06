@@ -2,6 +2,7 @@
 #define __SERIAL_INTERFACE__
 
 #include "serial/serial.h"
+#include "utils.hpp"
 
 namespace Hardware
 {
@@ -43,7 +44,7 @@ namespace Hardware
 
         while (iter != devices_found.end()) {
             serial::PortInfo device = *iter++;
-            printf("(%s, %s, %s)\n", device.port.c_str(), device.description.c_str(), device.hardware_id.c_str());
+            LOG_INFO("(%s, %s, %s)\n", device.port.c_str(), device.description.c_str(), device.hardware_id.c_str());
         }
     }
 
@@ -58,7 +59,7 @@ namespace Hardware
     inline int Serial_interface<T>::unpack() {
         memcpy(buffer, read(sizeof(T)).c_str(), sizeof(T));
         fromVector(buffer, &rp);
-        printf("serial info: %f %f %f %f %f %f\n", rp.yaw, rp.pitch, rp.roll, rp.yaw_v, rp.pitch_v, rp.roll_v);
+        LOG_INFO("serial info: %f %f %f %f %f %f\n", rp.yaw, rp.pitch, rp.roll, rp.yaw_v, rp.pitch_v, rp.roll_v);
 
         return 0;
     }

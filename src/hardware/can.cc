@@ -1,8 +1,5 @@
 #include "can.hpp"
-
 #include <cstring>
-
-#include "iostream"
 
 namespace Hardware
 {
@@ -17,7 +14,7 @@ namespace Hardware
         callback_fun = callback;
         // create CAN socket
         if ((soket_id = socket(PF_CAN, SOCK_RAW, CAN_RAW)) < 0) {
-            perror("Error while creating socket");
+            LOG_ERR("Error while creating socket");
             exit(-1);
         }
 
@@ -58,7 +55,7 @@ namespace Hardware
             if (init_flag) {
                 // read CAN frame
                 if (read(soket_id, &frame_r, sizeof(can_frame)) <= 0) {
-                    perror("Error reading CAN frame");
+                    LOG_ERR("Error reading CAN frame");
                     return Status::ERROR;
                 } else {
                     // printf("not reading!\n");

@@ -10,6 +10,7 @@
 #include <memory>
 
 #include "robot.hpp"
+#include "utils.hpp"
 
 namespace Io
 {
@@ -20,6 +21,7 @@ namespace Io
         ~Server_socket_interface();
         void task();
 		inline void unpack();
+		void lisent_connection();
 
        private:
         int64_t port_num;

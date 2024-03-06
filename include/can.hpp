@@ -15,6 +15,7 @@
 
 #include "config.hpp"
 #include "string"
+#include "utils.hpp"
 
 namespace Hardware
 {
