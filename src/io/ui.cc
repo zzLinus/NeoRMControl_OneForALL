@@ -35,10 +35,10 @@ namespace Ui
         textColor.DrawText(" Hi Mom", 10, 10, 20);
 
         Vector2 dir_center = { 100, 130 };
-        DrawRectangle(dir_center.x, dir_center.y - 20, 20, 20, IsKeyDown(KEY_W) ? RED : LIGHTGRAY);
-        DrawRectangle(dir_center.x, dir_center.y + 20, 20, 20, IsKeyDown(KEY_R) ? RED : LIGHTGRAY);
-        DrawRectangle(dir_center.x - 20, dir_center.y, 20, 20, IsKeyDown(KEY_A) ? RED : LIGHTGRAY);
-        DrawRectangle(dir_center.x + 20, dir_center.y, 20, 20, IsKeyDown(KEY_S) ? RED : LIGHTGRAY);
+        DrawRectangle(dir_center.x, dir_center.y - 20, 20, 20, p_robot_set->vy_set > 0 ? RED : LIGHTGRAY);
+        DrawRectangle(dir_center.x, dir_center.y + 20, 20, 20, p_robot_set->vy_set < 0 ? RED : LIGHTGRAY);
+        DrawRectangle(dir_center.x - 20, dir_center.y, 20, 20, p_robot_set->vx_set > 0 ? RED : LIGHTGRAY);
+        DrawRectangle(dir_center.x + 20, dir_center.y, 20, 20, p_robot_set->vx_set < 0 ? RED : LIGHTGRAY);
     }
 
     inline void raylib_ui::draw_motor_speed() {
