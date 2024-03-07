@@ -4,7 +4,6 @@ BUILD_DIR = $(WORK_DIR)/build
 MAKE = make
 MV = mv
 
-RAY_DIR = $(shell find ./3rdparty -name "src-raylib")
 SERIAL_DIR= $(shell find ./3rdparty -name "src-serial")
 
 CC = g++
@@ -20,7 +19,7 @@ CPPFLAGS += -D__DEBUG__
 CPPFLAGS += -I "./3rdparty/include"
 CPPFLAGS += -L "./3rdparty/lib"
 
-LDFLAGS += -lraylib -lGL -lm -lpthread -ldl -lrt -lX11 -lserial
+LDFLAGS += -lm -lpthread -ldl -lrt -lserial
 
 #LDFLAGS = `pkg-config sdl --libs`
 
@@ -38,28 +37,20 @@ dirs:
 run: all
 	$(BUILD_DIR)/$(BIN)
 
-raylib: $(RAY_DIR)
-	$(MAKE) -C $< -j8
-	$(MV) $(RAY_DIR)/libraylib.a 3rdparty/lib
-
 serial: $(SERIAL_DIR)
 	$(MAKE) -C $< -j8
 	$(MV) $(SERIAL_DIR)/build/libserial.a 3rdparty/lib
 
-$(BIN): $(OBJ) serial raylib
+$(BIN): $(OBJ) serial
 	$(CC) -o $(BUILD_DIR)/$(BIN) $(OBJ) $(CPPFLAGS) $(LDFLAGS)
 
 $(BUILD_DIR)/%.o: %.cc
 	@mkdir -p $(dir $@) && echo + CC $<
 	$(CC) -o $@ -c $< $(CPPFLAGS)
 
-clean-raylib: $(RAY_DIR)
-	$(MAKE) -C $< clean
-
 clean-serial: $(SERIAL_DIR)
 	$(MAKE) -C $< clean
 
-clean: clean-serial clean-raylib
-	rm 3rdparty/lib/libraylib.a
+clean: clean-serial
 	rm 3rdparty/lib/libserial.a
 	rm -rf $(BUILD_DIR)/$(BIN) $(OBJ)

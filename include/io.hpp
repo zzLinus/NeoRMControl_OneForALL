@@ -7,7 +7,6 @@
 #include "robot.hpp"
 #include "socket_interface.hpp"
 #include "types.hpp"
-#include "ui.hpp"
 
 namespace Io
 {
@@ -21,7 +20,6 @@ namespace Io
        private:
        public:
         Input::Kb_ctrl* kb;
-        Ui::raylib_ui* ui;
 
        private:
     };

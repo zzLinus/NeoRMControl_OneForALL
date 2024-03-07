@@ -13,7 +13,7 @@ CPPFLAGS += -I$(WORK_DIR)/include
 CPPFLAGS += -I "./3rdparty/include"
 CPPFLAGS += -L "./3rdparty/lib"
 
-LDFLAGS += -lraylib -lGL -lm -lpthread -ldl -lrt -lX11
+LDFLAGS += -lm -lpthread -ldl -lrt -lserial
 
 #LDFLAGS = `pkg-config sdl --libs`
 
