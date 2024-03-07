@@ -18,7 +18,7 @@ namespace Hardware
        private:
         inline void enumerate_ports();
         inline int unpack();
-        inline void fromVector(const uint8_t *data, ReceivePacket *pkg);
+        inline void fromVector(const uint8_t *data, T *pkg);
 
        public:
         T rp;
@@ -49,7 +49,7 @@ namespace Hardware
     }
 
     template<class T>
-    inline void Serial_interface<T>::fromVector(uint8_t *data, T *pkg) {
+    inline void Serial_interface<T>::fromVector(const uint8_t *data, T *pkg) {
         for (size_t i = 0; i < sizeof(T); ++i) {
             ((uint8_t *)pkg)[i] = data[i];
         }

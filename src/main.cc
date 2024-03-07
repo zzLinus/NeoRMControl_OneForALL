@@ -12,6 +12,7 @@ using namespace std::chrono;
 int main(int argc, char **argv) {
     Robot::Robot_ctrl robot;
     Io::Server_socket_interface socket_intrf(robot.robot_set);
+    Hardware::Serial_interface<Types::ReceivePacket> serial;
 
     Io::Io_handler io(robot.robot_set);
 
@@ -26,7 +27,7 @@ int main(int argc, char **argv) {
         fp32 angle = 0.f, da = 0.001f;
         robot.robot_set->mode = Types::ROBOT_MODE::ROBOT_FOLLOW_GIMBAL;
 
-        while(true) {
+        while (true) {
             auto now = system_clock::now();
             auto step = duration_cast<milliseconds>(now - start).count();
             robot.robot_set->ins_yaw = serial.rp.yaw;
@@ -37,12 +38,12 @@ int main(int argc, char **argv) {
             robot.robot_set->ins_roll_v = serial.rp.roll_v;
             robot.robot_set->mode = Types::ROBOT_MODE::ROBOT_NOT_FOLLOW;
             rad.update(UserLib::rad_format((fp32)robot.gimbal.yaw_motor.motor_measure.ecd * Config::M6020_ECD_TO_RAD));
-//            printf("%f,%f,%f\n", (fp32)step / 1000.f, input, rad.now);
+            //            printf("%f,%f,%f\n", (fp32)step / 1000.f, input, rad.now);
 
-//            if(fabs(angle) >= 0.5f) {
-//                da *= -1;
-//            }
-//            angle += da;
+            //            if(fabs(angle) >= 0.5f) {
+            //                da *= -1;
+            //            }
+            //            angle += da;
             robot.robot_set->v_yaw_set = angle;
 
             std::this_thread::sleep_for(2ms);
@@ -53,6 +54,7 @@ int main(int argc, char **argv) {
 
     std::thread io_thread(&Io::Io_handler::task, &io);
     std::thread socket_thread(&Io::Server_socket_interface::task, &socket_intrf);
+    std::thread copy_thread(copySerialData);
 
     try {
         Hardware::Serial_interface<Types::ReceivePacket> serial;
