@@ -1,5 +1,4 @@
 #include "gimbgal.hpp"
-#include "iostream"
 
 namespace Gimbal
 {

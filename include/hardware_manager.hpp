@@ -1,3 +1,5 @@
+#pragma once
+
 #include "hardware_list_base.hpp"
 namespace Hardware
 {
@@ -23,7 +25,7 @@ namespace Hardware
         }
 
         template<size_t idx, typename... Args>
-        [[maybe_unused]] void register_callback(Args &&...args) {
+        void register_callback(Args &&...args) {
             ListBase::register_callback<idx>(hardware, args...);
         }
 

@@ -2,12 +2,13 @@
 #define __CHASSIS_H__
 
 #include <memory>
+#include <vector>
 
 #include "robot.hpp"
+#include "hardware.hpp"
 #include "can.hpp"
 #include "motor.hpp"
 #include "types.hpp"
-#include <vector>
 #include "utils.hpp"
 
 namespace Chassis

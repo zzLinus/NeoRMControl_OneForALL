@@ -9,6 +9,7 @@
 #include "robot.hpp"
 #include "serial_interface.hpp"
 #include "socket_interface.hpp"
+#include "hardware.hpp"
 
 namespace Robot
 {
@@ -47,11 +48,4 @@ namespace Robot
        private:
     };
 
-    using RobotHardware = Hardware::Hardware_manager<
-        Hardware::Can_interface,
-        Hardware::Can_interface,
-        Hardware::Serial_interface<Types::ReceivePacket>,
-        Io::Server_socket_interface>;
-
-    extern std::shared_ptr<RobotHardware> hardware;
 }  // namespace Robot

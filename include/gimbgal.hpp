@@ -7,7 +7,7 @@
 #include "can.hpp"
 #include "robot.hpp"
 #include "config.hpp"
-#include "robot.hpp"
+#include "hardware.hpp"
 
 namespace Gimbal
 {
@@ -22,8 +22,6 @@ namespace Gimbal
         void update_data();
         void send_motor_current();
         void init_loop();
-
-        //TODO gimbal_init, init the origin yaw and pitch
 
        public:
         bool no_force = true;
