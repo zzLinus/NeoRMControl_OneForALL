@@ -1,5 +1,5 @@
-#pragma once
-
+#ifndef __ROBOT__
+#define __ROBOT__
 #include "can.hpp"
 #include "hardware_manager.hpp"
 #include "memory"
@@ -33,9 +33,6 @@ namespace Robot
         Types::ROBOT_MODE mode = Types::ROBOT_MODE::ROBOT_NO_FORCE;
     } __attribute__((packed));
 
-    using RobotHardware = Hardware::Hardware_manager<
-        Hardware::Can_interface,
-        Hardware::Can_interface,
-        Hardware::Serial_interface<Types::ReceivePacket>>;
-    extern std::shared_ptr<RobotHardware> hardware;
 }  // namespace Robot
+
+#endif

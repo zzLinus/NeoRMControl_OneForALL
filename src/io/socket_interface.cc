@@ -41,6 +41,10 @@ namespace Io
         p_robot_set->mode = Types::ROBOT_MODE::ROBOT_NOT_FOLLOW;
     }
 
+    void Server_socket_interface::set_callback(const Server_socket_interface::callbackType &fun) {
+        callback_fun = fun;
+    }
+
     Server_socket_interface::Server_socket_interface(std::shared_ptr<Robot::Robot_set> robot_set)
         : port_num(51717),
           p_robot_set(robot_set) {

@@ -1,5 +1,6 @@
 #ifndef __SERIAL_INTERFACE__
 #define __SERIAL_INTERFACE__
+#include <functional>
 
 #include "serial/serial.h"
 #include "utils.hpp"
@@ -13,7 +14,8 @@ namespace Hardware
        public:
         using callbackType = std::function<void(int, const T &t)>;
 
-        Serial_interface() = default;
+        Serial_interface(std::string port_name, int baudrate, int simple_timeout);
+        Serial_interface() = delete;
         ~Serial_interface();
         void task();
         void set_callback(const callbackType &fun);
@@ -31,15 +33,16 @@ namespace Hardware
         uint8_t buffer[256];
         uint8_t header;
     };
+
     template<class T>
     void Serial_interface<T>::set_callback(const Serial_interface::callbackType &fun) {
         callback_fun = fun;
     }
 
-//    template<class T>
-//    Serial_interface<T>::Serial_interface()
-//        : serial::Serial(std::string("/dev/ttyACM0"), 115200, serial::Timeout::simpleTimeout(1000)) {
-//    }
+    template<class T>
+    Serial_interface<T>::Serial_interface(std::string port_name, int baudrate, int simple_timeout)
+        : serial::Serial(port_name, baudrate, serial::Timeout::simpleTimeout(simple_timeout)) {
+    }
 
     template<class T>
     Serial_interface<T>::~Serial_interface() = default;

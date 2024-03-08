@@ -3,16 +3,15 @@
 namespace Chassis
 {
     Chassis::Chassis() {
-        // 电机初始化
+        // 电机初始int 
         motors.assign(4, Hardware::Motor{ Config::M3508_SPEED_PID_CONFIG });
     }
 
     void Chassis::init(const std::shared_ptr<Robot::Robot_set> &robot) {
         robot_set = robot;
-        for(int i = 0; i < motors.size(); i++) {
-            auto & mot = motors[i];
-            Robot::hardware->register_callback<CAN1>(
-                0x201 + i, [&mot](const auto &frame){mot.unpack(frame);});
+        for (size_t i = 0; i < motors.size(); i++) {
+            auto &mot = motors[i];
+            Robot::hardware->register_callback<CAN1>(0x201 + i, [&mot](const auto &frame) { mot.unpack(frame); });
         }
     }
 
@@ -47,7 +46,7 @@ namespace Chassis
         can_frame send_frame{};
         send_frame.can_id = 0x200;
         send_frame.can_dlc = 8;
-        for (int i = 0; i < motors.size(); i++) {
+        for (size_t i = 0; i < motors.size(); i++) {
             send_frame.data[i * 2] = (motors[i].give_current >> 8);
             send_frame.data[i * 2 + 1] = (motors[i].give_current & 0xff);
         }
