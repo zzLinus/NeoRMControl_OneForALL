@@ -1,8 +1,8 @@
 #pragma once
 
 #include "can.hpp"
-#include "memory"
 #include "hardware_manager.hpp"
+#include "memory"
 #include "serial_interface.hpp"
 #include "types.hpp"
 
@@ -31,10 +31,11 @@ namespace Robot
         fp32 yaw_relative = 0.f;
         fp32 pitch_relative = 0.f;
         Types::ROBOT_MODE mode = Types::ROBOT_MODE::ROBOT_NO_FORCE;
-    };
+    } __attribute__((packed));
 
-    using RobotHardware = Hardware::Hardware_manager<Hardware::Can_interface, Hardware::Can_interface,
-                                                  Hardware::Serial_interface<Types::ReceivePacket>>;
+    using RobotHardware = Hardware::Hardware_manager<
+        Hardware::Can_interface,
+        Hardware::Can_interface,
+        Hardware::Serial_interface<Types::ReceivePacket>>;
     extern std::shared_ptr<RobotHardware> hardware;
-}
-
+}  // namespace Robot
