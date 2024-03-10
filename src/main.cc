@@ -11,11 +11,11 @@ int main(int argc, char **argv) {
     Robot::Robot_ctrl robot;
 
     robot.load_hardware();
-    robot.start();
-    // robot.start_init();
+    robot.start_init();
+    robot.init_join();
 
+    robot.start();
     robot.join();
-    // robot.init_join();
 
     return 0;
 }
