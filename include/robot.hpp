@@ -10,6 +10,7 @@ namespace Robot
 {
     struct Robot_set
     {
+        uint8_t heaedr;
         /** chassis_control **/
         fp32 vx_set = 0.f;
         fp32 vy_set = 0.f;

@@ -32,9 +32,9 @@ namespace Types
 {
     typedef struct ReceivePacket
     {
-        float roll;
-        float pitch;
         float yaw;
+        float pitch;
+        float roll;
         float yaw_v;
         float pitch_v;
         float roll_v;
