@@ -12,10 +12,9 @@ int main(int argc, char **argv) {
 
     robot.load_hardware();
     robot.start();
+    // robot.start_init();
 
     robot.join();
-
-    // robot.start_init();
     // robot.init_join();
 
     return 0;

@@ -5,32 +5,34 @@
 
 namespace Io
 {
-    void Server_socket_interface::lisent_connection() {
-        listen(server_socket_fd, 5);
-        socklen_t clilen = sizeof(cli_addr);
-        client_socket_fd = accept(server_socket_fd, (struct sockaddr *)&cli_addr, &clilen);
-        if (client_socket_fd < 0) {
-            LOG_ERR("ERROR on accept message\n");
-        }
-    }
     void Server_socket_interface::task() {
-        lisent_connection();
-        int i = 0;
         while (true) {
             memset(buffer, 0, sizeof(buffer));
-            int n = read(client_socket_fd, buffer, 256);
-            if (n < 0) {
-                LOG_ERR("ERROR reading from socket");
-                lisent_connection();
+
+            int n = recvfrom(sockfd, buffer, 256, MSG_WAITALL, (sockaddr *)&cli_addr, &cli_addr_len);
+            if (n > 0) {
+                LOG_OK("%d bytes from client: %s\n", n, buffer);
             }
-            LOG_OK(" %d Client message: %s\n", i++, buffer);
-            n = write(client_socket_fd, "Server got your message", 24);
-            if (n < 0) {
-                lisent_connection();
-                LOG_ERR("ERROR writing to socket");
+            uint8_t header = buffer[0];
+
+            // TODO: send "real" info back to vision ros socket
+            n = sendto(
+                sockfd,
+                (const char *)"Server got your message",
+                strlen("Server got your message"),
+                MSG_CONFIRM,
+                (const struct sockaddr *)&cli_addr,
+                cli_addr_len);
+            if (n > 0) {
+                LOG_OK("%d bytes send to client: %s\n", n, buffer);
             }
 
-            unpack();
+            switch (header) {
+                case 0xEA: unpack(); break;
+                case 0x5A: break;  // TODO:
+                case 0x6A: break;
+                default:;
+            }
         }
     }
 
@@ -46,10 +48,11 @@ namespace Io
     }
 
     Server_socket_interface::Server_socket_interface(std::shared_ptr<Robot::Robot_set> robot_set)
-        : port_num(51717),
+        : port_num(51718),
           p_robot_set(robot_set) {
-        server_socket_fd = socket(AF_INET, SOCK_STREAM, 0);
-        if (server_socket_fd < 0) {
+        // NOTE: read this https://www.linuxhowtos.org/C_C++/socket.htm
+        sockfd = socket(AF_INET, SOCK_DGRAM, 0);
+        if (sockfd < 0) {
             LOG_ERR("can't open socket\n");
         }
 
@@ -57,13 +60,13 @@ namespace Io
         serv_addr.sin_addr.s_addr = INADDR_ANY;
         serv_addr.sin_port = htons(port_num);
 
-        if (bind(server_socket_fd, (struct sockaddr *)&serv_addr, sizeof(serv_addr)) < 0) {
+        if (bind(sockfd, (sockaddr *)&serv_addr, sizeof(serv_addr)) < 0) {
             LOG_ERR("can't bind socket fd with port number");
         }
+        cli_addr_len = sizeof(cli_addr);
     }
 
     Server_socket_interface::~Server_socket_interface() {
-        close(client_socket_fd);
-        close(server_socket_fd);
+        close(sockfd);
     }
 }  // namespace Io
