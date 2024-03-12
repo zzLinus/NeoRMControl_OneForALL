@@ -15,8 +15,10 @@ namespace Gimbal
     void Gimbal::init(const std::shared_ptr<Robot::Robot_set> &robot) {
         robot_set = robot;
 
-        Robot::hardware->register_callback<CAN0>(0x205, [&](const auto &frame) { yaw_motor.unpack(frame); });
-        Robot::hardware->register_callback<CAN0>(0x206, [&](const auto &frame) { pitch_motor.unpack(frame); });
+        Robot::hardware->register_callback<CAN0>(
+            0x205, [&](const auto &frame) { yaw_motor.unpack(frame); });
+        Robot::hardware->register_callback<CAN0>(
+            0x206, [&](const auto &frame) { pitch_motor.unpack(frame); });
     }
 
     void Gimbal::start_init_loop() {
@@ -81,10 +83,10 @@ namespace Gimbal
         yaw_motor.speed = Config::RPM_TO_RAD_S * (fp32)yaw_motor.motor_measure.speed_rpm;
         pitch_motor.speed = Config::RPM_TO_RAD_S * (fp32)pitch_motor.motor_measure.speed_rpm;
 
-        robot_set->yaw_relative =
-            Config::M6020_ECD_TO_RAD * ((fp32)yaw_motor.motor_measure.ecd - Config::GIMBAL_YAW_OFFSET_ECD);
-        robot_set->pitch_relative =
-            Config::M6020_ECD_TO_RAD * ((fp32)pitch_motor.motor_measure.ecd - Config::GIMBAL_PITCH_OFFSET_ECD);
+        robot_set->yaw_relative = UserLib::rad_format(
+            Config::M6020_ECD_TO_RAD * ((fp32)yaw_motor.motor_measure.ecd - Config::GIMBAL_YAW_OFFSET_ECD));
+        robot_set->pitch_relative = UserLib::rad_format(
+            Config::M6020_ECD_TO_RAD * ((fp32)pitch_motor.motor_measure.ecd - Config::GIMBAL_PITCH_OFFSET_ECD));
 
         // LOG_INFO("pitch angle %f\n", robot_set->pitch_relative);
         yaw_gyro = std::sin(robot_set->pitch_relative) * robot_set->ins_roll_v -

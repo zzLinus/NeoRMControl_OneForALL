@@ -16,20 +16,18 @@
 #include "config.hpp"
 #include "string"
 #include "utils.hpp"
+#include "hardware_callback.hpp"
 
 namespace Hardware
 {
-    class Can_interface
+    class Can_interface : public Callback_key<uint32_t , can_frame>
     {
        public:
-        using CallbackType = std::function<void(uint32_t id, const can_frame &)>;
-
         Can_interface();
         ~Can_interface();
         bool send(const can_frame &frame);
         bool task();
         void init(const char *can_channel);
-        void set_callback(const CallbackType &callback);
 
        private:
         sockaddr_can *addr;
@@ -38,7 +36,6 @@ namespace Hardware
         Types::debug_info_t *debug;
         int soket_id;
         bool init_flag;
-        CallbackType callback_fun;
 
        public:
     };

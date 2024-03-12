@@ -90,13 +90,13 @@ namespace Robot
         can1.init("can1");
         socket_intrf = new Io::Server_socket_interface(robot_set);
         try {
-            ser1 = new Hardware::Serial_interface<Types::ReceivePacket>("/dev/ttyACM1", 115200, 1000);
+            ser1 = new Hardware::Serial_interface<Types::ReceivePacket>("/dev/ttyACM0", 115200, 1000);
         } catch (serial::IOException) {
             LOG_ERR("there's no such serial device\n");
         }
 
         hardware = std::make_shared<RobotHardware>(can0, can1, *ser1, *socket_intrf);
-        Robot::hardware->register_callback<SER1>(0, [&](const Types::ReceivePacket &rp) {
+        Robot::hardware->register_callback<SER1>([&](const Types::ReceivePacket &rp) {
             robot_set->ins_yaw = rp.yaw;
             robot_set->ins_pitch = rp.pitch;
             robot_set->ins_roll = rp.roll;

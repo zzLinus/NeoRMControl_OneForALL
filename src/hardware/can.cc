@@ -61,7 +61,7 @@ namespace Hardware
                 } else {
                     // printf("not reading!\n");
                 }
-                callback_fun(frame_r.can_id, frame_r);
+                callback_key(frame_r.can_id, frame_r);
             }
         }
     }
@@ -70,10 +70,6 @@ namespace Hardware
         /* send CAN frame */
         write(soket_id, &frame, sizeof(can_frame));
         return true;
-    }
-
-    void Can_interface::set_callback(const Can_interface::CallbackType &callback) {
-        callback_fun = callback;
     }
 
 }  // namespace Hardware

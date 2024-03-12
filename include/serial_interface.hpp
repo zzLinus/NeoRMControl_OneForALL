@@ -9,16 +9,13 @@ namespace Hardware
 {
 
     template<class T>
-    class Serial_interface : serial::Serial
+    class Serial_interface : serial::Serial, public Callback<T>
     {
        public:
-        using callbackType = std::function<void(int, const T &t)>;
-
         Serial_interface(std::string port_name, int baudrate, int simple_timeout);
         Serial_interface() = delete;
         ~Serial_interface();
         void task();
-        void set_callback(const callbackType &fun);
 
        private:
         inline void enumerate_ports();
@@ -29,15 +26,9 @@ namespace Hardware
         T rp;
 
        private:
-        callbackType callback_fun;
         uint8_t buffer[256];
         uint8_t header;
     };
-
-    template<class T>
-    void Serial_interface<T>::set_callback(const Serial_interface::callbackType &fun) {
-        callback_fun = fun;
-    }
 
     template<class T>
     Serial_interface<T>::Serial_interface(std::string port_name, int baudrate, int simple_timeout)
@@ -77,7 +68,7 @@ namespace Hardware
 //            rp.yaw_v,
 //            rp.pitch_v,
 //            rp.roll_v);
-        callback_fun(0, rp);
+        this->callback(rp);
 
         return 0;
     }
