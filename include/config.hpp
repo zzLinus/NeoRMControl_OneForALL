@@ -70,9 +70,9 @@ namespace Config
     };
 
     const typename Pid::Pid_config PITCH_SPEED_PID_CONFIG{
-        5200.0f,
+        3300.0f,
+        6.0f,
         15.0f,
-        4.0f,
         30000.0f,
         5000.0f,
     };
