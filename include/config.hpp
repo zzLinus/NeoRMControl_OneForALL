@@ -59,17 +59,20 @@ namespace Config
     };
 
     const typename Pid::Pid_config YAW_SPEED_PID_CONFIG{
-        7000.f,
-        8.0f,
-        0.f,
+		3200.f,
+		3.0f,
+		2.f,
+        //7000.f,
+        //8.0f,
+        //0.f,
         30000.0f,
         5000.0f,
     };
 
     const typename Pid::Pid_config PITCH_SPEED_PID_CONFIG{
-        8200.0f,
+        5200.0f,
         15.0f,
-        0.0f,
+        4.0f,
         30000.0f,
         5000.0f,
     };
@@ -87,7 +90,7 @@ namespace Config
     constexpr fp32 GIMBAL_YAW_OFFSET_ECD = 104;
     constexpr fp32 GIMBAL_PITCH_OFFSET_ECD = 8080;
 
-    constexpr uint32_t GIMBAL_INIT_STOP_TIME = 1000;
+    constexpr uint32_t GIMBAL_INIT_STOP_TIME = 20000;
     constexpr fp32 GIMBAL_INIT_EXP = 0.1f;
 
 }  // namespace Config
