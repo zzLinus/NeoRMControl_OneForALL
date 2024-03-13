@@ -91,21 +91,30 @@ namespace Robot
         can1.init("can1");
         socket_intrf = new Io::Server_socket_interface(robot_set);
         try {
-            ser1 = new Hardware::Serial_interface<Types::ReceivePacket>("/dev/ttyACM0", 115200, 1000);
+            ser1 = new Hardware::Serial_interface<Types::ReceivePacket>("/dev/ttyACM1", 115200, 1000);
         } catch (serial::IOException) {
             LOG_ERR("there's no such serial device\n");
         }
 
         hardware = std::make_shared<RobotHardware>(can0, can1, *ser1, *socket_intrf);
+
+        Robot::hardware->register_callback<SOCKET>([&](const Robot::Vison_control &vc) {
+            LOG_INFO(" %f %f %f %f\n", vc.linear_vx, vc.linear_vy, vc.angular, vc.yaw_set);
+            robot_set->vx_set = vc.linear_vx;
+            robot_set->vy_set = vc.linear_vy;
+            robot_set->wz_set = vc.angular;
+            robot_set->yaw_set = vc.yaw_set;
+        });
+
         Robot::hardware->register_callback<SER1>([&](const Types::ReceivePacket &rp) {
-            ins_d.y = rp.yaw;
-            ins_d.p = rp.pitch;
-            ins_d.r = rp.roll;
-            ins_d.y_v = rp.yaw_v;
-            ins_d.p_v = -rp.pitch_v;
-            ins_d.r_v = -rp.roll_v;
+            robot_set->ins_yaw = rp.yaw;
+            robot_set->ins_pitch = rp.pitch;
+            robot_set->ins_roll = rp.roll;
+            robot_set->ins_yaw_v = rp.yaw_v;
+            robot_set->ins_pitch_v = -rp.pitch_v;
+            robot_set->ins_roll_v = -rp.roll_v;
         });
         chassis.init(robot_set);
-        gimbal.init(robot_set, &ins_d);
+        gimbal.init(robot_set);
     }
 };  // namespace Robot

@@ -70,23 +70,19 @@ namespace Robot
     } __attribute__((packed));
 
     // send twist package heaedr = 0x6A;
-    struct SendTwistPacket
+    struct Vison_control
     {
         /*       导航部分       */
         uint8_t header;
         // 线速度 m/s
         float linear_vx;
         float linear_vy;
-        float linear_vz;
         // 旋转角速度 rad/s
-        float angular_vx;
-        float angular_vy;
-        float angluar_vz;
+        float angular;
         // 欧拉角
-        float twist_v_yaw;
-        float twist_v_roll;
-        float twist_v_pitch;
+        float yaw_set;
 
+        Types::ROBOT_MODE mode = Types::ROBOT_MODE::ROBOT_NO_FORCE;
     } __attribute__((packed));
 
 }  // namespace Robot

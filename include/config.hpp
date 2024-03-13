@@ -17,9 +17,9 @@ namespace Config
     };
 
     const typename Pid::Pid_config CHASSIS_FOLLOW_GIMBAL_PID_CONFIG{
-        6.0f,   // KP
+        .4f,   // KP
         0.0f,    // KI
-        50.0f,  // KD
+        110.0f,  // KD
         6.0f,    // MAX_OUT
         0.2f,    // MAX_IOUT
     };
@@ -27,12 +27,12 @@ namespace Config
     //TODO Adjust PID parameters
 
     const typename Pid::Pid_config GIMBAL_YAW_ABSOLUTE_PID_CONFIG{
-        5.0f,  // KP
-        1.0f,   // KI
-        4.3f,   // KD
+        4.01f,  // KP
+        0.05f,   // KI
+        22.0f,   // KD
         10.0f,  // MAX_OUT
-        0.0f,   // MAX_IOUT
-    };          // MAX_IOUT
+        .2f,   // MAX_IOUT
+    };
 
     const typename Pid::Pid_config GIMBAL_PITCH_ABSOLUTE_PID_CONFIG{
         12.0f,  // KP

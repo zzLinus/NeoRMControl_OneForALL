@@ -8,13 +8,13 @@ namespace UserLib
     }
 
     void RealRad::update(fp32 ref) {
-        if(last < -3.f && ref > 3.f) {
+        if (last < -3.f && ref > 3.f) {
             count--;
-        }
-        else if(last > 3.f && ref < -3.f) {
+        } else if (last > 3.f && ref < -3.f) {
             count++;
         }
         last = ref;
         now = (fp32)count * 2.f * M_PIf + ref;
     }
-}
+
+}  // namespace UserLib

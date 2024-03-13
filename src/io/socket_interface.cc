@@ -11,7 +11,7 @@ namespace Io
 
             int n = recvfrom(sockfd, buffer, 256, MSG_WAITALL, (sockaddr *)&cli_addr, &cli_addr_len);
             if (n > 0) {
-                // LOG_OK("%d bytes from client: %s\n", n, buffer);
+				LOG_OK("reads %d bytes from client: %s\n", n, buffer);
             }
             uint8_t header = buffer[0];
 
@@ -28,31 +28,22 @@ namespace Io
             }
 
             switch (header) {
-                case 0xEA: unpack(); break;
+                case 0xEA: {
+                    Robot::Vison_control vc;
+                    UserLib::unpack(vc, buffer);
+                    callback(vc);
+                    break;
+                }
                 case 0x5A: break;  // TODO:
-                case 0x6A: break;
+                case 0x6A: {
+                    Robot::Vison_control vc;
+                    UserLib::unpack(vc, buffer);
+                    callback(vc);
+                    break;
+                }
                 default:;
             }
         }
-    }
-
-    inline void Server_socket_interface::unpack() {
-        fp32 yaw = p_robot_set->ins_yaw;
-        fp32 pitch = p_robot_set->ins_pitch;
-        fp32 roll = p_robot_set->ins_roll;
-
-        for (size_t i = 0; i < sizeof(Robot::Robot_set); i++) {
-            *((uint8_t *)p_robot_set.get() + i) = buffer[i];
-        }
-
-        p_robot_set->ins_yaw = yaw;
-        p_robot_set->ins_pitch = pitch;
-        p_robot_set->ins_roll = roll;
-        p_robot_set->mode = Types::ROBOT_MODE::ROBOT_NOT_FOLLOW;
-    }
-
-    void Server_socket_interface::set_callback(const Server_socket_interface::callbackType &fun) {
-        callback_fun = fun;
     }
 
     Server_socket_interface::Server_socket_interface(std::shared_ptr<Robot::Robot_set> robot_set)

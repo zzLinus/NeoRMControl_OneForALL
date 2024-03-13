@@ -17,7 +17,7 @@ namespace Gimbal
        public:
         Gimbal();
         ~Gimbal() = default;
-        void init(const std::shared_ptr<Robot::Robot_set> &robot, Robot::ins_data *p_ins_d);
+        void init(const std::shared_ptr<Robot::Robot_set> &robot);
         void control_loop();
         void update_data();
         void send_motor_current();
@@ -40,7 +40,6 @@ namespace Gimbal
         fp32 pitch_gyro = 0.f;
 
         std::shared_ptr<Robot::Robot_set> robot_set;
-        Robot::ins_data *ins_d;
 
         Hardware::Motor yaw_motor;
         Hardware::Motor pitch_motor;
