@@ -8,6 +8,16 @@
 
 namespace Robot
 {
+
+    struct ins_data
+    {
+        fp32 y;
+        fp32 p;
+        fp32 r;
+        fp32 y_v;
+        fp32 p_v;
+        fp32 r_v;
+    };
     // robot set header = 0xEA;
     struct Robot_set
     {

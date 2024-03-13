@@ -17,9 +17,9 @@ namespace Config
     };
 
     const typename Pid::Pid_config CHASSIS_FOLLOW_GIMBAL_PID_CONFIG{
-        20.0f,   // KP
+        6.0f,   // KP
         0.0f,    // KI
-        100.0f,  // KD
+        50.0f,  // KD
         6.0f,    // MAX_OUT
         0.2f,    // MAX_IOUT
     };
@@ -27,9 +27,9 @@ namespace Config
     //TODO Adjust PID parameters
 
     const typename Pid::Pid_config GIMBAL_YAW_ABSOLUTE_PID_CONFIG{
-        12.0f,  // KP
-        0.0f,   // KI
-        0.3f,   // KD
+        5.0f,  // KP
+        1.0f,   // KI
+        4.3f,   // KD
         10.0f,  // MAX_OUT
         0.0f,   // MAX_IOUT
     };          // MAX_IOUT
@@ -70,9 +70,9 @@ namespace Config
     };
 
     const typename Pid::Pid_config PITCH_SPEED_PID_CONFIG{
-        3300.0f,
-        6.0f,
-        15.0f,
+        3200.0f,
+        0.0f,
+        13.0f,
         30000.0f,
         5000.0f,
     };
@@ -87,10 +87,10 @@ namespace Config
     constexpr fp32 RPM_TO_RAD_S = 2.f * M_PIf / 60.f;
     constexpr fp32 CHASSIS_CONTROL_FREQUENCE = 500.0f;
 
-    constexpr fp32 GIMBAL_YAW_OFFSET_ECD = 104;
+    constexpr fp32 GIMBAL_YAW_OFFSET_ECD = 124;
     constexpr fp32 GIMBAL_PITCH_OFFSET_ECD = 8080;
 
-    constexpr uint32_t GIMBAL_INIT_STOP_TIME = 20000;
+    constexpr uint32_t GIMBAL_INIT_STOP_TIME = 1000;
     constexpr fp32 GIMBAL_INIT_EXP = 0.1f;
 
 }  // namespace Config

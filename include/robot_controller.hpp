@@ -6,10 +6,10 @@
 #include "chassis.hpp"
 #include "config.hpp"
 #include "gimbgal.hpp"
+#include "hardware.hpp"
 #include "robot.hpp"
 #include "serial_interface.hpp"
 #include "socket_interface.hpp"
-#include "hardware.hpp"
 
 namespace Robot
 {
@@ -42,6 +42,7 @@ namespace Robot
 
         Hardware::Can_interface can0;
         Hardware::Can_interface can1;
+        Robot::ins_data ins_d;
         Hardware::Serial_interface<Types::ReceivePacket> *ser1;
         Io::Server_socket_interface *socket_intrf;
 
