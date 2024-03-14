@@ -133,5 +133,6 @@ namespace Robot
         });
         chassis.init(robot_set);
         gimbal.init(robot_set);
+        shoot.init(robot_set);
     }
 };  // namespace Robot
