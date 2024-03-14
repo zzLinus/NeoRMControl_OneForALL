@@ -6,19 +6,19 @@
 namespace ListBase {
     /** list base define **/
     template<size_t idx, typename ...List>
-    class List_base;
+    class ListBase;
 
     template<size_t idx, typename Head, typename ...Tail>
-    class List_base<idx, Head, Tail...> :
-        public List_base<idx + 1, Tail...> {
+    class ListBase<idx, Head, Tail...> :
+        public ListBase<idx + 1, Tail...> {
        public:
-        using Inherited = List_base<idx + 1, Tail...>;
+        using Inherited = ListBase<idx + 1, Tail...>;
         using Type = Head;
 
         Head *val;
         std::shared_ptr<std::thread> thread;
 
-        explicit constexpr List_base(Head &head, Tail &... tail)
+        explicit constexpr ListBase(Head &head, Tail &... tail)
             : Inherited(tail...) {
             val = &head;
             thread = std::make_shared<std::thread>(&Head::task, &head);
@@ -26,31 +26,48 @@ namespace ListBase {
     };
 
     template<size_t idx, typename Head>
-    class List_base<idx, Head> {
+    class ListBase<idx, Head> {
        public:
-        using Inherited = List_base<idx + 1>;
+        using Inherited = ListBase<idx + 1>;
         using Type = Head;
 
         Head *val;
         std::shared_ptr<std::thread> thread;
 
-        explicit constexpr List_base(Head &head) {
+        explicit constexpr ListBase(Head &head) {
             val = &head;
             thread = std::make_shared<std::thread>(&Head::task, &head);
         }
     };
     template<size_t idx, typename Head, typename ...Tail>
-    List_base<idx, Head, Tail...> ListTypeFun(List_base<idx, Head, Tail...> &list);
+    ListBase<idx, Head, Tail...> ListTypeFun(ListBase<idx, Head, Tail...> &list);
 
     /** join define**/
     template<size_t idx, typename Head, typename Sec, typename ...Tail>
-    void join(List_base<idx, Head, Sec, Tail...> &list) {
+    void join(ListBase<idx, Head, Sec, Tail...> &list) {
         join<idx + 1, Sec, Tail...>(list);
         list.thread->join();
     }
 
     template<size_t idx, typename Head>
-    void join(List_base<idx, Head> &list) {
+    void join(ListBase<idx, Head> &list) {
         list.thread->join();
     }
+
+    /** callback element define **/
+    template<size_t idx, typename T>
+    struct ListElement;
+
+    template<size_t idx, size_t idx_t, typename Head, typename ...Args>
+    struct ListElement<idx, ListBase<idx_t, Head, Args...>> : ListElement<idx, ListBase<idx_t + 1, Args...>> {
+        using Inherited = ListElement<idx, ListBase<idx_t + 1, Args...>>;
+        using Type = Inherited::Type;
+        using ListType = Inherited::ListType;
+    };
+
+    template<size_t idx, typename Head, typename ...Args>
+    struct ListElement<idx, ListBase<idx, Head, Args...>> {
+        using Type = Head;
+        using ListType = ListBase<idx, Head, Args...>;
+    };
 }

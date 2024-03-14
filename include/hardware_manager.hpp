@@ -7,37 +7,42 @@ namespace Hardware
     template<typename ...List>
     class Hardware_manager {
        private:
-        ListBase::List_base<0, List...> hardware;
+        using BaseType = ListBase::ListBase<0, List...>;
+        BaseType hardware;
+
+        template<size_t idx>
+        using ListType = ListBase::ListElement<idx, BaseType>::ListType;
+
        public:
         template<typename ...Args>
         explicit Hardware_manager(Args &&... args) : hardware(args...) {}
 
         template<size_t idx, typename ...Args>
         auto get(Args &&... args) {
-            return ((decltype(ListTypeFun<idx>(hardware)) &) hardware).val->get(hardware, args...);
+            return ((ListType<idx> &) hardware).val;
         }
 
         template<size_t idx, typename ...Args>
         void send(Args &&... args) {
-            ((decltype(ListTypeFun<idx>(hardware)) &) hardware).val->send(args...);
+            ((ListType<idx> &) hardware).val->send(args...);
         }
 
         /** callback **/
         template<size_t idx, typename Type>
         void register_callback(const std::function<void(const Type &)> &fun) {
-            ((decltype(ListTypeFun<idx>(hardware)) &) hardware).val->template register_callback<Type>(fun);
+            ((ListType<idx> &) hardware).val->template register_callback<Type>(fun);
         }
 
         /** callback one element **/
         template<size_t idx, typename T>
         void register_callback(const T &fun) {
-            ((decltype(ListTypeFun<idx>(hardware)) &) hardware).val->register_callback(fun);
+            ((ListType<idx> &) hardware).val->register_callback(fun);
         }
 
         /** callback key **/
         template<size_t idx, typename Key, typename ...Args>
         void register_callback(const Key &key, Args &&... args) {
-            ((decltype(ListTypeFun<idx>(hardware)) &) hardware).val->register_callback_key(key, args...);
+            ((ListType<idx> &) hardware).val->register_callback_key(key, args...);
         }
 
         void join() {
