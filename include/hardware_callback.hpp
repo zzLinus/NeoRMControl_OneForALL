@@ -40,7 +40,7 @@ namespace Hardware {
     template<typename Idx, typename Head, typename ...Tail>
     struct CallbackElement<Idx, CallbackBase<Head, Tail...>> : CallbackElement<Idx, CallbackBase<Tail...>> {
         using Inherited = CallbackElement<Idx, CallbackBase<Tail...>>;
-        using ListType = Inherited::ListType;
+        using ListType = typename Inherited::ListType;
     };
 
     template<typename Idx, typename ...Tail>
@@ -77,7 +77,7 @@ namespace Hardware {
         using BaseType = CallbackBase<Head, Sec, Args...>;
         BaseType callback_set;
         template<typename Idx>
-        using ListType = CallbackElement<Idx, BaseType>::ListType;
+        using ListType = typename CallbackElement<Idx, BaseType>::ListType;
 
     };
 

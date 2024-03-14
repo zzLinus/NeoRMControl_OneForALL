@@ -61,8 +61,8 @@ namespace ListBase {
     template<size_t idx, size_t idx_t, typename Head, typename ...Args>
     struct ListElement<idx, ListBase<idx_t, Head, Args...>> : ListElement<idx, ListBase<idx_t + 1, Args...>> {
         using Inherited = ListElement<idx, ListBase<idx_t + 1, Args...>>;
-        using Type = Inherited::Type;
-        using ListType = Inherited::ListType;
+        using Type = typename Inherited::Type;
+        using ListType = typename Inherited::ListType;
     };
 
     template<size_t idx, typename Head, typename ...Args>

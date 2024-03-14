@@ -11,7 +11,7 @@ namespace Hardware
         BaseType hardware;
 
         template<size_t idx>
-        using ListType = ListBase::ListElement<idx, BaseType>::ListType;
+        using ListType = typename ListBase::ListElement<idx, BaseType>::ListType;
 
        public:
         template<typename ...Args>
