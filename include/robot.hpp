@@ -31,6 +31,10 @@ namespace Robot
         fp32 yaw_set = 0.f;
         fp32 pitch_set = 0.f;
 
+        /** shoot_control **/
+        bool friction_open = false;
+        bool shoot_open = false;
+
         /** IMU **/
         fp32 ins_yaw = 0.f;
         fp32 ins_pitch = 0.f;

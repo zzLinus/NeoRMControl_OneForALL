@@ -27,6 +27,7 @@ namespace Robot
         // #warning chassis is closed
         chassis_thread = std::make_unique<std::thread>(&Robot_ctrl::chassis_task, this);
         gimbal_thread = std::make_unique<std::thread>(&Robot_ctrl::gimbal_task, this);
+        shoot_thread = std::make_unique<std::thread>(&Robot_ctrl::shoot_task, this);
     }
 
     void Robot_ctrl::join() const {
@@ -86,13 +87,28 @@ namespace Robot
             std::this_thread::sleep_for(std::chrono::milliseconds(1));
         }
     }
+
+    void Robot_ctrl::shoot_task() {
+        while (true) {
+            if (robot_set->mode == Types::ROBOT_MODE::ROBOT_NO_FORCE) {
+                shoot.no_force = true;
+            } else {
+                shoot.no_force = false;
+                shoot.friction_open = robot_set->friction_open;
+                shoot.shoot_open = robot_set->shoot_open;
+            }
+            shoot.control_loop();
+            std::this_thread::sleep_for(std::chrono::milliseconds(Config::SHOOT_CONTROL_TIME));
+        }
+    }
+
     void Robot_ctrl::load_hardware() {
         can0.init("can0");
         can1.init("can1");
         socket_intrf = new Io::Server_socket_interface(robot_set);
         try {
             ser1 = new Hardware::Serial_interface<Types::ReceivePacket>("/dev/ttyACM1", 115200, 1000);
-        } catch (serial::IOException) {
+        } catch (serial::IOException &ex) {
             LOG_ERR("there's no such serial device\n");
         }
 
