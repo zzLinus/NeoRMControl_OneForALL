@@ -1,6 +1,5 @@
 #include <iostream>
 
-#include "io.hpp"
 #include "iostream"
 #include "robot_controller.hpp"
 #include "thread"

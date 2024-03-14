@@ -17,8 +17,8 @@ namespace Hardware
         template<typename ...Args>
         explicit Hardware_manager(Args &&... args) : hardware(args...) {}
 
-        template<size_t idx, typename ...Args>
-        auto get(Args &&... args) {
+        template<size_t idx>
+        auto get() {
             return ((ListType<idx> &) hardware).val;
         }
 
