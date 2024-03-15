@@ -27,12 +27,12 @@ namespace Gimbal
 
     void Gimbal::init_loop() {
         update_data();
-        LOG_INFO("init loop\n");
         init_yaw_set += UserLib::rad_format(0.f - robot_set->yaw_relative) * Config::GIMBAL_INIT_YAW_SPEED;
         init_pitch_set += UserLib::rad_format(0.f - robot_set->ins_pitch) * Config::GIMBAL_INIT_PITCH_SPEED;
         init_yaw_set = std::clamp(init_yaw_set, -0.1f, 0.1f);
         init_pitch_set = std::clamp(init_pitch_set, -0.1f, 0.1f);
 
+        LOG_INFO("init loop %f %f\n", robot_set->ins_pitch, init_pitch_set);
         yaw_relative_pid.calc(robot_set->yaw_relative, init_yaw_set);
         yaw_motor.speed_set = yaw_relative_pid.out;
         yaw_motor.pid_ctrler.calc(yaw_gyro, yaw_motor.speed_set);
@@ -69,12 +69,18 @@ namespace Gimbal
             yaw_motor.speed_set = yaw_absolute_pid.out;
             yaw_motor.pid_ctrler.calc(yaw_gyro, yaw_motor.speed_set);
             yaw_motor.give_current = (int16_t)yaw_motor.pid_ctrler.out;
-			LOG_INFO("ins_yaw %f , yaw_set %f yaw_gyro %f\n", robot_set->ins_yaw, yaw_set, yaw_gyro);
 
-            // pitch_absolute_pid.calc(robot_set->ins_pitch, pitch_set);
-            // pitch_motor.speed_set = pitch_absolute_pid.out;
-            // pitch_motor.pid_ctrler.calc(pitch_gyro, pitch_motor.speed_set);
-            // pitch_motor.give_current = (int16_t)pitch_motor.pid_ctrler.out;
+            pitch_absolute_pid.calc(robot_set->ins_pitch, pitch_set);
+            pitch_motor.speed_set = pitch_absolute_pid.out;
+            pitch_motor.pid_ctrler.calc(pitch_gyro, pitch_motor.speed_set);
+            pitch_motor.give_current = (int16_t)pitch_motor.pid_ctrler.out;
+            LOG_INFO(
+                "%f ,%f %f %f %f\n",
+                robot_set->ins_pitch,
+                pitch_set,
+                pitch_set - robot_set->ins_pitch,
+                pitch_absolute_pid.out,
+                pitch_motor.pid_ctrler.out);
         }
         send_motor_current();
     }

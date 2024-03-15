@@ -107,7 +107,7 @@ namespace Robot
         can1.init("can1");
         socket_intrf = new Io::Server_socket_interface(robot_set);
         try {
-            ser1 = new Hardware::Serial_interface<Types::ReceivePacket>("/dev/ttyACM1", 115200, 1000);
+            ser1 = new Hardware::Serial_interface<Types::ReceivePacket>("/dev/ttyACM0", 115200, 1000);
         } catch (serial::IOException &ex) {
             LOG_ERR("there's no such serial device\n");
         }
@@ -115,11 +115,12 @@ namespace Robot
         hardware = std::make_shared<RobotHardware>(can0, can1, *ser1, *socket_intrf);
 
         Robot::hardware->register_callback<SOCKET>([&](const Robot::Vison_control &vc) {
-            LOG_INFO(" %f %f %f %f\n", vc.linear_vx, vc.linear_vy, vc.angular, vc.yaw_set);
+            //LOG_INFO(" %f %f %f %f\n", vc.linear_vx, vc.linear_vy, vc.angular, vc.yaw_set);
             robot_set->vx_set = vc.linear_vx;
             robot_set->vy_set = vc.linear_vy;
             robot_set->wz_set = vc.angular;
             robot_set->yaw_set = vc.yaw_set;
+            robot_set->pitch_set = vc.pitch_set;
         });
 
         Robot::hardware->register_callback<SER1>([&](const Types::ReceivePacket &rp) {

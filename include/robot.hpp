@@ -85,6 +85,7 @@ namespace Robot
         float angular;
         // 欧拉角
         float yaw_set;
+        float pitch_set;
 
         Types::ROBOT_MODE mode = Types::ROBOT_MODE::ROBOT_NO_FORCE;
     } __attribute__((packed));

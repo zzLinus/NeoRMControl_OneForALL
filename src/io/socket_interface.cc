@@ -11,8 +11,11 @@ namespace Io
 
             int n = recvfrom(sockfd, buffer, 256, MSG_WAITALL, (sockaddr *)&cli_addr, &cli_addr_len);
             if (n > 0) {
-				LOG_OK("reads %d bytes from client: %s\n", n, buffer);
+                LOG_OK("reads %d bytes from client: %s\n", n, buffer);
+            } else {
+                LOG_ERR("errror sending ");
             }
+
             uint8_t header = buffer[0];
 
             // TODO: send "real" info back to vision ros socket
