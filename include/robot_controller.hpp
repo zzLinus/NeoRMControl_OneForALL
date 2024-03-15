@@ -12,6 +12,7 @@
 #include "serial_interface.hpp"
 #include "shoot.hpp"
 #include "socket_interface.hpp"
+#include "device/imu.hpp"
 
 namespace Robot
 {
@@ -41,6 +42,8 @@ namespace Robot
 
         Pid::Pid_rad chassis_angle_pid;
         std::shared_ptr<Robot_set> robot_set;
+
+        Device::IMU imu;
         Chassis::Chassis chassis;
         Gimbal::Gimbal gimbal;
         Shoot::Shoot shoot;
