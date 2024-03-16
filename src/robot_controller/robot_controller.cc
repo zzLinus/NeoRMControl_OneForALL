@@ -130,14 +130,5 @@ namespace Robot
             LOG_ERR("get receive gimbal packet\n");
             LOG_ERR("x: %f, y: %f, z: %f\n", pkg.x, pkg.y, pkg.z);
         });
-
-        Robot::hardware->register_callback<SER1>([&](const Types::ReceivePacket &rp) {
-            imu.unpack(rp);
-            Robot::SendGimbalPacket pkg;
-            pkg.yaw = rp.yaw;
-            pkg.pitch = rp.pitch;
-            pkg.roll = rp.roll;
-            Robot::hardware->send<SOCKET>(pkg);
-        });
     }
 };  // namespace Robot
