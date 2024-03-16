@@ -15,6 +15,9 @@ namespace Robot
         chassis.init(robot_set);
         gimbal.init(robot_set);
         shoot.init(robot_set);
+        while(imu.offline()) {
+            std::this_thread::sleep_for(std::chrono::milliseconds(2));
+        }
         gimbal_init_thread = std::make_unique<std::thread>(&Robot_ctrl::gimbal_init_task, this);
     }
 

@@ -14,9 +14,9 @@ int main(int argc, char **argv) {
     robot.init_join();
 
     robot.robot_set->mode = Types::ROBOT_MODE::ROBOT_NOT_FOLLOW;
+    robot.robot_set->yaw_set = robot.robot_set->ins_roll;
 
     robot.start();
-
     robot.join();
 
     return 0;

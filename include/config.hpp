@@ -28,12 +28,12 @@ namespace Config
     //TODO Adjust PID parameters
     /** GIMBAL **/
     const typename Pid::Pid_config GIMBAL_YAW_ABSOLUTE_PID_CONFIG{
-        5.0f,  // KP
+        12.0f,  // KP
         0.0f,   // KI
-        0.0f,   // KD
+        0.3f,   // KD
         10.0f,  // MAX_OUT
-        0.f,   // MAX_IOUT
-    };
+        0.0f,   // MAX_IOUT
+    };          // MAX_IOUT
 
     const typename Pid::Pid_config GIMBAL_PITCH_ABSOLUTE_PID_CONFIG{
         10.0f,  // KP
@@ -60,17 +60,17 @@ namespace Config
     };
 
     const typename Pid::Pid_config YAW_SPEED_PID_CONFIG{
-		3200.f,
-		4.0f,
-		2.f,
+        7000.f,
+        8.0f,
+        0.f,
         30000.0f,
         5000.0f,
     };
 
     const typename Pid::Pid_config PITCH_SPEED_PID_CONFIG{
-        3200.0f,
-        3.0f,
+        5000.0f,
         5.0f,
+        0.0f,
         30000.0f,
         5000.0f,
     };
