@@ -1,4 +1,5 @@
 #include "device/imu.hpp"
+
 #include "hardware.hpp"
 
 namespace Device
@@ -17,6 +18,11 @@ namespace Device
         robot_set = robot;
         Robot::hardware->register_callback<SER1>([&](const Types::ReceivePacket &rp) {
             unpack(rp);
+            Robot::SendGimbalPacket sp;
+            sp.yaw = robot_set->ins_yaw;
+            sp.pitch = robot_set->ins_pitch;
+            sp.roll = robot_set->ins_roll;
+            Robot::hardware->send<SOCKET>(sp);
         });
     }
-}
+}  // namespace Device

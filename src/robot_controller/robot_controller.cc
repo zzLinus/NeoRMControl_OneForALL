@@ -15,7 +15,7 @@ namespace Robot
         chassis.init(robot_set);
         gimbal.init(robot_set);
         shoot.init(robot_set);
-        while(imu.offline()) {
+        while (imu.offline()) {
             std::this_thread::sleep_for(std::chrono::milliseconds(2));
         }
         gimbal_init_thread = std::make_unique<std::thread>(&Robot_ctrl::gimbal_init_task, this);
@@ -54,9 +54,9 @@ namespace Robot
                 chassis.no_force = false;
 
                 fp32 sin_yaw, cos_yaw;
-                sincosf(-robot_set->yaw_relative, &sin_yaw, &cos_yaw);
-                chassis.vx_set = cos_yaw * robot_set->vx_set + sin_yaw * robot_set->vy_set;
-                chassis.vy_set = -sin_yaw * robot_set->vx_set + cos_yaw * robot_set->vy_set;
+                sincosf(robot_set->yaw_relative, &sin_yaw, &cos_yaw);
+                chassis.vx_set = cos_yaw * robot_set->vx_set - sin_yaw * robot_set->vy_set;
+                chassis.vy_set = sin_yaw * robot_set->vx_set + cos_yaw * robot_set->vy_set;
 
                 if (robot_set->mode == Types::ROBOT_MODE::ROBOT_FOLLOW_GIMBAL) {
                     chassis_angle_pid.calc(robot_set->yaw_relative, 0.f);
@@ -121,14 +121,14 @@ namespace Robot
         Robot::hardware->register_callback<SOCKET, Robot::Vison_control>([&](const Robot::Vison_control &vc) {
             robot_set->vx_set = vc.linear_vx;
             robot_set->vy_set = vc.linear_vy;
-            robot_set->wz_set = vc.angular;
+            robot_set->wz_set = 0;
             robot_set->yaw_set = vc.yaw_set;
-            robot_set->pitch_set = vc.pitch_set;
         });
 
-        Robot::hardware->register_callback<SOCKET, Robot::ReceiveGimbalPacket>([&](const auto &pkg) {
-            LOG_ERR("get receive gimbal packet\n");
-            LOG_ERR("x: %f, y: %f, z: %f\n", pkg.x, pkg.y, pkg.z);
-        });
+        Robot::hardware->register_callback<SOCKET, Robot::ReceiveGimbalPacket>(
+            [&](const Robot::ReceiveGimbalPacket &pkg) {
+                LOG_ERR("get receive gimbal packet\n");
+                LOG_ERR("x: %f, y: %f, z: %f\n", pkg.x, pkg.y, pkg.z);
+            });
     }
 };  // namespace Robot

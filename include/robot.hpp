@@ -71,17 +71,17 @@ namespace Robot
 
     struct SendGimbalPacket
     {
-        uint8_t detect_color = 1;
-        bool reset_tracker = false;
-        uint8_t reserved = 0;
-
-        fp32 roll;
-        fp32 pitch;
-        fp32 yaw;
-
-        fp32 aim_x;
-        fp32 aim_y;
-        fp32 aim_z;
+        uint8_t header = 0x5A;
+        uint8_t detect_color : 1;  // 0-red 1-blue
+        bool reset_tracker : 1;
+        uint8_t reserved : 6;
+        float roll;
+        float pitch;
+        float yaw;
+        float aim_x;
+        float aim_y;
+        float aim_z;
+        uint16_t checksum = 0;
     } __attribute__((packed));
 
     // send twist package heaedr = 0x6A;

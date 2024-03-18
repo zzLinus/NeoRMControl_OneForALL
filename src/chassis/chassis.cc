@@ -54,10 +54,10 @@ namespace Chassis
     }
 
     void Chassis::decomposition_speed() {
-        wheel_speed[0] = vx_set - vy_set + wz_set;
-        wheel_speed[1] = -vx_set - vy_set + wz_set;
-        wheel_speed[2] = -vx_set + vy_set + wz_set;
-        wheel_speed[3] = vx_set + vy_set + wz_set;
+        wheel_speed[0] = -vx_set + vy_set + wz_set;
+        wheel_speed[1] = vx_set + vy_set + wz_set;
+        wheel_speed[2] = vx_set - vy_set + wz_set;
+        wheel_speed[3] = -vx_set - vy_set + wz_set;
     }
 
     void Chassis::update_speed() {
