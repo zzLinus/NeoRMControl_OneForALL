@@ -30,7 +30,6 @@ namespace Gimbal
         init_yaw_set += UserLib::rad_format(0.f - robot_set->yaw_relative) * Config::GIMBAL_INIT_YAW_SPEED;
         init_pitch_set += UserLib::rad_format(0.f - robot_set->ins_pitch) * Config::GIMBAL_INIT_PITCH_SPEED;
 
-        LOG_INFO("init loop %f %f\n", robot_set->ins_pitch, init_pitch_set);
         yaw_relative_pid.calc(robot_set->yaw_relative, init_yaw_set);
         yaw_motor.speed_set = yaw_relative_pid.out;
         yaw_motor.pid_ctrler.calc(yaw_gyro, yaw_motor.speed_set);
@@ -41,10 +40,10 @@ namespace Gimbal
         pitch_motor.pid_ctrler.calc(pitch_gyro, pitch_motor.speed_set);
         pitch_motor.give_current = (int16_t)pitch_motor.pid_ctrler.out;
 
-//        pitch_relative_pid.calc(robot_set->pitch_relative, init_pitch_set);
-//        pitch_motor.speed_set = pitch_relative_pid.out;
-//        pitch_motor.pid_ctrler.calc(pitch_gyro, pitch_motor.speed_set);
-//        pitch_motor.give_current = (int16_t)pitch_motor.pid_ctrler.out;
+        //        pitch_relative_pid.calc(robot_set->pitch_relative, init_pitch_set);
+        //        pitch_motor.speed_set = pitch_relative_pid.out;
+        //        pitch_motor.pid_ctrler.calc(pitch_gyro, pitch_motor.speed_set);
+        //        pitch_motor.give_current = (int16_t)pitch_motor.pid_ctrler.out;
 
         if (fabs(robot_set->yaw_relative) < Config::GIMBAL_INIT_EXP &&
             fabs(robot_set->ins_pitch) < Config::GIMBAL_INIT_EXP) {

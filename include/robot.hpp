@@ -101,6 +101,15 @@ namespace Robot
         Types::ROBOT_MODE mode = Types::ROBOT_MODE::ROBOT_NO_FORCE;
     } __attribute__((packed));
 
+    struct SendVisionControl
+    {
+        uint8_t header = 0xA6;
+        float roll;
+        float pitch;
+        float yaw;
+    } __attribute__((packed));
+
+
 }  // namespace Robot
 
 #endif

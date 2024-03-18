@@ -18,11 +18,19 @@ namespace Device
         robot_set = robot;
         Robot::hardware->register_callback<SER1>([&](const Types::ReceivePacket &rp) {
             unpack(rp);
-            Robot::SendGimbalPacket sp;
-            sp.yaw = robot_set->ins_yaw;
-            sp.pitch = robot_set->ins_pitch;
-            sp.roll = robot_set->ins_roll;
-            Robot::hardware->send<SOCKET>(sp);
+            Robot::SendVisionControl svp;
+            svp.header = 0xA6;
+            svp.yaw = robot_set->ins_yaw;
+            svp.pitch = robot_set->ins_pitch;
+            svp.roll = robot_set->ins_roll;
+            Robot::hardware->send<SOCKET>(svp);
+
+            Robot::SendGimbalPacket sgp;
+            sgp.header = 0x5A;
+            sgp.yaw = robot_set->ins_yaw;
+            sgp.pitch = robot_set->ins_pitch;
+            sgp.roll = robot_set->ins_roll;
+            Robot::hardware->send<SOCKET>(sgp);
         });
     }
 }  // namespace Device
