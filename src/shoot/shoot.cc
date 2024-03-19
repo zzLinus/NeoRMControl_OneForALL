@@ -4,8 +4,8 @@ namespace Shoot
 {
 
     Shoot::Shoot() : friction_ramp(Config::FRICTION_ADD_SPEED, Config::SHOOT_CONTROL_TIME * 1e-3f) {
-        friction.assign(4, Hardware::Motor{ Config::FRIC_SPEED_PID_CONFIG });
-        trigger.assign(2, Hardware::Motor{ Config::TRIGGER_SPEED_PID_CONFIG });
+        friction.assign(Config::FRICTION_NUM, Hardware::Motor{ Config::FRIC_SPEED_PID_CONFIG });
+        trigger.assign(Config::TRIGGER_NUM, Hardware::Motor{ Config::TRIGGER_SPEED_PID_CONFIG });
     }
 
     void Shoot::init(const std::shared_ptr<Robot::Robot_set> &robot) {
