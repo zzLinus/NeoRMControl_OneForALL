@@ -133,8 +133,8 @@ namespace Robot
                 LOG_INFO("yaw: %f, pitch: %f, roll: %f, aim_yaw: %f, aim_pitch: %f\n",
                          robot_set->ins_roll, robot_set->ins_pitch, robot_set->ins_yaw,
                          aim_yaw, aim_pitch);
-//                robot_set->yaw_set = aim_yaw;
-//                robot_set->pitch_set = aim_pitch;
+                robot_set->yaw_set = aim_yaw;
+                robot_set->pitch_set = -aim_pitch;
             });
     }
 };  // namespace Robot

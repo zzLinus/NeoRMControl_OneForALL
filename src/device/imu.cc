@@ -34,8 +34,8 @@ namespace Device
             sgp.reserved = 0;
             sgp.reset_tracker = false;
             sgp.header = 0x5A;
-            sgp.yaw = robot_set->ins_yaw;
-            sgp.pitch = -robot_set->ins_pitch;
+            sgp.yaw = 0.f;
+            sgp.pitch = robot_set->ins_pitch;
             sgp.roll = robot_set->ins_roll;
             Robot::hardware->send<SOCKET>(sgp);
         });
