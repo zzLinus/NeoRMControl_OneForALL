@@ -14,6 +14,7 @@
 #include "hardware_callback.hpp"
 #include "robot.hpp"
 #include "utils.hpp"
+#include "iostream"
 
 namespace Io
 {

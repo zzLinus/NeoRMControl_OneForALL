@@ -27,7 +27,6 @@ typedef enum
     CAN1,
     SER1,
     SOCKET,
-	RC_CTRL
 } HardwareId;
 
 namespace Types

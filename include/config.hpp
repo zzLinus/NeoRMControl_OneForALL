@@ -91,6 +91,10 @@ namespace Config
         14000.0f,  // MAX_OUT
         2000.0f,   // MAX_IOUT
     };
+    /** shoot config **/
+
+    constexpr uint32_t FRICTION_NUM = 4;
+    constexpr uint32_t TRIGGER_NUM = 2;
 
     constexpr fp32 GIMBAL_INIT_YAW_SPEED = 0.005f;
     constexpr fp32 GIMBAL_INIT_PITCH_SPEED = 0.004f;
@@ -101,9 +105,13 @@ namespace Config
     constexpr fp32 M6020_ECD_TO_RAD = 2.f * M_PIf / 8192.f;
     constexpr fp32 RPM_TO_RAD_S = 2.f * M_PIf / 60.f;
     constexpr fp32 CHASSIS_CONTROL_FREQUENCE = 500.0f;
-
+#ifdef STAND
     constexpr fp32 GIMBAL_YAW_OFFSET_ECD = 124;
     constexpr fp32 GIMBAL_PITCH_OFFSET_ECD = 8080;
+#else
+    constexpr fp32 GIMBAL_YAW_OFFSET_ECD = 5424;
+    constexpr fp32 GIMBAL_PITCH_OFFSET_ECD = 618;
+#endif
 
     constexpr uint32_t GIMBAL_INIT_STOP_TIME = 1000;
     constexpr fp32 GIMBAL_INIT_EXP = 0.1f;

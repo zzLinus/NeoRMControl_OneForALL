@@ -50,10 +50,10 @@ namespace Robot
     {
         /*      自瞄部分     */
         uint8_t header;
-        bool tracking;
-        uint8_t id;
-        uint8_t armors_num;
-        uint8_t reserved;
+        bool tracking : 1;
+        uint8_t id : 3;
+        uint8_t armors_num : 3;
+        uint8_t reserved : 1;
         float x;
         float y;
         float z;
