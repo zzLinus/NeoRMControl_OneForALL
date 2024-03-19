@@ -26,6 +26,8 @@ namespace Gimbal
     }
 
     void Gimbal::init_loop() {
+        LOG_INFO("init loop %f, %f, %f, %u, %u\n", robot_set->ins_roll, robot_set->ins_pitch, robot_set->ins_yaw,
+                 yaw_motor.motor_measure.ecd, pitch_motor.motor_measure.ecd);
         update_data();
         init_yaw_set += UserLib::rad_format(0.f - robot_set->yaw_relative) * Config::GIMBAL_INIT_YAW_SPEED;
         init_pitch_set += UserLib::rad_format(0.f - robot_set->ins_pitch) * Config::GIMBAL_INIT_PITCH_SPEED;
@@ -78,11 +80,11 @@ namespace Gimbal
     void Gimbal::update_data() {
         yaw_motor.speed = Config::RPM_TO_RAD_S * (fp32)yaw_motor.motor_measure.speed_rpm;
         pitch_motor.speed = Config::RPM_TO_RAD_S * (fp32)pitch_motor.motor_measure.speed_rpm;
-
+#warning change it
         robot_set->yaw_relative = UserLib::rad_format(
             Config::M6020_ECD_TO_RAD * ((fp32)yaw_motor.motor_measure.ecd - Config::GIMBAL_YAW_OFFSET_ECD));
         robot_set->pitch_relative = UserLib::rad_format(
-            Config::M6020_ECD_TO_RAD * ((fp32)pitch_motor.motor_measure.ecd - Config::GIMBAL_PITCH_OFFSET_ECD));
+            Config::M6020_ECD_TO_RAD * -((fp32)pitch_motor.motor_measure.ecd - Config::GIMBAL_PITCH_OFFSET_ECD));
 
         yaw_gyro = std::sin(robot_set->pitch_relative) * robot_set->ins_roll_v -
                    std::cos(robot_set->pitch_relative) * robot_set->ins_yaw_v;

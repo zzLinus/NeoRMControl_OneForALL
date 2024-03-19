@@ -29,9 +29,9 @@ namespace Robot
 
     void Robot_ctrl::start() {
         // #warning chassis is closed
-        chassis_thread = std::make_unique<std::thread>(&Robot_ctrl::chassis_task, this);
+//        chassis_thread = std::make_unique<std::thread>(&Robot_ctrl::chassis_task, this);
         gimbal_thread = std::make_unique<std::thread>(&Robot_ctrl::gimbal_task, this);
-        shoot_thread = std::make_unique<std::thread>(&Robot_ctrl::shoot_task, this);
+//        shoot_thread = std::make_unique<std::thread>(&Robot_ctrl::shoot_task, this);
     }
 
     void Robot_ctrl::join() const {
@@ -127,8 +127,14 @@ namespace Robot
 
         Robot::hardware->register_callback<SOCKET, Robot::ReceiveGimbalPacket>(
             [&](const Robot::ReceiveGimbalPacket &pkg) {
-                LOG_ERR("get receive gimbal packet\n");
-                LOG_ERR("x: %f, y: %f, z: %f\n", pkg.x, pkg.y, pkg.z);
+                fp32 dis = std::sqrt(pkg.x * pkg.x + pkg.y * pkg.y);
+                fp32 aim_yaw = std::atan2(pkg.y, pkg.x);
+                fp32 aim_pitch = std::atan2(pkg.z, dis);
+                LOG_INFO("yaw: %f, pitch: %f, roll: %f, aim_yaw: %f, aim_pitch: %f\n",
+                         robot_set->ins_roll, robot_set->ins_pitch, robot_set->ins_yaw,
+                         aim_yaw, aim_pitch);
+//                robot_set->yaw_set = aim_yaw;
+//                robot_set->pitch_set = aim_pitch;
             });
     }
 };  // namespace Robot
