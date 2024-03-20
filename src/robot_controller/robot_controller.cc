@@ -12,6 +12,7 @@ namespace Robot
 
     void Robot_ctrl::start_init() {
         imu.init(robot_set);
+        cv_controller_.init(robot_set);
         chassis.init(robot_set);
         gimbal.init(robot_set);
         shoot.init(robot_set);
@@ -141,21 +142,5 @@ namespace Robot
             robot_set->wz_set = 0;
             robot_set->yaw_set = vc.yaw_set;
         });
-
-        Robot::hardware->register_callback<SOCKET, Robot::ReceiveGimbalPacket>(
-            [&](const Robot::ReceiveGimbalPacket &pkg) {
-                fp32 dis = std::sqrt(pkg.x * pkg.x + pkg.y * pkg.y);
-                fp32 aim_yaw = std::atan2(pkg.y, pkg.x);
-                fp32 aim_pitch = std::atan2(pkg.z, dis);
-                LOG_INFO(
-                    "yaw: %f, pitch: %f, roll: %f, aim_yaw: %f, aim_pitch: %f\n",
-                    robot_set->ins_roll,
-                    robot_set->ins_pitch,
-                    robot_set->ins_yaw,
-                    aim_yaw,
-                    aim_pitch);
-                robot_set->yaw_set = aim_yaw;
-                robot_set->pitch_set = -aim_pitch;
-            });
     }
 };  // namespace Robot

@@ -124,4 +124,4 @@ namespace Config
 
     constexpr uint32_t DEFAULT_OFFLINE_TIME = 100;
 
-}  // namespace Config
+}  // namespace BulletSolverConfig
