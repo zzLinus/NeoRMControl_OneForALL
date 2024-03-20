@@ -10,8 +10,7 @@ include_directories(./3rdparty/include)
 include_directories(./include)
 
 add_compile_options(-D__DEBUG__)
-add_compile_options(-Wno-pointer-arith -Wno-newline-eof -Wno-unused-parameter -Wno-gnu-statement-expression)
-add_compile_options(-Wno-gnu-compound-literal-initializer -Wno-gnu-zero-variadic-macro-arguments)
+add_compile_options(-Wno-pointer-arith -Wno-unused-parameter)
 
 file(GLOB_RECURSE SOURCE src/main.cc ./src/*.cc)
 
