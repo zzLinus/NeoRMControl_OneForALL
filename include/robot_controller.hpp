@@ -31,12 +31,14 @@ namespace Robot
 
         void chassis_task();
         void gimbal_task();
+        void vision_task();
         void shoot_task();
         void gimbal_init_task();
 
        public:
         std::unique_ptr<std::thread> chassis_thread;
         std::unique_ptr<std::thread> gimbal_thread;
+        std::unique_ptr<std::thread> vision_thread;
         std::unique_ptr<std::thread> shoot_thread;
         std::unique_ptr<std::thread> gimbal_init_thread;
 
