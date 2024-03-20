@@ -29,6 +29,11 @@ typedef enum
     SOCKET,
 } HardwareId;
 
+//之后移动到support
+struct Vec3d {
+    double x, y, z;
+};
+
 namespace Types
 {
     typedef struct ReceivePacket

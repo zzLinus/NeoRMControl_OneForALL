@@ -13,6 +13,7 @@
 #include "shoot.hpp"
 #include "socket_interface.hpp"
 #include "device/imu.hpp"
+#include "device/cv_controller.hpp"
 
 namespace Robot
 {
@@ -46,6 +47,7 @@ namespace Robot
         std::shared_ptr<Robot_set> robot_set;
 
         Device::IMU imu;
+        Device::Cv_controller cv_controller_;
         Chassis::Chassis chassis;
         Gimbal::Gimbal gimbal;
         Shoot::Shoot shoot;
