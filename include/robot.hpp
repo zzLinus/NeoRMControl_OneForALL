@@ -42,6 +42,9 @@ namespace Robot
         /** other **/
         fp32 yaw_relative = 0.f;
         fp32 pitch_relative = 0.f;
+		fp32 aimx;
+		fp32 aimy;
+		fp32 aimz;
         Types::ROBOT_MODE mode = Types::ROBOT_MODE::ROBOT_NO_FORCE;
     } __attribute__((packed));
 

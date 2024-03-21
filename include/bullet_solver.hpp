@@ -62,6 +62,7 @@ namespace Control
            return -output_pitch_;
        }
        ~BulletSolver() = default;
+       Vec3d target_pos_{};
 
       private:
        BulletSolverConfig config_{};
@@ -70,7 +71,6 @@ namespace Control
        double bullet_speed_{}, resistance_coff_{};
        int selected_armor_;
        bool track_target_;
-       Vec3d target_pos_{};
 
        double fly_time_;
    };
