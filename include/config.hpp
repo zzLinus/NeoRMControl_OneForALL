@@ -85,11 +85,11 @@ namespace Config
     };
 
     const typename Pid::Pid_config TRIGGER_SPEED_PID_CONFIG{
-        15000.0f,  // KP
-        10.0f,     // KI
+        800.0f,  // KP
+        0.5f,     // KI
         0.0f,      // KD
-        14000.0f,  // MAX_OUT
-        2000.0f,   // MAX_IOUT
+        10000.0f,  // MAX_OUT
+        9000.0f,   // MAX_IOUT
     };
     /** shoot config **/
 
@@ -102,6 +102,7 @@ namespace Config
     // m3508 rmp change to chassis speed,
     // m3508转化成底盘速度(m/s)的比例，
     constexpr fp32 CHASSIS_MOTOR_RPM_TO_VECTOR_SEN = 0.000415809748903494517209f;
+    constexpr fp32 SHOOT_MOTOR_RPM_TO_SPEED = 0.00290888208665721596153948461415f;
     constexpr fp32 M6020_ECD_TO_RAD = 2.f * M_PIf / 8192.f;
     constexpr fp32 RPM_TO_RAD_S = 2.f * M_PIf / 60.f;
     constexpr fp32 CHASSIS_CONTROL_FREQUENCE = 500.0f;
@@ -119,6 +120,7 @@ namespace Config
 
     constexpr fp32 FRICTION_MAX_SPEED = 4850.f;
     constexpr fp32 FRICTION_ADD_SPEED = 2500.f;
+    constexpr fp32 CONTINUE_TRIGGER_SPEED = 9.f;
 
     constexpr uint32_t GIMBAL_CONTROL_TIME = 1;
     constexpr uint32_t SHOOT_CONTROL_TIME = 1;

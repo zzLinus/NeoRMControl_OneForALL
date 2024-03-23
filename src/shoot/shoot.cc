@@ -15,11 +15,11 @@ namespace Shoot
             Robot::hardware->register_callback<CAN0>(
                 0x201 + i, [&mot](const auto &frame) { return mot.unpack(frame); });
         }
-//        for (int i = 0; i < trigger.size(); i++) {
-//            auto &mot = trigger[i];
-//            Robot::hardware->register_callback<CAN0>(
-//                0x205 + i, [&mot](const auto &frame) { return mot.unpack(frame); });
-//        }
+        for (int i = 0; i < trigger.size(); i++) {
+            auto &mot = trigger[i];
+            Robot::hardware->register_callback<CAN0>(
+                0x205 + i, [&mot](const auto &frame) { return mot.unpack(frame); });
+        }
     }
 
     void Shoot::update_speed() {
@@ -27,20 +27,20 @@ namespace Shoot
             m.speed = m.motor_measure.speed_rpm;
         }
         for (auto &m : trigger) {
-            m.speed = m.motor_measure.speed_rpm;
+            m.speed = Config::SHOOT_MOTOR_RPM_TO_SPEED * (fp32)m.motor_measure.speed_rpm;
         }
     }
 
     void Shoot::decomposition_speed() {
         if (no_force) {
             friction_ramp.clear();
-        } else if (friction_open) {
-            friction_ramp.update(Config::FRICTION_MAX_SPEED);
+            trigger[0].speed_set = trigger[1].speed_set = 0.f;
         } else {
-            friction_ramp.update(0.f);
+            friction_ramp.update(friction_open ? Config::FRICTION_MAX_SPEED : 0.f);
+            trigger[0].speed_set = trigger[1].speed_set = shoot_open ? Config::CONTINUE_TRIGGER_SPEED : 0.f;
         }
-        friction[0].speed_set = friction_ramp.out;
-        friction[1].speed_set = -friction_ramp.out;
+        friction[0].speed_set = -friction_ramp.out;
+        friction[1].speed_set = friction_ramp.out;
         friction[2].speed_set = friction_ramp.out;
         friction[3].speed_set = -friction_ramp.out;
     }
@@ -53,8 +53,18 @@ namespace Shoot
                 mot.give_current = 0;
             }
         } else {
-            decomposition_speed();
             for (auto &mot : friction) {
+                mot.pid_ctrler.calc(mot.speed, mot.speed_set);
+                mot.give_current = (int16_t)mot.pid_ctrler.out;
+            }
+        }
+        if(no_force || !shoot_open) {
+            for(auto & mot : trigger) {
+                mot.give_current = 0;
+            }
+        }
+        else {
+            for (auto &mot : trigger) {
                 mot.pid_ctrler.calc(mot.speed, mot.speed_set);
                 mot.give_current = (int16_t)mot.pid_ctrler.out;
             }
