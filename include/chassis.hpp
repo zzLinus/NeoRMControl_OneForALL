@@ -18,10 +18,9 @@ namespace Chassis
        public:
         Chassis();
         ~Chassis() = default;
-        void update_speed();
+        void update_data();
         void init(const std::shared_ptr<Robot::Robot_set> &robot);
         void decomposition_speed();
-        void send_motor_current();
         void control_loop();
 
        public:

@@ -17,7 +17,7 @@ namespace Chassis
 
     void Chassis::control_loop() {
         decomposition_speed();
-        update_speed();
+        update_data();
         if (no_force) {
             for (auto &m : motors) {
                 m.give_current = 0;
@@ -39,18 +39,7 @@ namespace Chassis
                 m.give_current = (int16_t)(m.pid_ctrler.out);
             }
         }
-        send_motor_current();
-    }
-
-    void Chassis::send_motor_current() {
-        can_frame send_frame{};
-        send_frame.can_id = 0x200;
-        send_frame.can_dlc = 8;
-        for (size_t i = 0; i < motors.size(); i++) {
-            send_frame.data[i * 2] = (motors[i].give_current >> 8);
-            send_frame.data[i * 2 + 1] = (motors[i].give_current & 0xff);
-        }
-        Robot::hardware->send<CAN1>(send_frame);
+        Robot::hardware->send<CAN1>(Hardware::get_frame(0x200, motors));
     }
 
     void Chassis::decomposition_speed() {
@@ -60,7 +49,7 @@ namespace Chassis
         wheel_speed[3] = -vx_set - vy_set + wz_set;
     }
 
-    void Chassis::update_speed() {
+    void Chassis::update_data() {
         for (auto &m : motors) {
             m.speed = Config::CHASSIS_MOTOR_RPM_TO_VECTOR_SEN * (fp32)m.motor_measure.speed_rpm;
             m.accel = Config::CHASSIS_CONTROL_FREQUENCE * m.pid_ctrler.Dbuf;
