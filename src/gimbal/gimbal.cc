@@ -40,7 +40,7 @@ namespace Gimbal
         pitch_absolute_pid.calc(robot_set->ins_pitch, init_pitch_set);
         pitch_motor.speed_set = pitch_absolute_pid.out;
         pitch_motor.pid_ctrler.calc(pitch_gyro, pitch_motor.speed_set);
-        pitch_motor.give_current = (int16_t)pitch_motor.pid_ctrler.out;
+        pitch_motor.give_current = -(int16_t)pitch_motor.pid_ctrler.out;
 
         //        pitch_relative_pid.calc(robot_set->pitch_relative, init_pitch_set);
         //        pitch_motor.speed_set = pitch_relative_pid.out;
@@ -72,7 +72,7 @@ namespace Gimbal
             pitch_absolute_pid.calc(robot_set->ins_pitch, pitch_set);
             pitch_motor.speed_set = pitch_absolute_pid.out;
             pitch_motor.pid_ctrler.calc(pitch_gyro, pitch_motor.speed_set);
-            pitch_motor.give_current = (int16_t)pitch_motor.pid_ctrler.out;
+            pitch_motor.give_current = -(int16_t)pitch_motor.pid_ctrler.out;
         }
         send_motor_current();
     }

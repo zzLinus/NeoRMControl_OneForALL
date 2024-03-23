@@ -105,8 +105,9 @@ namespace Config
     constexpr fp32 M6020_ECD_TO_RAD = 2.f * M_PIf / 8192.f;
     constexpr fp32 RPM_TO_RAD_S = 2.f * M_PIf / 60.f;
     constexpr fp32 CHASSIS_CONTROL_FREQUENCE = 500.0f;
+#define STAND
 #ifdef STAND
-    constexpr fp32 GIMBAL_YAW_OFFSET_ECD = 124;
+    constexpr fp32 GIMBAL_YAW_OFFSET_ECD = 7300;
     constexpr fp32 GIMBAL_PITCH_OFFSET_ECD = 8080;
 #else
     constexpr fp32 GIMBAL_YAW_OFFSET_ECD = 5424;
