@@ -5,6 +5,7 @@
 #include "types.hpp"
 #include "can.hpp"
 #include "device/deviece_base.hpp"
+#include <linux/can.h>
 
 namespace Hardware
 {
@@ -39,6 +40,21 @@ namespace Hardware
 
        private:
     };
+
+    can_frame get_frame(canid_t can_id, const std::vector<Motor> & mots);
+
+    template<typename ...Args>
+    can_frame get_frame(canid_t can_id, const Motor &head, Args &&...args) {
+        can_frame frame{};
+        frame.can_id = can_id;
+        frame.can_dlc = 8;
+        std::vector<const Motor*> mot_list = {&head, &args...};
+        for(int i = 0; i < mot_list.size() && i < 4; i++) {
+            frame.data[i << 1] = (mot_list[i]->give_current >> 8);
+            frame.data[i << 1 | 1] = (mot_list[i]->give_current & 0xFF);
+        }
+        return frame;
+    }
 }  // namespace Hardware
 
 #endif

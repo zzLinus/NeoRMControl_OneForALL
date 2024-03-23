@@ -45,17 +45,6 @@ namespace Shoot
         friction[3].speed_set = -friction_ramp.out;
     }
 
-    void Shoot::send_motor_current() {
-        can_frame frame{};
-        frame.can_id = 0x200;
-        frame.can_dlc = 8;
-        frame.data[0] = (friction[0].give_current >> 8);
-        frame.data[1] = (friction[0].give_current & 0xff);
-        frame.data[2] = (friction[1].give_current >> 8);
-        frame.data[3] = (friction[1].give_current & 0xff);
-        Robot::hardware->send<CAN0>(frame);
-    }
-
     void Shoot::control_loop() {
         update_speed();
         decomposition_speed();
@@ -70,7 +59,7 @@ namespace Shoot
                 mot.give_current = (int16_t)mot.pid_ctrler.out;
             }
         }
-        send_motor_current();
+        Robot::hardware->send<CAN0>(Hardware::get_frame(0x200, friction));
+        Robot::hardware->send<CAN0>(Hardware::get_frame(0x1FF, trigger));
     }
-
 }  // namespace Shoot

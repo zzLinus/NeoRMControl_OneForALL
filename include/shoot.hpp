@@ -15,7 +15,6 @@ namespace Shoot
         ~Shoot() = default;
         void update_speed();
         void decomposition_speed();
-        void send_motor_current();
         void control_loop();
 
        public:
