@@ -2,6 +2,7 @@
 
 #include "thread"
 #include "memory"
+#include "iostream"
 
 namespace ListBase {
     /** list base define **/
@@ -15,13 +16,26 @@ namespace ListBase {
         using Inherited = ListBase<idx + 1, Tail...>;
         using Type = Head;
 
-        Head *val;
+        Head *val = nullptr;
         std::shared_ptr<std::thread> thread;
 
-        explicit constexpr ListBase(Head &head, Tail &... tail)
+        template<typename ...Args>
+        explicit constexpr ListBase(Head &head, Args &&... tail)
             : Inherited(tail...) {
             val = &head;
             thread = std::make_shared<std::thread>(&Head::task, &head);
+        }
+
+        template<typename ...Args>
+        explicit constexpr ListBase(Head *head, Args &&... tail)
+            : Inherited(tail...) {
+            val = head;
+            if(head != nullptr) {
+                thread = std::make_shared<std::thread>(&Head::task, head);
+            }
+            else {
+                std::cerr << "the " << idx + 1 << "th hardware is null!" << std::endl;
+            }
         }
     };
 
@@ -31,12 +45,22 @@ namespace ListBase {
         using Inherited = ListBase<idx + 1>;
         using Type = Head;
 
-        Head *val;
+        Head *val = nullptr;
         std::shared_ptr<std::thread> thread;
 
         explicit constexpr ListBase(Head &head) {
             val = &head;
             thread = std::make_shared<std::thread>(&Head::task, &head);
+        }
+
+        explicit constexpr ListBase(Head *head) {
+            val = head;
+            if(head != nullptr) {
+                thread = std::make_shared<std::thread>(&Head::task, head);
+            }
+            else {
+                std::cerr << "the " << idx + 1 << "th hardware is null!" << std::endl;
+            }
         }
     };
     template<size_t idx, typename Head, typename ...Tail>
@@ -46,12 +70,16 @@ namespace ListBase {
     template<size_t idx, typename Head, typename Sec, typename ...Tail>
     void join(ListBase<idx, Head, Sec, Tail...> &list) {
         join<idx + 1, Sec, Tail...>(list);
-        list.thread->join();
+        if(list.thread) {
+            list.thread->join();
+        }
     }
 
     template<size_t idx, typename Head>
     void join(ListBase<idx, Head> &list) {
-        list.thread->join();
+        if(list.thread) {
+            list.thread->join();
+        }
     }
 
     /** callback element define **/
