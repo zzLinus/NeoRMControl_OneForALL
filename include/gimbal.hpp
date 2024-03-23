@@ -20,7 +20,6 @@ namespace Gimbal
         void init(const std::shared_ptr<Robot::Robot_set> &robot);
         void control_loop();
         void update_data();
-        void send_motor_current();
         void init_loop();
         void start_init_loop();
 
