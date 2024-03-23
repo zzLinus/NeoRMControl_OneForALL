@@ -37,7 +37,20 @@ namespace Shoot
             trigger[0].speed_set = trigger[1].speed_set = 0.f;
         } else {
             friction_ramp.update(friction_open ? Config::FRICTION_MAX_SPEED : 0.f);
-            trigger[0].speed_set = trigger[1].speed_set = shoot_open ? Config::CONTINUE_TRIGGER_SPEED : 0.f;
+            if(back_time) {
+                back_time--;
+                trigger[0].speed_set = trigger[1].speed_set = shoot_open ? -Config::CONTINUE_TRIGGER_SPEED : 0.f;
+            }
+            else {
+                if(isJam()) {
+                    jam_time++;
+                }
+                if(jam_time > 500) {
+                    back_time = 1000;
+                    jam_time = 0;
+                }
+                trigger[0].speed_set = trigger[1].speed_set = shoot_open ? Config::CONTINUE_TRIGGER_SPEED : 0.f;
+            }
         }
         friction[0].speed_set = -friction_ramp.out;
         friction[1].speed_set = friction_ramp.out;
@@ -71,5 +84,9 @@ namespace Shoot
         }
         Robot::hardware->send<CAN0>(Hardware::get_frame(0x200, friction));
         Robot::hardware->send<CAN0>(Hardware::get_frame(0x1FF, trigger));
+    }
+
+    bool Shoot::isJam() {
+        return (trigger[0].give_current > 4000) && (trigger[1].give_current > 4000) && (trigger[0].speed < 1.f) && (trigger[1].speed < 1.f);
     }
 }  // namespace Shoot
