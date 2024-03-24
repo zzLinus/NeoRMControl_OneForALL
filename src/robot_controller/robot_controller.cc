@@ -137,7 +137,7 @@ namespace Robot
             LOG_ERR("there's no such serial device\n");
         }
 
-        hardware = std::make_shared<RobotHardware>(can0, can1, ser1, socket_intrf, rc_ctrl);
+        hardware = std::make_shared<RobotHardware>(can0, can1, nullptr, socket_intrf, rc_ctrl);
 
         Robot::hardware->register_callback<SOCKET, Robot::Vison_control>([&](const Robot::Vison_control &vc) {
             robot_set->vx_set = vc.linear_vx;
