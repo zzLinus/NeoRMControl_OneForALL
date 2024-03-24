@@ -27,10 +27,16 @@ namespace Device
             if (solver_successful) {
                 robot_set->yaw_set = (fp32)bullet_solver_.getYaw();
                 robot_set->pitch_set = (fp32)bullet_solver_.getPitch();
-				robot_set->aimx = (fp32)bullet_solver_.target_pos_.x;
-				robot_set->aimy = (fp32)bullet_solver_.target_pos_.y;
-				robot_set->aimz = (fp32)bullet_solver_.target_pos_.z;
+                robot_set->aimx = (fp32)bullet_solver_.target_pos_.x;
+                robot_set->aimy = (fp32)bullet_solver_.target_pos_.y;
+                robot_set->aimz = (fp32)bullet_solver_.target_pos_.z;
             }
+        }
+
+        if (pkg.tracking) {
+            robot_set->is_aiming = true;
+        } else {
+            robot_set->is_aiming = false;
         }
         update_time();
     }

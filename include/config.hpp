@@ -36,7 +36,7 @@ namespace Config
     };          // MAX_IOUT
 
     const typename Pid::Pid_config GIMBAL_PITCH_ABSOLUTE_PID_CONFIG{
-        10.0f,  // KP
+        12.0f,  // KP
         0.0f,   // KI
         0.0f,   // KD
         10.0f,  // MAX_OUT
@@ -44,7 +44,7 @@ namespace Config
     };
 
     const typename Pid::Pid_config GIMBAL_YAW_RELATIVE_PID_CONFIG{
-        9.0f,
+        15.0f,
         0.0f,
         0.0f,
         10.0f,
@@ -60,16 +60,16 @@ namespace Config
     };
 
     const typename Pid::Pid_config YAW_SPEED_PID_CONFIG{
-        7000.f,
-        8.0f,
+        8000.f,
+        0.0f,
         0.f,
         30000.0f,
         5000.0f,
     };
 
     const typename Pid::Pid_config PITCH_SPEED_PID_CONFIG{
-        5000.0f,
-        5.0f,
+        7000.0f,
+        2.0f,
         0.0f,
         30000.0f,
         5000.0f,
@@ -108,7 +108,7 @@ namespace Config
     constexpr fp32 CHASSIS_CONTROL_FREQUENCE = 500.0f;
 #define STAND
 #ifdef STAND
-    constexpr fp32 GIMBAL_YAW_OFFSET_ECD = 7300;
+    constexpr fp32 GIMBAL_YAW_OFFSET_ECD = 4728;
     constexpr fp32 GIMBAL_PITCH_OFFSET_ECD = 8080;
 #else
     constexpr fp32 GIMBAL_YAW_OFFSET_ECD = 5424;
