@@ -45,6 +45,8 @@ namespace Robot
 		fp32 aimx;
 		fp32 aimy;
 		fp32 aimz;
+
+		bool is_aiming = false;
         Types::ROBOT_MODE mode = Types::ROBOT_MODE::ROBOT_NO_FORCE;
     } __attribute__((packed));
 

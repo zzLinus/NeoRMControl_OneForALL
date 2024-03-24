@@ -25,6 +25,7 @@ namespace Gimbal
 
        public:
         bool no_force = true;
+        bool searching = true;
         bool inited = false;
 
         uint32_t init_stop_times = 0;
