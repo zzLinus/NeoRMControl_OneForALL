@@ -14,12 +14,11 @@ int main(int argc, char **argv) {
     robot.init_join();
     LOG_INFO("finish init\n");
 
-	 robot.robot_set->mode = Types::ROBOT_MODE::ROBOT_FOLLOW_GIMBAL;
-	 robot.robot_set->yaw_set = robot.robot_set->ins_roll;
-	 robot.robot_set->friction_open = true;
+    robot.robot_set->mode = Types::ROBOT_MODE::ROBOT_FOLLOW_GIMBAL;
+    robot.robot_set->yaw_set = robot.robot_set->ins_roll;
 
-	 robot.start();
-	 robot.join();
+    robot.start();
+    robot.join();
 
     return 0;
 }

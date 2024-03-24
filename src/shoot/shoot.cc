@@ -87,6 +87,7 @@ namespace Shoot
     }
 
     bool Shoot::isJam() {
-        return (trigger[0].give_current > 4000) && (trigger[1].give_current > 4000) && (trigger[0].speed < 1.f) && (trigger[1].speed < 1.f);
+        return (trigger[0].give_current > 4000) && (trigger[1].give_current > 4000) &&
+               (trigger[0].speed < 1.f) && (trigger[1].speed < 1.f);
     }
 }  // namespace Shoot
