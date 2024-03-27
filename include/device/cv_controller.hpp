@@ -15,6 +15,7 @@ namespace Device
 
         void init(const std::shared_ptr<Robot::Robot_set> &robot);
         void unpack(const Robot::ReceiveGimbalPacket &pkg);
+        [[noreturn]] void task();
 
        public:
         Control::BulletSolver bullet_solver_;
