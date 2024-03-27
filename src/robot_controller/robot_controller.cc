@@ -33,7 +33,7 @@ namespace Robot
         gimbal_thread = std::make_unique<std::thread>(&Gimbal::Gimbal::task, &gimbal);
         shoot_thread = std::make_unique<std::thread>(&Shoot::Shoot::task, &shoot);
 
-        vision_thread = std::make_unique<std::thread>(&Robot_ctrl::vision_task, this);
+        vision_thread = std::make_unique<std::thread>(&Device::Cv_controller::task, &cv_controller_);
     }
 
     void Robot_ctrl::join() const {
@@ -45,24 +45,6 @@ namespace Robot
         }
         if (gimbal_thread != nullptr) {
             gimbal_thread->join();
-        }
-    }
-
-    void Robot_ctrl::vision_task() {
-        while (1) {
-            Robot::SendGimbalPacket sgp;
-            sgp.detect_color = 1;
-            sgp.reserved = 0;
-            sgp.reset_tracker = false;
-            sgp.header = 0x5A;
-            sgp.yaw = 0.f;
-            sgp.pitch = robot_set->ins_pitch;
-            sgp.roll = robot_set->ins_roll;
-            sgp.aim_x = robot_set->aimx;
-            sgp.aim_y = robot_set->aimy;
-            sgp.aim_z = robot_set->aimz;
-            Robot::hardware->send<SOCKET>(sgp);
-            std::this_thread::sleep_for(std::chrono::milliseconds(5));
         }
     }
 
