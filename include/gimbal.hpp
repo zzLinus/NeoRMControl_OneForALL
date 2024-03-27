@@ -18,10 +18,9 @@ namespace Gimbal
         Gimbal();
         ~Gimbal() = default;
         void init(const std::shared_ptr<Robot::Robot_set> &robot);
-        void control_loop();
+        void init_task();
+        [[noreturn]] void task();
         void update_data();
-        void init_loop();
-        void start_init_loop();
 
        public:
         bool no_force = true;
@@ -29,9 +28,6 @@ namespace Gimbal
         bool inited = false;
 
         uint32_t init_stop_times = 0;
-
-        fp32 yaw_set = 0.f;
-        fp32 pitch_set = 0.f;
 
         fp32 init_yaw_set = 0.f;
         fp32 init_pitch_set = 0.f;
