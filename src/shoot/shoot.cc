@@ -82,8 +82,6 @@ namespace Shoot
                 mot.give_current = (int16_t)mot.pid_ctrler.out;
             }
         }
-        std::cout << friction[0].speed << '\t' << friction[1].speed << '\t'
-                  << friction[2].speed << '\t' << friction[3].speed << std::endl;
         Robot::hardware->send<CAN0>(Hardware::get_frame(0x200, friction));
         Robot::hardware->send<CAN0>(Hardware::get_frame(0x1FF, trigger));
     }

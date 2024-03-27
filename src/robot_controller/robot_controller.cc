@@ -11,15 +11,15 @@ namespace Robot
     }
 
     void Robot_ctrl::start_init() {
-//        imu.init(robot_set);
-//        cv_controller_.init(robot_set);
-//        chassis.init(robot_set);
-//        gimbal.init(robot_set);
+        imu.init(robot_set);
+        cv_controller_.init(robot_set);
+        chassis.init(robot_set);
+        gimbal.init(robot_set);
         shoot.init(robot_set);
-//        while (imu.offline()) {
-//            std::this_thread::sleep_for(std::chrono::milliseconds(2));
-//        }
-//        gimbal_init_thread = std::make_unique<std::thread>(&Robot_ctrl::gimbal_init_task, this);
+        while (imu.offline()) {
+            std::this_thread::sleep_for(std::chrono::milliseconds(2));
+        }
+        gimbal_init_thread = std::make_unique<std::thread>(&Robot_ctrl::gimbal_init_task, this);
     }
 
     void Robot_ctrl::init_join() const {
@@ -30,10 +30,10 @@ namespace Robot
 
     void Robot_ctrl::start() {
         // #warning chassis is closed
-//        chassis_thread = std::make_unique<std::thread>(&Robot_ctrl::chassis_task, this);
-//        gimbal_thread = std::make_unique<std::thread>(&Robot_ctrl::gimbal_task, this);
-//
-//        vision_thread = std::make_unique<std::thread>(&Robot_ctrl::vision_task, this);
+        chassis_thread = std::make_unique<std::thread>(&Robot_ctrl::chassis_task, this);
+        gimbal_thread = std::make_unique<std::thread>(&Robot_ctrl::gimbal_task, this);
+
+        vision_thread = std::make_unique<std::thread>(&Robot_ctrl::vision_task, this);
         shoot_thread = std::make_unique<std::thread>(&Robot_ctrl::shoot_task, this);
     }
 
