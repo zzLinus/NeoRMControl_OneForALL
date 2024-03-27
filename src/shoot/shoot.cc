@@ -32,14 +32,15 @@ namespace Shoot
     }
 
     void Shoot::decomposition_speed() {
-        if (no_force) {
+        fp32 trigger_speed = 0.f;
+        if (robot_set->mode == Types::ROBOT_MODE::ROBOT_NO_FORCE) {
             friction_ramp.clear();
-            trigger[0].speed_set = trigger[1].speed_set = 0.f;
+            trigger_speed = 0.f;
         } else {
-            friction_ramp.update(friction_open ? Config::FRICTION_MAX_SPEED : 0.f);
+            friction_ramp.update(robot_set->friction_open ? Config::FRICTION_MAX_SPEED : 0.f);
             if(back_time) {
                 back_time--;
-                trigger[0].speed_set = trigger[1].speed_set = shoot_open ? -Config::CONTINUE_TRIGGER_SPEED : 0.f;
+                trigger_speed = robot_set->shoot_open ? -Config::CONTINUE_TRIGGER_SPEED : 0.f;
             }
             else {
                 if(isJam()) {
@@ -49,41 +50,47 @@ namespace Shoot
                     back_time = 1000;
                     jam_time = 0;
                 }
-                trigger[0].speed_set = trigger[1].speed_set = shoot_open ? Config::CONTINUE_TRIGGER_SPEED : 0.f;
+                trigger_speed = trigger[1].speed_set = robot_set->shoot_open ? Config::CONTINUE_TRIGGER_SPEED : 0.f;
             }
         }
         friction[0].speed_set = -friction_ramp.out;
         friction[1].speed_set = friction_ramp.out;
         friction[2].speed_set = friction_ramp.out;
         friction[3].speed_set = -friction_ramp.out;
+        for(auto & mot : trigger) {
+            mot.speed_set = trigger_speed;
+        }
     }
 
-    void Shoot::control_loop() {
-        update_speed();
-        decomposition_speed();
-        if (no_force) {
-            for(auto & mot : friction) {
-                mot.give_current = 0;
+    [[noreturn]] void Shoot::task() {
+        while(true) {
+            update_speed();
+            decomposition_speed();
+            if(robot_set->mode == Types::ROBOT_MODE::ROBOT_NO_FORCE) {
+                for(auto & mot : friction) {
+                    mot.give_current = 0;
+                }
+            } else {
+                for (auto &mot : friction) {
+                    mot.pid_ctrler.calc(mot.speed, mot.speed_set);
+                    mot.give_current = (int16_t)mot.pid_ctrler.out;
+                }
             }
-        } else {
-            for (auto &mot : friction) {
-                mot.pid_ctrler.calc(mot.speed, mot.speed_set);
-                mot.give_current = (int16_t)mot.pid_ctrler.out;
+            if(robot_set->mode == Types::ROBOT_MODE::ROBOT_NO_FORCE || !robot_set->shoot_open) {
+                for(auto & mot : trigger) {
+                    mot.give_current = 0;
+                }
             }
+            else {
+                for (auto &mot : trigger) {
+                    mot.pid_ctrler.calc(mot.speed, mot.speed_set);
+                    mot.give_current = (int16_t)mot.pid_ctrler.out;
+                }
+            }
+            Robot::hardware->send<CAN0>(Hardware::get_frame(0x200, friction));
+            Robot::hardware->send<CAN0>(Hardware::get_frame(0x1FF, trigger));
+            UserLib::sleep_ms(Config::SHOOT_CONTROL_TIME);
         }
-        if(no_force || !shoot_open) {
-            for(auto & mot : trigger) {
-                mot.give_current = 0;
-            }
-        }
-        else {
-            for (auto &mot : trigger) {
-                mot.pid_ctrler.calc(mot.speed, mot.speed_set);
-                mot.give_current = (int16_t)mot.pid_ctrler.out;
-            }
-        }
-        Robot::hardware->send<CAN0>(Hardware::get_frame(0x200, friction));
-        Robot::hardware->send<CAN0>(Hardware::get_frame(0x1FF, trigger));
     }
 
     bool Shoot::isJam() {

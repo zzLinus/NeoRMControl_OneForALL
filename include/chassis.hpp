@@ -21,7 +21,7 @@ namespace Chassis
         void update_data();
         void init(const std::shared_ptr<Robot::Robot_set> &robot);
         void decomposition_speed();
-        void control_loop();
+        [[noreturn]] void task();
 
        public:
         fp32 vx_set = 0.f;
@@ -31,8 +31,6 @@ namespace Chassis
         // chassis set horizontal speed,positive means left,unit m/s.底盘设定速度 左右方向
         // 左为正，单位 m/s
         fp32 wz_set = 0.f;
-
-        bool no_force = true;
 
 //        std::shared_ptr<Hardware::Can_interface> can_itrf;
        private:
@@ -47,6 +45,7 @@ namespace Chassis
         fp32 wheel_speed[4] = {};
 
         fp32 max_wheel_speed = 2.5f;
+        Pid::Pid_rad chassis_angle_pid;
 
         std::vector<Hardware::Motor> motors;
         std::shared_ptr<Robot::Robot_set> robot_set;

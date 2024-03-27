@@ -30,11 +30,7 @@ namespace Robot
         void start();
         void join() const;
 
-        void chassis_task();
-        void gimbal_task();
         void vision_task();
-        void shoot_task();
-        void gimbal_init_task();
 
        public:
         std::unique_ptr<std::thread> chassis_thread;
@@ -43,7 +39,6 @@ namespace Robot
         std::unique_ptr<std::thread> shoot_thread;
         std::unique_ptr<std::thread> gimbal_init_thread;
 
-        Pid::Pid_rad chassis_angle_pid;
         std::shared_ptr<Robot_set> robot_set;
 
         Device::IMU imu;

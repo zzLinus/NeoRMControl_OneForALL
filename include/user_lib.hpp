@@ -1,3 +1,4 @@
+#pragma once
 #include <cmath>
 #include <vector>
 
@@ -6,6 +7,7 @@
 namespace UserLib
 {
     fp32 rad_format(fp32 ang);
+    void sleep_ms(uint32_t dur);
 
     template<typename T>
     void unpack(T &t, void *ptr) {
