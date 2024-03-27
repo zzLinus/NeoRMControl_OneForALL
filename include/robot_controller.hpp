@@ -30,8 +30,6 @@ namespace Robot
         void start();
         void join() const;
 
-        void vision_task();
-
        public:
         std::unique_ptr<std::thread> chassis_thread;
         std::unique_ptr<std::thread> gimbal_thread;
