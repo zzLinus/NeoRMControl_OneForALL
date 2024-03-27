@@ -15,14 +15,11 @@ namespace Shoot
         ~Shoot() = default;
         void update_speed();
         void decomposition_speed();
-        void control_loop();
+        [[noreturn]] void task();
         bool isJam();
 
        public:
-        bool no_force = true;
-        bool friction_open = false;
         bool friction_finish = false;
-        bool shoot_open = false;
 
         int jam_time = 0;
         int back_time = 0;

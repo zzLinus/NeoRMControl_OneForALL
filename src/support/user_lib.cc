@@ -1,7 +1,14 @@
 #include "user_lib.hpp"
 
+#include "thread"
+#include "chrono"
+
 namespace UserLib
 {
+    void sleep_ms(uint32_t dur) {
+        std::this_thread::sleep_for(std::chrono::milliseconds(dur));
+    }
+
     fp32 rad_format(fp32 ang) {
         fp32 ans = fmodf(ang + M_PIf, M_PIf * 2.f);
         return (ans < 0.f) ? ans + M_PIf : ans - M_PIf;
