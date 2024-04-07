@@ -6,6 +6,8 @@
 ## Documentation
 [doc](doc/doc.md "doc")
 
+[hardware_manager](doc/hardware_manager.md "doc")
+
 ## Building
 Using bash like command line to build
 - GNU/Make
