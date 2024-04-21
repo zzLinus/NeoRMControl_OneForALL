@@ -35,15 +35,15 @@ namespace Robot
     }
 
     void Robot_ctrl::join() const {
-        if (hardware != nullptr) {
-            hardware->join();
-        }
         if (chassis_thread != nullptr) {
             chassis_thread->join();
         }
         if (gimbal_thread != nullptr) {
             gimbal_thread->join();
         }
+        io<CAN>.join();
+        io<SOCKET>.join();
+        io<SER>.join();
     }
 
     void Robot_ctrl::chassis_task() {
@@ -107,28 +107,32 @@ namespace Robot
     }
 
     void Robot_ctrl::load_hardware() {
-        can0.init("can0");
-        can1.init("can1");
-        socket_intrf = new Io::Server_socket_interface();
+        io<CAN>.resize(Config::CAN_NUMBER);
+        for(int i = 0; i < Config::CAN_NUMBER; i++) {
+            io<CAN>[i] = new CAN();
+            io<CAN>[i]->init((std::string("can") + std::to_string(i)).c_str());
+        }
+        io<SOCKET>.emplace_back();
         try {
-            ser1 = new Hardware::Serial_interface<Types::ReceivePacket>("/dev/ttyACM0", 115200, 1000);
+            io<SER>.emplace_back(new Hardware::Serial_interface<Types::ReceivePacket>("/dev/ttyACM0", 115200, 1000));
         } catch (serial::IOException &ex) {
             LOG_ERR("there's no such serial device\n");
         }
 
-        hardware = std::make_shared<RobotHardware>(can0, can1, *ser1, *socket_intrf, rc_ctrl);
-
-        Robot::hardware->register_callback<SOCKET, Robot::Vison_control>([&](const Robot::Vison_control &vc) {
+        io<SOCKET>[0]->register_callback<Robot::Vison_control>([&](const Robot::Vison_control &vc) {
             robot_set->vx_set = vc.linear_vx;
             robot_set->vy_set = vc.linear_vy;
             robot_set->wz_set = 0;
             robot_set->yaw_set = vc.yaw_set;
         });
 
-        Robot::hardware->register_callback<SOCKET, Robot::ReceiveGimbalPacket>(
+        io<SOCKET>[0]->register_callback<Robot::ReceiveGimbalPacket>(
             [&](const Robot::ReceiveGimbalPacket &pkg) {
                 LOG_ERR("get receive gimbal packet\n");
                 LOG_ERR("x: %f, y: %f, z: %f\n", pkg.x, pkg.y, pkg.z);
             });
+        io<CAN>.start();
+        io<SOCKET>.start();
+        io<SER>.start();
     }
 };  // namespace Robot

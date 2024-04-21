@@ -15,8 +15,8 @@ namespace Gimbal
     void Gimbal::init(const std::shared_ptr<Robot::Robot_set> &robot) {
         robot_set = robot;
 
-        Robot::hardware->register_callback<CAN0>(0x205, [&](const auto &frame) { yaw_motor.unpack(frame); });
-        Robot::hardware->register_callback<CAN0>(0x206, [&](const auto &frame) { pitch_motor.unpack(frame); });
+        Robot::io<CAN>[0]->register_callback(0x205, [&](const auto &frame) { yaw_motor.unpack(frame); });
+        Robot::io<CAN>[0]->register_callback(0x206, [&](const auto &frame) { pitch_motor.unpack(frame); });
     }
 
     void Gimbal::start_init_loop() {
@@ -97,7 +97,7 @@ namespace Gimbal
         send_frame.data[1] = (yaw_motor.give_current & 0xff);
         send_frame.data[2] = (pitch_motor.give_current >> 8);
         send_frame.data[3] = (pitch_motor.give_current & 0xff);
-        Robot::hardware->send<CAN0>(send_frame);
+        Robot::io<CAN>[0]->send(send_frame);
     }
 
 }  // namespace Gimbal

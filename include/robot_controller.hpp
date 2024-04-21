@@ -7,7 +7,6 @@
 #include "config.hpp"
 #include "gimbal.hpp"
 #include "hardware.hpp"
-#include "rc_ctrl.hpp"
 #include "robot.hpp"
 #include "serial_interface.hpp"
 #include "shoot.hpp"
@@ -52,7 +51,6 @@ namespace Robot
         Hardware::Can_interface can1;
         Hardware::Serial_interface<Types::ReceivePacket> *ser1;
         Io::Server_socket_interface *socket_intrf;
-        Io::Rc_ctrl rc_ctrl;
 
        private:
     };

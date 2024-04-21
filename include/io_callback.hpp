@@ -6,7 +6,7 @@
 #include "functional"
 #include "map"
 
-namespace Hardware {
+namespace IO {
 
     /** callback base define **/
     /**
@@ -114,7 +114,7 @@ namespace Hardware {
             }
         }
 
-        void register_callback_key(const Key &key, const std::function<void(const Args &...)> &fun) {
+        void register_callback(const Key &key, const std::function<void(const Args &...)> &fun) {
             callback_map[key] = fun;
         }
 

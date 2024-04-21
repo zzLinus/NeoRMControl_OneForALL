@@ -21,15 +21,6 @@ namespace Status
     const bool ERROR = false;
 }  // namespace Status
 
-typedef enum
-{
-    CAN0 = 0,
-    CAN1,
-    SER1,
-    SOCKET,
-	RC_CTRL
-} HardwareId;
-
 namespace Types
 {
     typedef struct ReceivePacket
@@ -110,19 +101,6 @@ namespace Types
         ROBOT_FOLLOW_GIMBAL,
         ROBOT_NOT_FOLLOW
     };
-
-    typedef enum
-    {
-        CHSMODE_ZERO_FORCE = 0x1 << 0,  // chassis will be like no power,底盘无力, 跟没上电那样
-        CHSMODE_NO_MOVE = 0x1 << 1,     // chassis will be stop,底盘保持不动
-        CHSMODE_FOLLOW_GIMBAL_YAW = 0x1 << 2,
-        CHSMODE_FOLLOW_CHASSIS_YAW = 0x1 << 3,
-        // speed 底盘不跟随角度，角度是开环的，但轮子是有速度环
-        // 底盘不跟随云台，但左右推左摇杆时底盘也会向左向右转
-        CHSMODE_NO_FOLLOW_GIMBAL_YAW = 0x1 << 4,
-        CHSMODE_OPEN = 0x1 << 5,  //  遥控器的值乘以比例成电流值 直接发送到can总线上
-        CHSMODE_SPIN = 0x1 << 6,  // 新增：小陀螺模式
-    } mode_e;
 
     typedef struct
     {

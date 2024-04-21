@@ -2,7 +2,7 @@
 #define __SERIAL_INTERFACE__
 #include <functional>
 
-#include "hardware_callback.hpp"
+#include "io_callback.hpp"
 #include "serial/serial.h"
 #include "utils.hpp"
 
@@ -10,7 +10,7 @@ namespace Hardware
 {
 
     template<class T>
-    class Serial_interface : serial::Serial, public Callback<T>
+    class Serial_interface : serial::Serial, public IO::Callback<T>
     {
        public:
         Serial_interface(std::string port_name, int baudrate, int simple_timeout);

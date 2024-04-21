@@ -11,13 +11,13 @@
 #include <memory>
 
 #include "arpa/inet.h"
-#include "hardware_callback.hpp"
+#include "io_callback.hpp"
 #include "robot.hpp"
 #include "utils.hpp"
 
 namespace Io
 {
-    class Server_socket_interface : public Hardware::Callback<Robot::Vison_control, Robot::ReceiveGimbalPacket>
+    class Server_socket_interface : public IO::Callback<Robot::Vison_control, Robot::ReceiveGimbalPacket>
 
     {
        public:

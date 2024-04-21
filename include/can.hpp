@@ -14,13 +14,13 @@
 #include <functional>
 
 #include "config.hpp"
+#include "io_callback.hpp"
 #include "string"
 #include "utils.hpp"
-#include "hardware_callback.hpp"
 
 namespace Hardware
 {
-    class Can_interface : public Callback_key<uint32_t , can_frame>
+    class Can_interface : public IO::Callback_key<uint32_t , can_frame>
     {
        public:
         Can_interface();

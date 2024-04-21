@@ -4,7 +4,9 @@
 
 namespace Config
 {
-    const char CAN_CHANNEL[] = "can1";
+    constexpr size_t CAN_NUMBER = 2;
+    constexpr size_t SER_NUMBER = 1;
+    constexpr size_t SOCKET_NUMBER = 1;
 
     // NOTE: PID CONFIG
 

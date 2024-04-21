@@ -12,7 +12,7 @@ namespace Shoot
         robot_set = robot;
         for (int i = 0; i < friction.size(); i++) {
             auto &mot = friction[i];
-            Robot::hardware->register_callback<CAN0>(
+            Robot::io<CAN>[0]->register_callback(
                 0x201 + i, [&mot](const auto &frame) { return mot.unpack(frame); });
         }
 //        for (int i = 0; i < trigger.size(); i++) {
@@ -53,7 +53,7 @@ namespace Shoot
         frame.data[1] = (friction[0].give_current & 0xff);
         frame.data[2] = (friction[1].give_current >> 8);
         frame.data[3] = (friction[1].give_current & 0xff);
-        Robot::hardware->send<CAN0>(frame);
+        Robot::io<CAN>[0]->send(frame);
     }
 
     void Shoot::control_loop() {

@@ -1,19 +1,35 @@
 #pragma once
 
 #include "can.hpp"
-#include "hardware_manager.hpp"
-#include "rc_ctrl.hpp"
 #include "serial_interface.hpp"
 #include "socket_interface.hpp"
+#include "thread"
+
+using CAN = Hardware::Can_interface;
+using SER = Hardware::Serial_interface<Types::ReceivePacket>;
+using SOCKET = Io::Server_socket_interface;
+
+template<typename T>
+class IO_manager : public std::vector<T*>{
+   public:
+    using std::vector<T*>::vector;
+    std::vector<std::thread> thread_list;
+
+    void start() {
+        for(auto & x : *this) {
+            thread_list.emplace_back(&T::task, x);
+        }
+    }
+
+    void join() {
+        for(auto & x : thread_list) {
+            x.join();
+        }
+    }
+};
 
 namespace Robot
 {
-    using RobotHardware = Hardware::Hardware_manager<
-        Hardware::Can_interface,
-        Hardware::Can_interface,
-        Hardware::Serial_interface<Types::ReceivePacket>,
-        Io::Server_socket_interface,
-        Io::Rc_ctrl>;
-
-    extern std::shared_ptr<RobotHardware> hardware;
+    template<typename T>
+    IO_manager<T> io;
 }  // namespace Robot
