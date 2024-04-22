@@ -4,8 +4,13 @@
 
 namespace Config
 {
-    constexpr size_t CAN_NUMBER = 2;
-    constexpr size_t SER_NUMBER = 1;
+    /** IO config **/
+    const std::array<const char *, 2> can_pram_list {
+        "can0", "can1"
+    };
+    const std::array<std::tuple<std::string, int, int>, 1> ser_pram_list {
+        std::tuple<std::string, int, int>{"/dev/ttyACM0", 115200, 1000},
+    };
     constexpr size_t SOCKET_NUMBER = 1;
 
     // NOTE: PID CONFIG

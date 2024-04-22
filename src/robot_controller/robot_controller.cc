@@ -107,17 +107,20 @@ namespace Robot
     }
 
     void Robot_ctrl::load_hardware() {
-        io<CAN>.resize(Config::CAN_NUMBER);
-        for(int i = 0; i < Config::CAN_NUMBER; i++) {
-            io<CAN>[i] = new CAN();
-            io<CAN>[i]->init((std::string("can") + std::to_string(i)).c_str());
+        for(const auto & name : Config::can_pram_list) {
+            io<CAN>.push_back(new CAN());
+            io<CAN>.back()->init(name);
         }
-        io<SOCKET>.emplace_back();
+
         try {
-            io<SER>.emplace_back(new Hardware::Serial_interface<Types::ReceivePacket>("/dev/ttyACM0", 115200, 1000));
+            for(const auto & [name, rate, time] : Config::ser_pram_list) {
+                io<SER>.push_back(new SER(name, rate, time));
+            }
         } catch (serial::IOException &ex) {
             LOG_ERR("there's no such serial device\n");
         }
+
+        io<SOCKET>.resize(Config::SOCKET_NUMBER);
 
         io<SOCKET>[0]->register_callback<Robot::Vison_control>([&](const Robot::Vison_control &vc) {
             robot_set->vx_set = vc.linear_vx;
