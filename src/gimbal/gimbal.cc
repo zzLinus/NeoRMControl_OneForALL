@@ -59,7 +59,7 @@ namespace Gimbal
             robot_set->yaw_set = robot_set->ins_yaw;
             init_stop_times = 0;
         }
-        inited = init_stop_times >= Config::GIMBAL_INIT_STOP_TIME;
+        inited = false;//init_stop_times >= Config::GIMBAL_INIT_STOP_TIME;
         Robot::hardware->send<CAN1>(Hardware::get_frame(0x1FF, yaw_motor, pitch_motor));
     }
 

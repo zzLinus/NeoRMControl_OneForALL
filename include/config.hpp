@@ -1,4 +1,5 @@
 #pragma once
+#include <cstdint>
 #include "pid_controller.hpp"
 #include "types.hpp"
 
@@ -15,6 +16,22 @@ namespace Config
         0.0f,      // KD
         14000.0f,  // MAX_OUT
         2000.0f,   // MAX_IOUT
+    };
+
+    const typename Pid::Pid_config M6020_ANGLE_PID_CONFIG{
+        0.0f,   //KP
+        0.0f,   //KI
+        0.0f,   //KD
+        0.0f,   //MAX_OUT
+        0.0f,   //MAXIOUT
+    };
+
+    const typename Pid::Pid_config TURN_ABSOLUTE_PID_CONFIG{
+        0.0f,
+        0.0f,
+        0.0f,
+        0.0f,
+        0.0f,
     };
 
     const typename Pid::Pid_config CHASSIS_FOLLOW_GIMBAL_PID_CONFIG{
@@ -44,9 +61,9 @@ namespace Config
     };
 
     const typename Pid::Pid_config GIMBAL_YAW_RELATIVE_PID_CONFIG{
-        15.0f,
+        24.0f,
         0.0f,
-        0.0f,
+        1.0f,
         10.0f,
         0.0f,
     };
@@ -108,8 +125,8 @@ namespace Config
     constexpr fp32 CHASSIS_CONTROL_FREQUENCE = 500.0f;
 #define STAND
 #ifdef STAND
-    constexpr fp32 GIMBAL_YAW_OFFSET_ECD = 4728;
-    constexpr fp32 GIMBAL_PITCH_OFFSET_ECD = 8080;
+    constexpr fp32 GIMBAL_YAW_OFFSET_ECD = 2500;
+    constexpr fp32 GIMBAL_PITCH_OFFSET_ECD = 8018;
 #else
     constexpr fp32 GIMBAL_YAW_OFFSET_ECD = 5424;
     constexpr fp32 GIMBAL_PITCH_OFFSET_ECD = 618;
@@ -127,4 +144,9 @@ namespace Config
 
     constexpr uint32_t DEFAULT_OFFLINE_TIME = 100;
 
+    constexpr fp32 CHASSIS_RADIUS = 0.293f; // unit meter
+    constexpr uint32_t TURN_MOTOR_INIT_ECD_1 = 4000; 
+    constexpr uint32_t TURN_MOTOR_INIT_ECD_2 = 4000; 
+    constexpr uint32_t TURN_MOTOR_INIT_ECD_3 = 4000; 
+    constexpr uint32_t TURN_MOTOR_INIT_ECD_4 = 4000; 
 }  // namespace BulletSolverConfig

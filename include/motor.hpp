@@ -6,6 +6,7 @@
 #include "can.hpp"
 #include "device/deviece_base.hpp"
 #include <linux/can.h>
+#include <cwchar>
 
 namespace Hardware
 {
@@ -35,7 +36,10 @@ namespace Hardware
         fp32 accel = 0.f;
         fp32 speed = 0.f;
         fp32 speed_set = 0.f;
-
+        fp32 angle = 0.f;
+        fp32 angle_set = 0.f;
+        fp32 angular_velocity = 0.f;
+  
         int16_t give_current = 0;
 
        private:

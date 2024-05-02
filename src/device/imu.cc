@@ -18,7 +18,7 @@ namespace Device
     void IMU::init(const std::shared_ptr<Robot::Robot_set> &robot) {
         robot_set = robot;
         Robot::hardware->register_callback<SER1>([&](const Types::ReceivePacket &rp) {
-            //            LOG_INFO("%f, %f, %f\n", rp.roll, rp.pitch, rp.yaw);
+                       LOG_INFO("%f, %f, %f\n", rp.roll, rp.pitch, rp.yaw);
 
             unpack(rp);
 
