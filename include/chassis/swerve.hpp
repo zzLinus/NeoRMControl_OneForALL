@@ -18,7 +18,7 @@ namespace Chassis
        private:
         void update_data();
         void decomposition_speed();
-        fp32 get_turn_value(fp32 angle_change, fp32 speed_change);
+        fp32 get_turn_cost(fp32 angle_change, fp32 speed_change);
         void set_speed(uint32_t idx, const Vec2f &speed);
 
        private:

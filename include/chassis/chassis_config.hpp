@@ -3,6 +3,7 @@
 #include "robot.hpp"
 
 #include <memory>
+#include <array>
 
 namespace Chassis {
     struct MecConfig {
@@ -22,6 +23,7 @@ namespace Chassis {
         std::shared_ptr<Robot::Robot_set> robot_set_;
 
        public:
+        virtual ~ChassisBase() = default; 
         virtual void task() = 0;
         virtual void init(const std::shared_ptr<Robot::Robot_set> &robot_set) = 0;
     };

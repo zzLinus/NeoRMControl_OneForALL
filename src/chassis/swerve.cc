@@ -1,4 +1,5 @@
 #include "chassis/swerve.hpp"
+#include <cmath>
 #include "hardware.hpp"
 
 namespace Chassis
@@ -68,15 +69,15 @@ namespace Chassis
         }
     }
 
-    fp32 Swerve::get_turn_value(fp32 angle_change, fp32 speed_change) {
-        return 0.f;
+    fp32 Swerve::get_turn_cost(fp32 angle_change, fp32 speed_change) {
+        return angle_change > 3*M_PIf/4 ? 1: 0;
     }
 
     void Swerve::set_speed(uint32_t idx, const Vec2f &speed) {
         auto w = std::atan2(speed.y, speed.x);
         auto v = std::sqrt(speed.x * speed.x + speed.y * speed.y);
-        if (get_turn_value(UserLib::rad_format(turn_angle_[idx] - w), speed_motors_[idx].speed - v) <
-            get_turn_value(UserLib::rad_format(turn_angle_[idx] - w + M_PIf), speed_motors_[idx].speed + v)) {
+        if (get_turn_cost(UserLib::rad_format(turn_angle_[idx] - w), speed_motors_[idx].speed - v) <
+            get_turn_cost(UserLib::rad_format(turn_angle_[idx] - w + M_PIf), speed_motors_[idx].speed + v)) {
             turn_angle_set_[idx] = w;
             speed_motors_[idx].speed_set = v;
         } else {

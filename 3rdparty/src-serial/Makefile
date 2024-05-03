@@ -8,7 +8,7 @@ BLUE='\033[0;34m'
 END='\033[0m'
 
 CC = g++
-CPPFLAGS = -std=c++17 -O0 -g
+CPPFLAGS = -std=c++17 -O0 -g 
 CPPFLAGS += -I$(WORK_DIR)/include
 
 CPPFLAGS += -I "./3rdparty/include"
