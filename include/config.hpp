@@ -1,31 +1,29 @@
 #pragma once
+#include "chassis/chassis_config.hpp"
 #include "pid_controller.hpp"
 #include "types.hpp"
 
 namespace Config
 {
-    const char CAN_CHANNEL[] = "can1";
+    const auto chassis_config = Chassis::MecConfig{
+        .speed_pid_config{
+            .kp = 15000.0f,  // KP
+            .ki = 10.0f,     // KI
+            .kd = 0.0f,      // KD
+            .max_out = 14000.0f,  // MAX_OUT
+            .max_iout = 2000.0f,   // MAX_IOUT
+        },
 
-    // NOTE: PID CONFIG
-
-    /** CHASSIS **/
-    const typename Pid::Pid_config M3508_SPEED_PID_CONFIG{
-        15000.0f,  // KP
-        10.0f,     // KI
-        0.0f,      // KD
-        14000.0f,  // MAX_OUT
-        2000.0f,   // MAX_IOUT
+        .follow_gimbal_pid_config{
+            .kp = .4f,     // KP
+            .ki = 0.0f,    // KI
+            .kd = 110.0f,  // KD
+            .max_out = 6.0f,    // MAX_OUT
+            .max_iout = 0.2f,    // MAX_IOUT
+        }
     };
 
-    const typename Pid::Pid_config CHASSIS_FOLLOW_GIMBAL_PID_CONFIG{
-        .4f,   // KP
-        0.0f,    // KI
-        110.0f,  // KD
-        6.0f,    // MAX_OUT
-        0.2f,    // MAX_IOUT
-    };
-
-    //TODO Adjust PID parameters
+    // TODO Adjust PID parameters
     /** GIMBAL **/
     const typename Pid::Pid_config GIMBAL_YAW_ABSOLUTE_PID_CONFIG{
         12.0f,  // KP
@@ -128,4 +126,4 @@ namespace Config
 
     constexpr uint32_t DEFAULT_OFFLINE_TIME = 100;
 
-}  // namespace BulletSolverConfig
+}  // namespace Config

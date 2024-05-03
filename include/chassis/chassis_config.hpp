@@ -1,0 +1,28 @@
+#pragma once
+#include "pid_controller.hpp"
+#include "robot.hpp"
+
+#include <memory>
+
+namespace Chassis {
+    struct MecConfig {
+        Pid::Pid_config speed_pid_config;
+        Pid::Pid_config follow_gimbal_pid_config;
+    };
+
+    struct SwerveConfig {
+        Pid::Pid_config speed_pid_config;
+        Pid::Pid_config turn_pid_config;
+        Pid::Pid_config follow_gimbal_pid_config;
+        std::array<uint16_t, 4> turn_init_ecd;
+    };
+
+    class ChassisBase {
+       protected:
+        std::shared_ptr<Robot::Robot_set> robot_set_;
+
+       public:
+        virtual void task() = 0;
+        virtual void init(const std::shared_ptr<Robot::Robot_set> &robot_set) = 0;
+    };
+}

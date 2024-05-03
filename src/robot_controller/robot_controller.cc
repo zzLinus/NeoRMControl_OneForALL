@@ -4,6 +4,7 @@ namespace Robot
 {
     Robot_ctrl::Robot_ctrl() {
         robot_set = std::make_shared<Robot_set>();
+        chassis = Chassis::create_chassis(Config::chassis_config);
     }
 
     Robot_ctrl::~Robot_ctrl() {
@@ -13,7 +14,7 @@ namespace Robot
     void Robot_ctrl::start_init() {
         imu.init(robot_set);
         cv_controller_.init(robot_set);
-        chassis.init(robot_set);
+        chassis->init(robot_set);
         gimbal.init(robot_set);
         shoot.init(robot_set);
         while (imu.offline()) {
@@ -29,7 +30,7 @@ namespace Robot
     }
 
     void Robot_ctrl::start() {
-        chassis_thread = std::make_unique<std::thread>(&Chassis::Chassis::task, &chassis);
+        chassis_thread = std::make_unique<std::thread>([&](){chassis->task();});
         gimbal_thread = std::make_unique<std::thread>(&Gimbal::Gimbal::task, &gimbal);
         shoot_thread = std::make_unique<std::thread>(&Shoot::Shoot::task, &shoot);
 

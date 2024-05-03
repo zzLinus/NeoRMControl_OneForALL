@@ -3,8 +3,10 @@
 #include <thread>
 
 #include "can.hpp"
-#include "chassis.hpp"
+#include "chassis/chassis.hpp"
 #include "config.hpp"
+#include "device/cv_controller.hpp"
+#include "device/imu.hpp"
 #include "gimbal.hpp"
 #include "hardware.hpp"
 #include "rc_ctrl.hpp"
@@ -12,8 +14,6 @@
 #include "serial_interface.hpp"
 #include "shoot.hpp"
 #include "socket_interface.hpp"
-#include "device/imu.hpp"
-#include "device/cv_controller.hpp"
 
 namespace Robot
 {
@@ -41,7 +41,7 @@ namespace Robot
 
         Device::IMU imu;
         Device::Cv_controller cv_controller_;
-        Chassis::Chassis chassis;
+        std::unique_ptr<Chassis::ChassisBase> chassis;
         Gimbal::Gimbal gimbal;
         Shoot::Shoot shoot;
 

@@ -34,6 +34,10 @@ struct Vec3d {
     double x, y, z;
 };
 
+struct Vec2f {
+    float x, y;
+};
+
 namespace Types
 {
     typedef struct ReceivePacket
