@@ -6,7 +6,6 @@
 #include "can.hpp"
 #include "config.hpp"
 #include "hardware.hpp"
-#include "motor.hpp"
 #include "robot.hpp"
 
 namespace Gimbal

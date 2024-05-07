@@ -1,3 +1,5 @@
+-include ./3rdparty/newbee/Makefile
+
 UNAME_S = $(shell uname -s)
 WORK_DIR  = $(shell pwd)
 BUILD_DIR = $(WORK_DIR)/build
@@ -10,6 +12,8 @@ END='\033[0m'
 
 SERIAL_DIR= $(shell find ./3rdparty -name "src-serial")
 THIRD_PARTY_LIB_DIR= $(shell find ./3rdparty -name "lib")
+
+LOCK_DIR = .git/
 
 CC = g++
 CPPFLAGS = -std=c++17 -O0 -g
@@ -31,9 +35,8 @@ SRC = $(wildcard src/*.cc) $(wildcard src/**/*.cc)
 OBJ = $(addprefix $(BUILD_DIR)/, $(addsuffix .o, $(basename $(SRC))))
 BIN = rx78-2
 
-.PHONY: all clean
-
-all: dirs $(BIN)
+all: dirs $(BIN) 
+	$(call git_commit, "compile NeoRMControl!!")
 
 dirs:
 	@echo -e + $(BLUE)MKDIR$(END) $(BUILD_DIR)
@@ -50,6 +53,7 @@ os-deps:
 
 run: all os-deps
 	$(BUILD_DIR)/$(BIN)
+	$(call git_commit, "run NeoRMControl!!")
 
 serial: $(SERIAL_DIR)
 	@$(MAKE) -C $< -j8
@@ -73,3 +77,5 @@ clean: clean-serial
 	@rm 3rdparty/lib/libserial.a
 	@echo -e + $(BLUE)RM$(END) $(BUILD_DIR)/$(BIN) OBJs
 	@rm -rf $(BUILD_DIR)/$(BIN) $(OBJ)
+
+.PHONY: all dirs run clean-serial clean .git_commit .clean_index
