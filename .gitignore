@@ -2,3 +2,5 @@
 build/
 *.friction
 *.a
+.idea/
+cmake-build-debug/
