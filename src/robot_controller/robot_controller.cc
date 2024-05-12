@@ -28,13 +28,13 @@ namespace Robot
         }
     }
 
-    //void Robot_ctrl::start() {
-    //    chassis_thread = std::make_unique<std::thread>(&Chassis::Chassis::task, &chassis);
-    //    gimbal_thread = std::make_unique<std::thread>(&Gimbal::Gimbal::task, &gimbal);
-    //    shoot_thread = std::make_unique<std::thread>(&Shoot::Shoot::task, &shoot);
+    void Robot_ctrl::start() {
+        chassis_thread = std::make_unique<std::thread>(&Chassis::Chassis::task, &chassis);
+        gimbal_thread = std::make_unique<std::thread>(&Gimbal::Gimbal::task, &gimbal);
+        shoot_thread = std::make_unique<std::thread>(&Shoot::Shoot::task, &shoot);
 
-    //    vision_thread = std::make_unique<std::thread>(&Device::Cv_controller::task, &cv_controller_);
-    //}
+        vision_thread = std::make_unique<std::thread>(&Device::Cv_controller::task, &cv_controller_);
+    }
 
     void Robot_ctrl::join() const {
         if (hardware != nullptr) {
