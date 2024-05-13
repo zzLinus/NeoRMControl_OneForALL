@@ -91,17 +91,17 @@ int main()
         char key = wnd.getKey();
         if (key == 27)
             break;
-        mod = mod.rotate(.5 * cos(clock() / 1000.), vec3(0, 1, 0));
-        mod = mod.rotate(2 * cos(clock() / 1000.), vec3(0, 0, 1));
+        mod = mod.rotate(.5 * cos(clock() / CLOCKS_PER_SEC), vec3(0, 1, 0));
+        mod = mod.rotate(2 * cos(clock() / CLOCKS_PER_SEC), vec3(0, 0, 1));
         ras.pushModel(mod);
 
-        mod2 = mod2.rotate(.5 * sin(clock() / 1000.), vec3(0, 1, 0));
-        mod2 = mod2.rotate(2 * sin(clock() / 1000.), vec3(0, 0, 1));
+        mod2 = mod2.rotate(.5 * sin(clock() / CLOCKS_PER_SEC), vec3(0, 1, 0));
+        mod2 = mod2.rotate(2 * sin(clock() / CLOCKS_PER_SEC), vec3(0, 0, 1));
         ras.pushModel(mod2);
 
         if (stage == 2)
         {
-            if (rand() % 100 == 0 || clock() - lst > 1000)
+            if (rand() % 100 == 0 || clock() - lst > CLOCKS_PER_SEC)
             {
                 vballs.push_back({ball,
                                   vec3(0, 0, 0),
