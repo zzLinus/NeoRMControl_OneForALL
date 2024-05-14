@@ -22,31 +22,29 @@ CPPFLAGS += -I$(WORK_DIR)/src
 # NOTE: turn on debug here
 CPPFLAGS += -D__DEBUG__
 
-# FIXME: imtui dependency linking
-CPPFLAGS += -I "./3rdparty/include"
-CPPFLAGS += -L "./3rdparty/lib"
+CPPFLAGS += -I "./inc"
+CPPFLAGS += `pkg-config --cflags opencv4`
 
+LDFLAGS = `pkg-config --libs opencv4`
 LDFLAGS += -lm -lpthread -ldl -lrt
 
-#LDFLAGS = `pkg-config sdl --libs`
-
-SRC = $(wildcard *.cpp) $(wildcard **/*.cpp)
+SRC = $(wildcard **/*.cpp) $(wildcard **/**/*.cpp)
 OBJ = $(addprefix $(BUILD_DIR)/, $(addsuffix .o, $(basename $(SRC))))
-BIN = MS-06
+BIN = MSN-07S
 
 all: $(BIN) 
-	$(call git_commit, "compile wormup!!")
+	$(call git_commit, "compile opencv!!")
 
 run: all
 	$(BUILD_DIR)/$(BIN)
-	$(call git_commit, "run wormup!!")
+	$(call git_commit, "run opencv!!")
 
 
 $(BIN): $(OBJ)
 	@echo -e + $(GREEN)LN$(END) $(BUILD_DIR)/$(BIN)
 	@$(CC) -o $(BUILD_DIR)/$(BIN) $(OBJ) $(CPPFLAGS) $(LDFLAGS)
 
-$(BUILD_DIR)/%.o: %.cc
+$(BUILD_DIR)/%.o: %.cpp
 	@mkdir -p $(dir $@) 
 	@echo -e + $(GREEN)CC$(END) $<
 	@$(CC) -o $@ -c $< $(CPPFLAGS)
