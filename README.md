@@ -21,6 +21,7 @@ $ make run
 - CMake
 ```
 $ mkdir build
-$ cd build && make -j 8
-$ make run
+$ cd build
+$ cmake ..
+$ make -j
 ```
