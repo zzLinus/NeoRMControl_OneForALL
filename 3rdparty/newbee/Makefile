@@ -1,5 +1,5 @@
-STUID = 222023321102085# 学号
-STUNAME = 冯辞羽# 姓名
+STUID = 2085# 学号
+STUNAME = 冯ciyu# 姓名
 
 # DO NOT modify the following code!!!
 
