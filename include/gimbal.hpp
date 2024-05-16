@@ -1,5 +1,5 @@
-#ifndef __GIMBAL__
-#define __GIMBAL__
+#ifndef GIMBAL_H
+#define GIMBAL_H
 
 #include <memory>
 
@@ -7,7 +7,7 @@
 #include "config.hpp"
 #include "hardware.hpp"
 #include "robot.hpp"
-
+#include "motor.hpp"
 namespace Gimbal
 {
 
