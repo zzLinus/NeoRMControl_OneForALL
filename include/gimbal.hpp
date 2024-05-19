@@ -2,7 +2,7 @@
 #define __GIMBAL__
 
 #include <memory>
-
+#include "motor.hpp"
 #include "can.hpp"
 #include "config.hpp"
 #include "hardware.hpp"
