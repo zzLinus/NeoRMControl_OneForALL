@@ -27,8 +27,9 @@ namespace Chassis
             } else {
                 fp32 max_speed = *std::max_element(wheel_speed, wheel_speed + 4);
                 fp32 speed_rate = std::min(max_wheel_speed / max_speed, 1.f);
-                for (auto &m : motors) {
-                    m.speed_set *= speed_rate;
+                for (int i = 0; i < motors.size(); i++) {
+                    auto &m = motors[i];
+                    m.speed_set = wheel_speed[i] * speed_rate;
                     m.pid_ctrler.calc(m.speed, m.speed_set);
                     m.give_current = (int16_t)(m.pid_ctrler.out);
                 }
