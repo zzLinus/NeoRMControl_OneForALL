@@ -21,6 +21,7 @@ namespace Gimbal
 
     void Gimbal::init_task() {
         update_data();
+        robot_set->yaw_relative = robot_set->ins_roll;
         init_yaw_set = robot_set->yaw_relative;
         init_pitch_set = robot_set->ins_pitch;
 
@@ -28,6 +29,7 @@ namespace Gimbal
             LOG_INFO("init loop %f, %f, %f, %u, %u\n", robot_set->ins_roll, robot_set->ins_pitch, robot_set->ins_yaw,
                      yaw_motor.motor_measure.ecd, pitch_motor.motor_measure.ecd);
             update_data();
+            robot_set->yaw_relative = robot_set->ins_roll;
             init_yaw_set += UserLib::rad_format(0.f - robot_set->yaw_relative) * Config::GIMBAL_INIT_YAW_SPEED;
             init_pitch_set += UserLib::rad_format(0.f - robot_set->ins_pitch) * Config::GIMBAL_INIT_PITCH_SPEED;
 
