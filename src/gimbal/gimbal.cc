@@ -15,13 +15,12 @@ namespace Gimbal
     void Gimbal::init(const std::shared_ptr<Robot::Robot_set> &robot) {
         robot_set = robot;
 
-        Robot::hardware->register_callback<CAN1>(0x205, [&](const auto &frame) { yaw_motor.unpack(frame); });
-        Robot::hardware->register_callback<CAN1>(0x206, [&](const auto &frame) { pitch_motor.unpack(frame); });
+        Robot::hardware->register_callback<CAN0>(0x205, [&](const auto &frame) { yaw_motor.unpack(frame); });
+        Robot::hardware->register_callback<CAN0>(0x206, [&](const auto &frame) { pitch_motor.unpack(frame); });
     }
 
     void Gimbal::init_task() {
         update_data();
-        robot_set->yaw_relative = robot_set->ins_roll;
         init_yaw_set = robot_set->yaw_relative;
         init_pitch_set = robot_set->ins_pitch;
 
@@ -29,7 +28,6 @@ namespace Gimbal
             LOG_INFO("init loop %f, %f, %f, %u, %u\n", robot_set->ins_roll, robot_set->ins_pitch, robot_set->ins_yaw,
                      yaw_motor.motor_measure.ecd, pitch_motor.motor_measure.ecd);
             update_data();
-            robot_set->yaw_relative = robot_set->ins_roll;
             init_yaw_set += UserLib::rad_format(0.f - robot_set->yaw_relative) * Config::GIMBAL_INIT_YAW_SPEED;
             init_pitch_set += UserLib::rad_format(0.f - robot_set->ins_pitch) * Config::GIMBAL_INIT_PITCH_SPEED;
 
