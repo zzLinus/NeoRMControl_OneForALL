@@ -10,9 +10,10 @@ namespace Chassis
 
     void Chassis::init(const std::shared_ptr<Robot::Robot_set> &robot) {
         robot_set = robot;
+        sender.init_can(0x200,"can1");
         for (size_t i = 0; i < motors.size(); i++) {
             auto &mot = motors[i];
-            Robot::hardware->register_callback<CAN1>(0x201 + i, [&mot](const auto &frame) { mot.unpack(frame); });
+            sender.addMotor(mot,0x201 + i);
         }
     }
 
@@ -34,7 +35,7 @@ namespace Chassis
                     m.give_current = (int16_t)(m.pid_ctrler.out);
                 }
             }
-            Robot::hardware->send<CAN1>(Hardware::get_frame(0x200, motors));
+            sender.send();
             UserLib::sleep_ms(Config::CHASSIS_CONTROL_TIME);
         }
     }

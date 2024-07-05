@@ -108,7 +108,7 @@ namespace Config
     constexpr fp32 CHASSIS_CONTROL_FREQUENCE = 500.0f;
 #define STAND
 #ifdef STAND
-    constexpr fp32 GIMBAL_YAW_OFFSET_ECD = 4728;
+    constexpr fp32 GIMBAL_YAW_OFFSET_ECD = 0x1dca;
     constexpr fp32 GIMBAL_PITCH_OFFSET_ECD = 8080;
 #else
     constexpr fp32 GIMBAL_YAW_OFFSET_ECD = 5424;

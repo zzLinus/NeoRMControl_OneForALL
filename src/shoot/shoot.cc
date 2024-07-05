@@ -10,15 +10,16 @@ namespace Shoot
 
     void Shoot::init(const std::shared_ptr<Robot::Robot_set> &robot) {
         robot_set = robot;
+        friction_sender.init_can(0x200,"can1");
+        trigger_sender.init_can(0x1ff,"can1");
+
         for (int i = 0; i < friction.size(); i++) {
             auto &mot = friction[i];
-            Robot::hardware->register_callback<CAN0>(
-                0x201 + i, [&mot](const auto &frame) { return mot.unpack(frame); });
+            friction_sender.addMotor(mot,0x201 + i);
         }
         for (int i = 0; i < trigger.size(); i++) {
             auto &mot = trigger[i];
-            Robot::hardware->register_callback<CAN0>(
-                0x205 + i, [&mot](const auto &frame) { return mot.unpack(frame); });
+            trigger_sender.addMotor(mot,0x205 + i);
         }
     }
 
@@ -87,8 +88,8 @@ namespace Shoot
                     mot.give_current = (int16_t)mot.pid_ctrler.out;
                 }
             }
-            Robot::hardware->send<CAN0>(Hardware::get_frame(0x200, friction));
-            Robot::hardware->send<CAN0>(Hardware::get_frame(0x1FF, trigger));
+            friction_sender.send();
+            trigger_sender.send();
             UserLib::sleep_ms(Config::SHOOT_CONTROL_TIME);
         }
     }

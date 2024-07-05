@@ -12,10 +12,10 @@ namespace Robot
 
     void Robot_ctrl::start_init() {
         imu.init(robot_set);
-        cv_controller_.init(robot_set);
-        chassis.init(robot_set);
+//        cv_controller_.init(robot_set);
+//        chassis.init(robot_set);
         gimbal.init(robot_set);
-        shoot.init(robot_set);
+//        shoot.init(robot_set);
         while (imu.offline()) {
             std::this_thread::sleep_for(std::chrono::milliseconds(1));
         }
@@ -29,11 +29,11 @@ namespace Robot
     }
 
     void Robot_ctrl::start() {
-        chassis_thread = std::make_unique<std::thread>(&Chassis::Chassis::task, &chassis);
+//        chassis_thread = std::make_unique<std::thread>(&Chassis::Chassis::task, &chassis);
         gimbal_thread = std::make_unique<std::thread>(&Gimbal::Gimbal::task, &gimbal);
-        shoot_thread = std::make_unique<std::thread>(&Shoot::Shoot::task, &shoot);
+//        shoot_thread = std::make_unique<std::thread>(&Shoot::Shoot::task, &shoot);
 
-        vision_thread = std::make_unique<std::thread>(&Device::Cv_controller::task, &cv_controller_);
+//        vision_thread = std::make_unique<std::thread>(&Device::Cv_controller::task, &cv_controller_);
     }
 
     void Robot_ctrl::join() const {
@@ -49,8 +49,6 @@ namespace Robot
     }
 
     void Robot_ctrl::load_hardware() {
-        can0.init("can0");
-        can1.init("can1");
         socket_intrf = new Io::Server_socket_interface();
         try {
             ser1 = new Hardware::Serial_interface<Types::ReceivePacket>("/dev/ttyACM0", 115200, 1000);
@@ -58,7 +56,7 @@ namespace Robot
             LOG_ERR("there's no such serial device\n");
         }
 
-        hardware = std::make_shared<RobotHardware>(can0, can1, ser1, socket_intrf, rc_ctrl);
+        hardware = std::make_shared<RobotHardware>(ser1, socket_intrf, rc_ctrl);
 
         Robot::hardware->register_callback<SOCKET, Robot::Vison_control>([&](const Robot::Vison_control &vc) {
             robot_set->vx_set = vc.linear_vx;

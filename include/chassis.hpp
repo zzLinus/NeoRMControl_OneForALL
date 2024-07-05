@@ -10,6 +10,7 @@
 #include "motor.hpp"
 #include "types.hpp"
 #include "utils.hpp"
+#include "motor_sender.hpp"
 
 namespace Chassis
 {
@@ -48,6 +49,7 @@ namespace Chassis
         Pid::Pid_rad chassis_angle_pid;
 
         std::vector<Hardware::Motor> motors;
+        Hardware::Motor_sender sender;
         std::shared_ptr<Robot::Robot_set> robot_set;
     };
 }  // namespace Chassis

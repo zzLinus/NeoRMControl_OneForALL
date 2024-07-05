@@ -5,6 +5,7 @@
 
 #include "functional"
 #include "map"
+#include "cassert"
 
 namespace Hardware {
 
@@ -109,12 +110,12 @@ namespace Hardware {
     class Callback_key {
        public:
         void callback_key(const Key &key, const Args &... args) {
-            if (callback_map.count(key)) {
-                callback_map[key](args...);
-            }
+            assert(callback_map.count(key));
+            callback_map[key](args...);
         }
 
         void register_callback_key(const Key &key, const std::function<void(const Args &...)> &fun) {
+            assert(!callback_map.count(key));
             callback_map[key] = fun;
         }
 

@@ -4,6 +4,7 @@
 #include "pid_controller.hpp"
 #include "robot.hpp"
 #include "ramp.hpp"
+#include "motor_sender.hpp"
 
 namespace Shoot
 {
@@ -26,6 +27,8 @@ namespace Shoot
 
         std::vector<Hardware::Motor> friction;
         std::vector<Hardware::Motor> trigger;
+        Hardware::Motor_sender friction_sender;
+        Hardware::Motor_sender trigger_sender;
 
         std::shared_ptr<Robot::Robot_set> robot_set;
        private:

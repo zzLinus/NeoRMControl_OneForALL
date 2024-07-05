@@ -9,8 +9,6 @@
 namespace Robot
 {
     using RobotHardware = Hardware::Hardware_manager<
-        Hardware::Can_interface,
-        Hardware::Can_interface,
         Hardware::Serial_interface<Types::ReceivePacket>,
         Io::Server_socket_interface,
         Io::Rc_ctrl>;

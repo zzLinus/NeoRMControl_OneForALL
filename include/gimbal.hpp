@@ -8,6 +8,7 @@
 #include "hardware.hpp"
 #include "motor.hpp"
 #include "robot.hpp"
+#include "motor_sender.hpp"
 
 namespace Gimbal
 {
@@ -39,6 +40,7 @@ namespace Gimbal
 
         Hardware::Motor yaw_motor;
         Hardware::Motor pitch_motor;
+        Hardware::Motor_sender sender;
 
         Pid::Pid_rad yaw_absolute_pid;
         Pid::Pid_rad pitch_absolute_pid;

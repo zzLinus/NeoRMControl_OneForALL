@@ -14,9 +14,8 @@ namespace Gimbal
 
     void Gimbal::init(const std::shared_ptr<Robot::Robot_set> &robot) {
         robot_set = robot;
-
-        Robot::hardware->register_callback<CAN0>(0x205, [&](const auto &frame) { yaw_motor.unpack(frame); });
-        Robot::hardware->register_callback<CAN0>(0x206, [&](const auto &frame) { pitch_motor.unpack(frame); });
+        sender.init_can(0x1ff,"can0");
+        sender.addMotor(yaw_motor,0x205,pitch_motor,0x206);
     }
 
     void Gimbal::init_task() {
@@ -36,6 +35,8 @@ namespace Gimbal
             yaw_motor.pid_ctrler.calc(yaw_gyro, yaw_motor.speed_set);
             yaw_motor.give_current = (int16_t)yaw_motor.pid_ctrler.out;
 
+
+            LOG_INFO("%f\t%f\t",robot_set->ins_pitch,init_pitch_set);
             pitch_absolute_pid.calc(robot_set->ins_pitch, init_pitch_set);
             pitch_motor.speed_set = pitch_absolute_pid.out;
             pitch_motor.pid_ctrler.calc(pitch_gyro, pitch_motor.speed_set);
@@ -49,7 +50,7 @@ namespace Gimbal
                 init_stop_times = 0;
             }
             inited = init_stop_times >= Config::GIMBAL_INIT_STOP_TIME;
-            Robot::hardware->send<CAN0>(Hardware::get_frame(0x1FF, yaw_motor, pitch_motor));
+            sender.send();
             UserLib::sleep_ms(Config::GIMBAL_CONTROL_TIME);
         }
     }
@@ -71,7 +72,7 @@ namespace Gimbal
                 pitch_motor.pid_ctrler.calc(pitch_gyro, pitch_motor.speed_set);
                 pitch_motor.give_current = (int16_t)-pitch_motor.pid_ctrler.out;
             }
-            Robot::hardware->send<CAN0>(Hardware::get_frame(0x1FF, yaw_motor, pitch_motor));
+            sender.send();
             UserLib::sleep_ms(Config::GIMBAL_CONTROL_TIME);
         }
     }
