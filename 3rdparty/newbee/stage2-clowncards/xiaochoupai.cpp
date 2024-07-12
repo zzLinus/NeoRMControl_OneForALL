@@ -1,23 +1,25 @@
 #include <ctime>
-#include <cstdio>
 #include <vector>
 #include <cstring>
 #include <iostream>
-#include<algorithm>
+#include <algorithm>
+#include <cstdio>
+
 #define CARD_COUNT 52
 
 #define pb push_back
 
 using namespace std;
 
-typedef struct cards {
+class CARDS {
+public:
 	int num; //当前牌堆中牌的数量 
-	bool vis[CARD_COUNT];//游戏进行的状态 
+	bool vis[CARD_COUNT];//当前卡片是否被访问
 	int chu,qi; //出牌/弃牌次数 
 	int score; //当前分数 
-	int target; //目标分数 
-	int* choose;//牌的序号和花色 
-}CARDS;
+	int target; //目标
+	int* choose;//用来储存选中卡片的索引和总数量
+};
 
 int new_card(CARDS* cur);
 char* calc_card(int id);
@@ -26,8 +28,8 @@ void dfs(int* cur,CARDS* bur);
 
 int main() {
 	srand(time(NULL));
-	CARDS* now=(CARDS*)malloc(sizeof(CARDS));
-	now->choose=(int*)malloc(sizeof(int)*64);
+	CARDS *now = new CARDS[sizeof(CARDS)];
+	now->choose = new int[sizeof(int) * 64];
 	for(int i=0;i<CARD_COUNT;i++) {
 		now->vis[i]=0;
 	}
@@ -42,8 +44,8 @@ int main() {
 	while(true) {
 		display_menu(now);
 		char ch=' ';
-		int opt=0; //0出牌 1弃牌 
-		int* use=(int*)malloc(sizeof(int)*64);
+		int opt=0; //0出牌 1弃牌
+		int *use = new int[sizeof(int) * 64];
 		use[0]=0;
 		while(ch!='\n') {
 			ch=getchar();
@@ -54,44 +56,46 @@ int main() {
 			}
 		}
 		if(opt==1) {
-			printf("你的有效输入是: ");
+			cout << "你的有效输入是:";
 			for(int i=1;i<=use[0];i++) {
-				printf("%d ",-use[i]);
+				cout << -use[i];
 			}
-			printf("\n");
+			cout << endl;
 			if(now->qi==0) {
-				printf("已经没有弃牌次数了\n");
+				cout << "已经没有弃牌次数了" << endl;
 				continue;
 			}
-			printf("你弃置了这些牌: ");
+			cout << "你弃掉了这些牌：";
 			for(int i=1;i<=use[0];i++) {
-				printf("%s ",calc_card(now->choose[use[i]]));
+				cout << calc_card(now->choose[use[i]]);
 			}
-			printf("\n");
+			cout << endl;
 			for(int i=1;i<=use[0];i++) {
 				now->choose[use[i]]=new_card(now);
 			}
 			now->qi--;
 		} else {
-			printf("你的有效输入是: ");
+			cout << "你的有效输入是";
 			for(int i=1;i<=use[0];i++) {
-				printf("%d ",use[i]);
+				cout << use[i];
 			}
-			printf("\n");
-			int* pai=(int*)malloc(sizeof(int)*64);
+			cout << endl;
+			int *pai = new int[sizeof(int)*64];
 			pai[0]=use[0];
 			for(int i=1;i<=use[0];i++) {
 				pai[i]=now->choose[use[i]];
 			}
 			sort(pai+1,pai+pai[0]+1);
 			dfs(pai,now);
+			delete[] pai;
 			for(int i=1;i<=use[0];i++) {
 				now->choose[use[i]]=new_card(now);
 			}
 			now->chu--;
 		}
 		if(now->chu==0&&now->score<now->target) {
-			printf("失败了是否重新开始y/n: ");
+			cout << "失败了是否重新开始y/n:";
+			cout << endl;
 			char ch=' ';
 			while(!islower(ch)) ch=getchar();
 //			getchar();
@@ -111,8 +115,9 @@ int main() {
 				break;
 			}
 		} else if(now->score>=now->target) {
-			printf("当前回合获胜了\n");
-			printf("是否进入下一回合y/n: ");
+			cout << "当前回合获胜了" << endl;
+			cout << "是否进入下一回合y/n";
+			cout << endl;
 			char ch=' ';
 			while(!islower(ch)) ch=getchar();
 //			getchar();
@@ -134,7 +139,9 @@ int main() {
 		}
 		getchar();
 		system("cls");
+		delete[] use;
 	}
+	delete[] now;
 	return 0;
 }
 
@@ -156,7 +163,7 @@ int new_card(CARDS* cur) {
 }
 
 char* calc_card(int id) {
-	char* buff=(char*)malloc(sizeof(char)*64);
+	char *buff = new char[sizeof(char) * 64];
 	switch(id/13) {
 		case 0:
 			strcpy(buff,"红桃");
@@ -212,20 +219,24 @@ char* calc_card(int id) {
 			buff=strcat(buff,"K");
 			break;
 	}
-	return buff;
+	if(buff!=NULL){
+		return buff;
+		delete[] buff;
+	}
 }
 
 void display_menu(CARDS* cur) {
-	printf("===================================\n");
-	printf("目前拥有的小丑牌: 无\n");
-	printf("剩余出牌次数:%d          剩余弃牌次数:%d\n",cur->chu,cur->qi);
-	printf("当前分数:%d       目标分数:%d\n",cur->score,cur->target);
-	printf("当前有的手牌:");
+	cout << "===================================" << endl;
+	cout << "目前拥有的小丑牌: 无" << endl;
+	cout << "剩余出牌次数:" << cur->chu <<"       "<< "剩余弃牌次数:" << cur->qi << endl;
+	cout << "当前分数:" << cur->score<<"       "<< "目标分数:" << cur->target << endl;
+	cout << "当前有的手牌:";
 	for(int i=1;i<=8;i++) {
-		printf("%s  ",calc_card(cur->choose[i]));
+		cout << calc_card(cur->choose[i]) << "  ";
 	}
-	printf("\n");
-	printf("序号:          1      2      3      4      5      6      7      8\n");
+	cout << endl;
+	cout<<"序号:          1      2      3      4      5      6      7      8";
+	cout << endl;
 	return;
 }
 
@@ -240,71 +251,68 @@ bool cmp1(int pp,int qq) {
 }
 
 void dfs(int* cur,CARDS* bur) {
-	for(int i=1;i<=cur[0];i++) {
-		cout<<cur[i]<<" "<<calc_card(cur[i])<<endl;
-	}
 	//同花顺
-	TONGHUASHUN:;
 	if(cur[0]==5) {
+		bool flg=0;
 		for(int i=2;i<=cur[0];i++) {
 			if(cur[i]/13!=cur[1]/13) {
-				goto SITIAO;
+				flg=1;
+				break;
 			}
 		}
-		if(cur[5]-cur[1]==4) {
+		if(flg==0&&cur[5]-cur[1]==4) {
 			int sum=100;
 			for(int i=1;i<=cur[0];i++) {
 				sum+=calc_Q(cur[i]);
 			}
-			printf("你打出了同花顺    ");
-			printf("有效牌是: ");
+			cout << "你打出了同花顺    ";
+			cout << "有效牌是: ";
 			for(int i=1;i<=cur[0];i++) {
-				printf("%s ",calc_card(cur[i]));
+				cout << calc_card(cur[i]);
 			}
-			printf("\n");
-			printf("此次得分是: %d * 8 = %d\n",sum,sum*8);
+			cout << endl;
+			cout << "此次得分是: " << sum << "*8" << "=" << sum * 8;
+			cout << endl;
 			bur->score+=sum*8;
 			return;
 		}
 	}
 	//四条 
-	SITIAO:;
-//	sort(cur+1,cur+cur[0]+1,[](int pp,int qq) {
-//		return pp%13<qq%13;	
-//	});
-	sort(cur+1,cur+cur[0]+1);
-	int* cnt=(int*)malloc(sizeof(int)*13);
+	sort(cur+1,cur+cur[0]+1,cmp1);
+	int *cnt = new int[sizeof(int) * 64];
 	for(int i=0;i<13;i++) cnt[i]=0;
 	for(int i=1;i<=cur[0];i++) cnt[cur[i]%13]++;
 	if(cur[0]>=4) {
 		if(cnt[cur[1]%13]==4) {
 			int sum=60;
 			sum+=calc_Q(cur[1])*4;
-			printf("你打出了四条    ");
-			printf("有效牌是: ");
+			cout << "你打出了四条    ";
+			cout << "有效牌是: ";
 			for(int i=1;i<=4;i++) {
-				printf("%s ",calc_card(cur[i]));
+				cout << calc_card(cur[i]);
 			}
-			printf("\n");
-			printf("此次得分是: %d * 7 = %d\n",sum,sum*7);
+			cout << endl;
+			cout << "此次得分是: " << sum << "*7" << "=" << sum * 7;
+			cout << endl;
 			bur->score+=sum*7;
 			return;
 		} else if(cnt[cur[2]%13]==4) {
 			int sum=60;
 			sum+=calc_Q(cur[1])*4;
-			printf("你打出了四条    ");
-			printf("有效牌是: ");
-			for(int i=2;i<=5;i++) {
-				printf("%s ",calc_card(cur[i]));
+			cout << "你打出了四条    ";
+			cout << "有效牌是: ";
+			for(int i=1;i<=4;i++) {
+				cout << calc_card(cur[i]);
 			}
-			printf("\n");
-			printf("此次得分是: %d * 7 = %d\n",sum,sum*7);
+			cout << endl;
+			delete[] cnt;
+			cout << "此次得分是: " << sum << "*7" << "=" << sum * 7;
+			cout << endl;
 			bur->score+=sum*7;
 			return;
 		}
 	}
 	//葫芦
-	HULU:;
 	if(cur[0]==5) {
 		if(cnt[cur[1]%13]==3&&cnt[cur[4]%13]==2
 			||cnt[cur[1]%13]==2&&cnt[cur[3]%13]==3) {
@@ -312,61 +320,69 @@ void dfs(int* cur,CARDS* bur) {
 			for(int i=1;i<=cur[0];i++) {
 				sum+=calc_Q(cur[i]);
 			}
-			printf("你打出了葫芦    ");
-			printf("有效牌是: ");
-			for(int i=1;i<=cur[0];i++) {
-				printf("%s ",calc_card(cur[i]));
+			cout << "你打出了葫芦    ";
+			cout << "有效牌是: ";
+			for(int i=1;i<=4;i++) {
+				cout << calc_card(cur[i]);
 			}
-			printf("\n");
-			printf("此次得分是: %d * 4 = %d\n",sum,sum*4);
+			cout << endl;
+			cout << "此次得分是: " << sum << "*4" << "=" << sum * 4;
+			cout << endl;
 			bur->score+=sum*4;
 			return;
 		}
 	}
 	//同花
-	TONGHUA:;
 	if(cur[0]==5) {
+		bool flg=1;
 		for(int i=2;i<=cur[0];i++) {
 			if(cur[i]/13!=cur[1]/13) {
-				goto SHUNZI;
+				flg=0;
+				break;
 			}
 		}
-		int sum=35;
-		for(int i=1;i<=cur[0];i++) {
-			sum+=calc_Q(cur[i]);
+		if(flg) {
+			int sum=35;
+			for(int i=1;i<=cur[0];i++) {
+				sum+=calc_Q(cur[i]);
+			}
+			cout << "你打出了同花    ";
+			cout << "有效牌是: ";
+			for(int i=1;i<=4;i++) {
+				cout << calc_card(cur[i]);
+			}
+			cout << endl;
+			cout << "此次得分是: " << sum << "*4" << "=" << sum * 4;
+			cout << endl;
+			bur->score+=sum*4;
+			return;
 		}
-		printf("你打出了同花    ");
-		printf("有效牌是: ");
-		for(int i=1;i<=cur[0];i++) {
-			printf("%s ",calc_card(cur[i]));
-		}
-		printf("\n");
-		printf("此次得分是: %d * 4 = %d\n",sum,sum*4);
-		bur->score+=sum*4;
-		return;
 	}
 	//顺子
-	SHUNZI:;
+//	SHUNZI:;
 	if(cur[0]==5) {
+		bool flg=1;
 		if(cur[5]%13-4!=cur[1]%13) {
-			goto SANTIAO;
+			flg=0;
 		}
-		int sum=30;
-		for(int i=1;i<=cur[0];i++) {
-			sum+=calc_Q(cur[i]);
+		if(flg) {
+			int sum=30;
+			for(int i=1;i<=cur[0];i++) {
+				sum+=calc_Q(cur[i]);
+			}
+			cout << "你打出了顺子    ";
+			cout << "有效牌是: ";
+			for(int i=1;i<=4;i++) {
+				cout << calc_card(cur[i]);
+			}
+			cout << endl;
+			cout << "此次得分是: " << sum << "*4" << "=" << sum * 4;
+			cout << endl;
+			bur->score+=sum*4;
+			return;
 		}
-		printf("你打出了顺子    ");
-		printf("有效牌是: ");
-		for(int i=1;i<=cur[0];i++) {
-			printf("%s ",calc_card(cur[i]));
-		}
-		printf("\n");
-		printf("此次得分是: %d * 4 = %d\n",sum,sum*4);
-		bur->score+=sum*4;
-		return;
 	}
 	//三条
-	SANTIAO:;
 	if(cur[0]>=3) {
 		int p1=-1,p2=-1;
 		for(int i=1;i<=cur[0]-2;i++) {
@@ -379,19 +395,19 @@ void dfs(int* cur,CARDS* bur) {
 			for(int i=p1;i<=p2;i++) {
 				sum+=calc_Q(cur[i]);
 			}
-			printf("你打出了三条    ");
-			printf("有效牌是: ");
-			for(int i=p1;i<=p2;i++) {
-				printf("%s ",calc_card(cur[i]));
+			cout << "你打出了三条    ";
+			cout << "有效牌是: ";
+			for(int i=1;i<=4;i++) {
+				cout << calc_card(cur[i]);
 			}
-			printf("\n");
-			printf("此次得分是: %d * 3 = %d\n",sum,sum*3);
+			cout << endl;
+			cout << "此次得分是: " << sum << "*3" << "=" << sum * 3;
+			cout << endl;
 			bur->score+=sum*3;
 			return;
 		}
 	}
 	//对子
-	DUIZI:;
 	if(cur[0]>=2) {
 		int p1=-1,p2=-1;
 		for(int i=1;i<=cur[0]-1;i++) {
@@ -404,19 +420,19 @@ void dfs(int* cur,CARDS* bur) {
 			for(int i=p1;i<=p2;i++) {
 				sum+=calc_Q(cur[i]);
 			}
-			printf("你打出了对子    ");
-			printf("有效牌是: ");
-			for(int i=p1;i<=p2;i++) {
-				printf("%s ",calc_card(cur[i]));
+			cout << "你打出了对子    ";
+			cout << "有效牌是: ";
+			for(int i=1;i<=4;i++) {
+				cout << calc_card(cur[i]);
 			}
-			printf("\n");
-			printf("此次得分是: %d * 2 = %d\n",sum,sum*2);
+			cout << endl;
+			cout << "此次得分是: " << sum << "*2" << "=" << sum * 2;
+			cout << endl;
 			bur->score+=sum*2;
 			return;
 		}
 	}
 	//高牌
-	GAOPAI:;
 	if(1) {
 		int p1=-1;
 		if(cur[1]%13==0) {
@@ -424,13 +440,14 @@ void dfs(int* cur,CARDS* bur) {
 		} else p1=cur[0];
 		int sum=5;
 		sum+=calc_Q(cur[p1]);
-		printf("你打出了高牌    ");
-		printf("有效牌是: ");
-		printf("%s ",calc_card(cur[p1]));
-		printf("\n");
-		printf("此次得分是: %d * 1 = %d\n",sum,sum*1);
+		cout << "你打出了高牌    ";
+		cout << "有效牌是: ";
+		cout << calc_card(cur[p1]);
+		cout << endl;
+		cout << "此次得分是: " << sum << "*1" << "=" << sum * 1;
+		cout << endl;
 		bur->score+=sum*1;
 		return;
 	}
+	delete[] cnt;
 }
-//一看到这个题目就很懵不知道从何开始下手，自己又去学了一下算法和数据结构，由于目前写c的代码写的比较好，所以就用c来写了，目前只实现了第一阶段，后面的小丑牌还在思考怎么实现 
