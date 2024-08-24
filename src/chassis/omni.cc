@@ -51,6 +51,7 @@ namespace Chassis
                 wz_set_ = robot_set_->wz_set;
             }
         }
+        //TODO:try a new speed decomposition to decrease chassis power
         wheel_speed_[0] = -vx_set_ + vy_set_ + wz_set_;
         wheel_speed_[1] = vx_set_ + vy_set_ + wz_set_;
         wheel_speed_[2] = vx_set_ - vy_set_ + wz_set_;
