@@ -51,11 +51,10 @@ namespace Chassis
                 wz_set_ = robot_set_->wz_set;
             }
         }
-        //TODO:try a new speed decomposition to decrease chassis power
-        wheel_speed_[0] = -vx_set_ + vy_set_ + wz_set_;
-        wheel_speed_[1] = vx_set_ + vy_set_ + wz_set_;
-        wheel_speed_[2] = vx_set_ - vy_set_ + wz_set_;
-        wheel_speed_[3] = -vx_set_ - vy_set_ + wz_set_;
+        wheel_speed_[0] = vy_set_ + wz_set_;   //0 is front, counter-clockwise
+        wheel_speed_[1] = -vx_set_ + wz_set_;
+        wheel_speed_[2] = -vy_set_ + wz_set_;
+        wheel_speed_[3] = vx_set_ + wz_set_;
     }
 
     void Mecanum::update_data() {
