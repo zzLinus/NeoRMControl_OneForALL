@@ -1,13 +1,13 @@
-#include "chassis/mecanum.hpp"
+#include "chassis/omni.hpp"
 #include "hardware.hpp"
 
 namespace Chassis
 {
-    Mecanum::Mecanum(const MecConfig &config) : chassis_angle_pid_(config.follow_gimbal_pid_config) {
+    Omni::Omni(const MecConfig &config) : chassis_angle_pid_(config.follow_gimbal_pid_config) {
         motors_.assign(4, Hardware::Motor{ config.speed_pid_config });
     }
 
-    void Mecanum::init(const std::shared_ptr<Robot::Robot_set> &robot) {
+    void Omni::init(const std::shared_ptr<Robot::Robot_set> &robot) {
         robot_set_ = robot;
         for (size_t i = 0; i < motors_.size(); i++) {
             auto &mot = motors_[i];
@@ -15,7 +15,7 @@ namespace Chassis
         }
     }
 
-    [[noreturn]] void Mecanum::task() {
+    [[noreturn]] void Omni::task() {
         while (true) {
             update_data();
             decomposition_speed();
@@ -37,7 +37,7 @@ namespace Chassis
         }
     }
 
-    void Mecanum::decomposition_speed() {
+    void Omni::decomposition_speed() {
         if (robot_set_->mode != Types::ROBOT_MODE::ROBOT_NO_FORCE) {
             fp32 sin_yaw, cos_yaw;
             sincosf(robot_set_->yaw_relative, &sin_yaw, &cos_yaw);
@@ -57,7 +57,7 @@ namespace Chassis
         wheel_speed_[3] = vx_set_ + wz_set_;
     }
 
-    void Mecanum::update_data() {
+    void Omni::update_data() {
         for (auto &m : motors_) {
             m.speed = Config::CHASSIS_MOTOR_RPM_TO_VECTOR_SEN * (fp32)m.motor_measure.speed_rpm;
             m.accel = Config::CHASSIS_CONTROL_FREQUENCE * m.pid_ctrler.Dbuf;
