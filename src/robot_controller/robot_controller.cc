@@ -21,7 +21,7 @@ namespace Robot
             std::this_thread::sleep_for(std::chrono::milliseconds(1));
         }
         gimbal_init_thread = std::make_unique<std::thread>(&Gimbal::Gimbal::init_task, &gimbal);
-        chassis_init_thread = std::make_unique<std::thread>(&Chassis::Swerve::init_task, &chassis);
+        chassis_init_thread = std::make_unique<std::thread>([&](){ chassis->init_task(); });
     }
 
     void Robot_ctrl::init_join() const {
