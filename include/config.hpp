@@ -5,22 +5,55 @@
 
 namespace Config
 {
-    const auto chassis_config = Chassis::MecConfig{
+    // const auto chassis_config = Chassis::MecConfig{
+    //     .speed_pid_config{
+    //         .kp = 15000.0f,  // KP
+    //         .ki = 10.0f,     // KI
+    //         .kd = 0.0f,      // KD
+    //         .max_out = 14000.0f,  // MAX_OUT
+    //         .max_iout = 2000.0f,   // MAX_IOUT
+    //     },
+
+    //     .follow_gimbal_pid_config{
+    //         .kp = .4f,     // KP
+    //         .ki = 0.0f,    // KI
+    //         .kd = 110.0f,  // KD
+    //         .max_out = 6.0f,    // MAX_OUT
+    //         .max_iout = 0.2f,    // MAX_IOUT
+    //     }
+    // };
+
+    const auto chassis_config = Chassis::SwerveConfig{ 
         .speed_pid_config{
-            .kp = 15000.0f,  // KP
-            .ki = 10.0f,     // KI
-            .kd = 0.0f,      // KD
+            .kp = 15000.0f,       // KP
+            .ki = 10.0f,          // KI
+            .kd = 0.0f,           // KD
             .max_out = 14000.0f,  // MAX_OUT
-            .max_iout = 2000.0f,   // MAX_IOUT
+            .max_iout = 2000.0f,  // MAX_IOUT
+        },
+
+        .speed_pid_config{
+            .kp = 15000.0f,       // KP
+            .ki = 10.0f,          // KI
+            .kd = 0.0f,           // KD
+            .max_out = 14000.0f,  // MAX_OUT
+            .max_iout = 2000.0f,  // MAX_IOUT
         },
 
         .follow_gimbal_pid_config{
-            .kp = .4f,     // KP
-            .ki = 0.0f,    // KI
-            .kd = 110.0f,  // KD
-            .max_out = 6.0f,    // MAX_OUT
-            .max_iout = 0.2f,    // MAX_IOUT
-        }
+            .kp = .4f,         // KP
+            .ki = 0.0f,        // KI
+            .kd = 110.0f,      // KD
+            .max_out = 6.0f,   // MAX_OUT
+            .max_iout = 0.2f,  // MAX_IOUT
+        },
+
+        .turn_init_ecd = { 
+            0,    //wheel1 
+            0,    //wheel2
+            0, 
+            0 
+        } 
     };
 
     // TODO Adjust PID parameters
