@@ -36,7 +36,7 @@ namespace Chassis
                 update_data();
                 for (int i = 0; i < 4; i++) {
                     auto &mot = turn_motors_[i];
-                    turn_pid_[i].calc(mot.motor_measure.ecd, turn_init_ecd[i]);
+                    turn_pid_[i].calc(mot.motor_measure.ecd, turn_init_ecd_[i]);
                     mot.speed_set = turn_pid_[i].out;
                     mot.pid_ctrler.calc(mot.speed, mot.speed_set);
                     mot.give_current = (int16_t)-mot.pid_ctrler.out;
