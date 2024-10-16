@@ -36,6 +36,7 @@ namespace Robot
         std::unique_ptr<std::thread> vision_thread;
         std::unique_ptr<std::thread> shoot_thread;
         std::unique_ptr<std::thread> gimbal_init_thread;
+        std::unique_ptr<std::thread> chassis_init_thread;
 
         std::shared_ptr<Robot_set> robot_set;
 
