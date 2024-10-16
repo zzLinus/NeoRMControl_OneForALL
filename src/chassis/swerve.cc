@@ -22,6 +22,32 @@ namespace Chassis
         }
     }
 
+    void Swerve::init_task() {
+        bool init_finish = false;
+        update_data();
+        while (!init_finish) {
+            while (turn_angle_[0] > 0.1 && turn_angle_[1] > 0.1 && turn_angle_[2] > 0.1 && turn_angle_[3] > 0.1) {
+                LOG_INFO(
+                    "angle0: %f, angle1: %f, angle2: %f, angle3: %f",
+                    turn_angle_[0],
+                    turn_angle_[1],
+                    turn_angle_[2],
+                    turn_angle_[3]);
+                update_data();
+                for (int i = 0; i < 4; i++) {
+                    auto &mot = turn_motors_[i];
+                    turn_pid_[i].calc(mot.motor_measure.ecd, turn_init_ecd[i]);
+                    mot.speed_set = turn_pid_[i].out;
+                    mot.pid_ctrler.calc(mot.speed, mot.speed_set);
+                    mot.give_current = (int16_t)-mot.pid_ctrler.out;
+                }
+                Robot::hardware->send<CAN1>(Hardware::get_frame(0x201, turn_motors_));
+                UserLib::sleep_ms(Config::CHASSIS_CONTROL_TIME);
+            }
+            init_finish = true;
+        }
+    }
+
     [[noreturn]] void Swerve::task() {
         while (true) {
             update_data();

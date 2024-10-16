@@ -2,7 +2,6 @@
 
 namespace Gimbal
 {
-
     Gimbal::Gimbal()
         : yaw_motor(Config::YAW_SPEED_PID_CONFIG),
           pitch_motor(Config::PITCH_SPEED_PID_CONFIG),
@@ -24,9 +23,14 @@ namespace Gimbal
         init_yaw_set = robot_set->yaw_relative;
         init_pitch_set = robot_set->ins_pitch;
 
-        while(!inited) {
-            LOG_INFO("init loop %f, %f, %f, %u, %u\n", robot_set->ins_roll, robot_set->ins_pitch, robot_set->ins_yaw,
-                     yaw_motor.motor_measure.ecd, pitch_motor.motor_measure.ecd);
+        while (!inited) {
+            LOG_INFO(
+                "init loop %f, %f, %f, %u, %u\n",
+                robot_set->ins_roll,
+                robot_set->ins_pitch,
+                robot_set->ins_yaw,
+                yaw_motor.motor_measure.ecd,
+                pitch_motor.motor_measure.ecd);
             update_data();
             init_yaw_set += UserLib::rad_format(0.f - robot_set->yaw_relative) * Config::GIMBAL_INIT_YAW_SPEED;
             init_pitch_set += UserLib::rad_format(0.f - robot_set->ins_pitch) * Config::GIMBAL_INIT_PITCH_SPEED;
@@ -55,7 +59,7 @@ namespace Gimbal
     }
 
     [[noreturn]] void Gimbal::task() {
-        while(true) {
+        while (true) {
             update_data();
             if (robot_set->mode == Types::ROBOT_MODE::ROBOT_NO_FORCE) {
                 yaw_motor.give_current = 0.f;

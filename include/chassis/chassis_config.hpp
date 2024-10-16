@@ -25,6 +25,7 @@ namespace Chassis {
        public:
         virtual ~ChassisBase() = default; 
         virtual void task() = 0;
+        virtual void init_task() = 0;
         virtual void init(const std::shared_ptr<Robot::Robot_set> &robot_set) = 0;
     };
 }

@@ -13,6 +13,7 @@ namespace Chassis
         explicit Swerve(const SwerveConfig &config);
         ~Swerve() = default;
         void init(const std::shared_ptr<Robot::Robot_set> &robot) override;
+        void init_task() override;
         [[noreturn]] void task() override;
 
        private:
