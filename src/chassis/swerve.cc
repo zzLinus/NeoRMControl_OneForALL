@@ -14,11 +14,11 @@ namespace Chassis
         robot_set_ = robot;
         for (size_t i = 0; i < speed_motors_.size(); i++) {
             auto &mot = speed_motors_[i];
-            Robot::hardware->register_callback<CAN1>(0x201 + i, [&mot](const auto &frame) { mot.unpack(frame); });
+            Robot::hardware->register_callback<CAN0>(0x201 + i, [&mot](const auto &frame) { mot.unpack(frame); });
         }
         for (size_t i = 0; i < turn_motors_.size(); i++) {
             auto &mot = turn_motors_[i];
-            Robot::hardware->register_callback<CAN1>(0x205 + i, [&mot](const auto &frame) { mot.unpack(frame); });
+            Robot::hardware->register_callback<CAN1>(0x201 + i, [&mot](const auto &frame) { mot.unpack(frame); });
         }
     }
 
@@ -70,8 +70,8 @@ namespace Chassis
                     mot.give_current = (int16_t)-mot.pid_ctrler.out;
                 }
             }
-            Robot::hardware->send<CAN1>(Hardware::get_frame(0x200, speed_motors_));
-            Robot::hardware->send<CAN1>(Hardware::get_frame(0x201, turn_motors_));
+            Robot::hardware->send<CAN0>(Hardware::get_frame(0x200, speed_motors_));
+            Robot::hardware->send<CAN1>(Hardware::get_frame(0x200, turn_motors_));
             UserLib::sleep_ms(Config::CHASSIS_CONTROL_TIME);
         }
     }
