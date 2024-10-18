@@ -32,7 +32,7 @@ namespace Config
             .max_iout = 2000.0f,  // MAX_IOUT
         },
 
-        .speed_pid_config{
+        .turn_pid_config{
             .kp = 15000.0f,       // KP
             .ki = 10.0f,          // KI
             .kd = 0.0f,           // KD
